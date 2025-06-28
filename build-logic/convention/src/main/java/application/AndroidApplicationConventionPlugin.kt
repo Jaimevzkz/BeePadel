@@ -1,3 +1,5 @@
+package application
+
 import com.android.build.api.dsl.ApplicationExtension
 import com.vzkz.build_logic.convention.ExtensionType
 import com.vzkz.build_logic.convention.configureBuildTypes
@@ -28,6 +30,7 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
 
                 configureBuildTypes(commonExtension = this, extensionType = ExtensionType.APPLICATION)
             }
+
         }
     }
 }

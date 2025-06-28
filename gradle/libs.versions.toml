@@ -1,39 +1,50 @@
 [versions]
 agp = "8.10.1"
 kotlin = "2.0.21"
+jetbrainsKotlinJvm = "2.0.21"
+ksp = "2.0.21-1.0.27"
 coreKtx = "1.16.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
 composeBom = "2025.06.01"
 appcompat = "1.7.1"
 material = "1.12.0"
-jetbrainsKotlinJvm = "2.0.21"
-ksp = "2.0.21-1.0.27"
+#Test
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+junitJupiterApi = "5.10.1"
+kotlintestRunnerJunit5 = "3.4.2"
+coroutinesTestVersion = "1.9.0"
+mockk = "1.13.13"
+assertk = "0.28.1"
+turbine = "1.2.0"
+junitPluginVersion="1.10.0.0"
+
 #Gradle
-androidTools = "31.10.1"
+androidTools = "31.11.0"
 desugar_jdk_libs = "2.1.5"
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 uiAndroid = "1.8.3"
 uiTooling = "1.8.3"
 #Koin
 koin = "4.0.4"
+# Navigation 3
+nav3Core = "1.0.0-alpha04"
+nav3Lifecycle = "1.0.0-alpha02"
+kotlinSerialization = "2.1.21"
+kotlinxSerializationCore = "1.8.1"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
 projectVersionName = "1.0"
 projectMinSdkVersion = "24"
-projectTargetSdkVersion = "35"
-projectCompileSdkVersion = "35"
+projectTargetSdkVersion = "36"
+projectCompileSdkVersion = "36"
 projectVersionCode = "1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -42,11 +53,29 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+#Test
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiterApi" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiterApi" }
+kotlintest-runner-junit5 = { module = "io.kotlintest:kotlintest-runner-junit5", version.ref = "kotlintestRunnerJunit5" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTestVersion" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
 #Gradle
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
@@ -61,6 +90,12 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+# Navigation
+nav3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+nav3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-nav3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3Lifecycle" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -69,6 +104,8 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+# Navigation
+jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
 # Convention plugins
 beepadel-android-application = { id = "beepadel.android.application", version = "unspecified" }
 beepadel-android-application-compose = { id = "beepadel.android.application.compose", version = "unspecified" }
@@ -76,6 +113,8 @@ beepadel-android-library = { id = "beepadel.android.library", version = "unspeci
 beepadel-android-library-compose = { id = "beepadel.android.library.compose", version = "unspecified" }
 beepadel-android-feature-ui = { id = "beepadel.android.feature.ui", version = "unspecified" }
 beepadel-jvm-library = { id = "beepadel.jvm.library", version = "unspecified" }
+#Test
+junit5 = {id = "de.mannodermaus.android-junit5", version.ref = "junitPluginVersion"}
 
 [bundles]
 compose = [
@@ -93,3 +132,32 @@ compose-debug = [
 ]
 koin = ["koin-core", "koin-android"]
 koin-compose = ["koin-core", "koin-android", "koin-androidx-compose"]
+
+nav3 = [
+    "nav3-runtime",
+    "nav3-ui",
+    "androidx-lifecycle-viewmodel-nav3",
+    "kotlinx-serialization-core",
+    "kotlinx-serialization-json",
+]
+
+test = [
+    "junit",
+    "androidx-espresso-core",
+    "junit-jupiter-api",
+    "junit-jupiter-params",
+    "junit-jupiter-engine",
+    "kotlintest-runner-junit5",
+    "kotlinx-coroutines-test",
+    "mockk",
+    "mockk-agent",
+    "mockk-android",
+    "assertk",
+    "turbine"
+]
+
+androidTest = [
+    "androidx-compose-ui-test-junit4",
+    "androidx-compose-ui-tooling",
+    "androidx-compose-ui-test-manifest"
+]

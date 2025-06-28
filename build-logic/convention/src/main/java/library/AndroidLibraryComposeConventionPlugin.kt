@@ -1,3 +1,5 @@
+package library
+
 import com.android.build.api.dsl.LibraryExtension
 import com.vzkz.build_logic.convention.configureAndroidCompose
 import org.gradle.api.Plugin
@@ -10,6 +12,7 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
             pluginManager.run {
                 apply("beepadel.android.library")
                 apply("org.jetbrains.kotlin.plugin.compose")
+                apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
             val extension = extensions.getByType<LibraryExtension>()

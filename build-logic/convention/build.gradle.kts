@@ -15,32 +15,32 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "beepadel.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+            implementationClass = "application.AndroidApplicationConventionPlugin"
         }
 
         register("androidApplicationCompose") {
             id = "beepadel.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+            implementationClass = "application.AndroidApplicationComposeConventionPlugin"
         }
 
         register("androidLibrary") {
             id = "beepadel.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+            implementationClass = "library.AndroidLibraryConventionPlugin"
         }
 
         register("androidLibraryCompose") {
             id = "beepadel.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+            implementationClass = "library.AndroidLibraryComposeConventionPlugin"
         }
 
         register("androidFeatureUi") {
             id = "beepadel.android.feature.ui"
-            implementationClass = "AndroidFeatureUiConventionPlugin"
+            implementationClass = "feature.AndroidFeatureUiConventionPlugin"
         }
 
         register("jvmLibrary") {
             id = "beepadel.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
+            implementationClass = "jvm.JvmLibraryConventionPlugin"
         }
     }
 }

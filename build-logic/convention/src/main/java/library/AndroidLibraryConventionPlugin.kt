@@ -1,3 +1,5 @@
+package library
+
 import com.android.build.api.dsl.LibraryExtension
 import com.vzkz.build_logic.convention.ExtensionType
 import com.vzkz.build_logic.convention.configureBuildTypes
@@ -33,6 +35,7 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
                "testImplementation"(kotlin("test"))
                "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
                "implementation"(libs.findBundle("koin").get())
+               "testImplementation"(libs.findBundle("test").get())
            }
        }
     }

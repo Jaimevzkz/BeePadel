@@ -1,3 +1,5 @@
+package feature
+
 import com.vzkz.build_logic.convention.addUiLayerDependencies
 import org.gradle.api.Plugin
 import org.gradle.api.Project

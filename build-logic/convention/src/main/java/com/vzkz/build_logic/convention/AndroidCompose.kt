@@ -1,7 +1,9 @@
 package com.vzkz.build_logic.convention
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureAndroidCompose(
@@ -24,6 +26,9 @@ internal fun Project.configureAndroidCompose(
             "androidTestImplementation"(platform(bom))
             "debugImplementation"(libs.findLibrary("androidx-ui-tooling-preview").get())
             "debugImplementation"(libs.findLibrary("ui-tooling").get())
+
+            // Navigation
+            "implementation"(libs.findBundle("nav3").get())
         }
     }
 }

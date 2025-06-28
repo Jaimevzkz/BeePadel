@@ -1,6 +1,6 @@
 plugins {
     // Convention plugins
-    alias(libs.plugins.beepadel.android.application)
+    alias(libs.plugins.beepadel.android.application.compose)
 }
 
 android {
@@ -36,9 +36,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    //Koin
-    implementation(libs.bundles.koin)
 }
