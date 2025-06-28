@@ -18,13 +18,10 @@ dependencies {
     implementation(projects.core.presentation.ui)
     implementation(projects.core.presentation.designsystem)
 
-    implementation(projects.matchHistory.data)
-    implementation(projects.matchHistory.domain)
-    implementation(projects.matchHistory.presentation)
 
-    implementation(projects.activeMatch.data)
-    implementation(projects.activeMatch.domain)
-    implementation(projects.activeMatch.presentation)
+    implementation(projects.match.data)
+    implementation(projects.match.domain)
+    implementation(projects.match.presentation)
 
 
     implementation(libs.androidx.core.ktx)
