@@ -26,7 +26,7 @@ fun generateSet(games1: Int, games2: Int): Set{
     repeat((1..games2).count()) {
         gameList.add(game(Fifteen, Won))
     }
-    return Set(gameList)
+    return Set(gameList, Pair(games1, games2))
 }
 
 fun set(): Set {
@@ -42,7 +42,8 @@ fun set(): Set {
             game(Fifteen, Won),
             game(Won, Thirty),
             game(Won, Forty),
-        )
+        ),
+        formattedSet = Pair(6,4)
     )
 }
 
