@@ -1,6 +1,7 @@
 package com.vzkz.beepadel
 
 import android.app.Application
+import com.vzkz.core.data.di.coreDataModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -12,7 +13,7 @@ class BeePadelApp: Application() {
             androidLogger()
             androidContext(this@BeePadelApp)
             modules(
-
+                coreDataModule
             )
         }
     }
