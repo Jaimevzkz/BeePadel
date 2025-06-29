@@ -1,14 +1,13 @@
 package com.vzkz.match.presentation.match_history
 
-import com.vzkz.core.domain.error.RootError
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
-import com.vzkz.match.domain.Match
+import com.vzkz.match.presentation.match_history.model.MatchUi
 
 
 data class MatchHistoryState(
-    val matchHistory: List<Match>
+    val matchHistory: List<MatchUi>
 ) : State {
     companion object {
         val initial: MatchHistoryState = MatchHistoryState(
