@@ -13,6 +13,20 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
+fun matchList(): List<Match> {
+    return List(10) { index ->
+        if (index % 2 == 0)
+            match().copy(
+                setList = listOf(
+                    generateSet(3, 6),
+                    generateSet(6, 2),
+                    generateSet(6, 7),
+                )
+            )
+        else
+            match()
+    }
+}
 
 fun match(): Match {
     return Match(
@@ -31,7 +45,7 @@ fun match(): Match {
     )
 }
 
-fun generateSet(games1: Int, games2: Int): Set{
+fun generateSet(games1: Int, games2: Int): Set {
     val gameList = mutableListOf<Game>()
     repeat((1..games1).count()) {
         gameList.add(game(Won, Zero))

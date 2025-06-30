@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 data object KeyMatchHistoryScreen : NavKey
 
 @Serializable
-data class KeyActiveMatchScreen(val matchId: Int) : NavKey
+data object KeyActiveMatchScreen : NavKey

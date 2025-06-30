@@ -11,3 +11,7 @@ val CalendarIcon: ImageVector
 val TrophyIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.throphy)
+
+val PadelIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.padel)

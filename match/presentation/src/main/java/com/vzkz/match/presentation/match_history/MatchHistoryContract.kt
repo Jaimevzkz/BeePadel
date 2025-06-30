@@ -17,9 +17,9 @@ data class MatchHistoryState(
 }
 
 sealed class MatchHistoryIntent : Intent {
-    data class NavigateToActiveMatch(val matchId: Int) : MatchHistoryIntent()
+    data object NavigateToActiveMatch : MatchHistoryIntent()
 }
 
 sealed class MatchHistoryEvent : Event {
-    data class NavigateToActiveMatch(val matchId: Int) : MatchHistoryEvent()
+    data object NavigateToActiveMatch : MatchHistoryEvent()
 }

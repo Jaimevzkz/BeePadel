@@ -9,7 +9,7 @@ class MatchHistoryViewModel(private val dispatchers: DispatchersProvider, privat
 
     override fun reduce(intent: MatchHistoryIntent) {
         when (intent) {
-            is MatchHistoryIntent.NavigateToActiveMatch -> sendEvent(MatchHistoryEvent.NavigateToActiveMatch(intent.matchId))
+            is MatchHistoryIntent.NavigateToActiveMatch -> sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
         }
     }
 

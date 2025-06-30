@@ -33,8 +33,8 @@ fun NavigationRoot(
                         key = key,
                     ) {
                         MatchHistoryScreenRot(
-                            onNavigateToActiveMatch = { matchId ->
-                                backStack.add(KeyActiveMatchScreen(matchId))
+                            onNavigateToActiveMatch = {
+                                backStack.add(KeyActiveMatchScreen)
                             }
                         )
                     }
@@ -45,9 +45,7 @@ fun NavigationRoot(
                         key = key,
                     ) {
                         ActiveMatchScreenRot(
-                            viewModel = koinViewModel{
-                                parametersOf(key.matchId)
-                            },
+
                         )
                     }
                 }
