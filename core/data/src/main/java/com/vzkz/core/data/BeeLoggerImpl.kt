@@ -4,7 +4,7 @@ import android.util.Log
 import com.vzkz.core.domain.log.BeeLogger
 import com.vzkz.core.domain.log.LogType
 
-class BeeLoggerImpl: BeeLogger {
+object BeeLoggerImpl: BeeLogger {
     override fun log(message: String, tag: String, logType: LogType) {
         when(logType){
             LogType.INFO -> Log.i(tag, message)

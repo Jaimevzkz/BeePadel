@@ -24,7 +24,6 @@ private const val BUFFER_SIZE = 64
 abstract class BaseViewModel<S : State, I : Intent, E : Event>(
     initialState: S,
     private val dispatchers: DispatchersProvider,
-    private val beeLogger: BeeLogger
 ) : ViewModel() {
 
     private val intents =
@@ -53,7 +52,7 @@ abstract class BaseViewModel<S : State, I : Intent, E : Event>(
     protected fun sendEvent(event: E) {
         val success = _events.trySend(event)
         if (success.isFailure)
-            beeLogger.log("Send event failed", logType = LogType.ERROR)
+            Beelog.log("Send event failed", logType = LogType.ERROR)
     }
 
     fun onAction(intent: I) {

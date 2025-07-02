@@ -1,4 +1,4 @@
-package com.vzkz.match.domain
+package com.vzkz.match.domain.model
 
 data class Game(
     val serverId: Int,

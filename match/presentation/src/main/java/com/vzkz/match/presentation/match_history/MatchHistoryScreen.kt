@@ -106,7 +106,8 @@ private fun MatchHistoryScreen(
             ) { matchUi ->
                 MatchCard(
                     modifier = Modifier.padding(horizontal = 12.dp),
-                    match = matchUi
+                    match = matchUi,
+                    onDeleteMatch = {  }
                 )
             }
         }

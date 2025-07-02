@@ -1,17 +1,17 @@
 package com.vzkz.common
 
-import com.vzkz.match.domain.Game
-import com.vzkz.match.domain.Match
-import com.vzkz.match.domain.Points
-import com.vzkz.match.domain.Points.*
-import com.vzkz.match.domain.Set
-import java.time.LocalDateTime
+import com.vzkz.match.domain.model.Game
+import com.vzkz.match.domain.model.Match
+import com.vzkz.match.domain.model.Points
+import com.vzkz.match.domain.model.Points.*
+import com.vzkz.match.domain.model.Set
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import kotlin.time.Duration
+import java.util.UUID
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 
 fun matchList(): List<Match> {
     return List(10) { index ->
@@ -41,7 +41,8 @@ fun match(): Match {
             2025, 6, 29,
             14, 30, 0, 0,
             ZoneId.of("UTC")
-        )
+        ),
+        matchId = UUID.randomUUID()
     )
 }
 
