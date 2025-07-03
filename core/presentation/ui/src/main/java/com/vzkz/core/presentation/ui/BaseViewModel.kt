@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.domain.DispatchersProvider
-import com.vzkz.core.domain.log.BeeLogger
-import com.vzkz.core.domain.log.LogType
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
@@ -18,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 private const val BUFFER_SIZE = 64
 
@@ -52,12 +51,12 @@ abstract class BaseViewModel<S : State, I : Intent, E : Event>(
     protected fun sendEvent(event: E) {
         val success = _events.trySend(event)
         if (success.isFailure)
-            Beelog.log("Send event failed", logType = LogType.ERROR)
+            Timber.e("Send event failed")
     }
 
     fun onAction(intent: I) {
         val success = intents.tryEmit(intent)
         if (!success)
-            beeLogger.log("MVI action buffer overflow on intent: $intent", logType = LogType.ERROR)
+            Timber.e("MVI action buffer overflow on intent: $intent")
     }
 }

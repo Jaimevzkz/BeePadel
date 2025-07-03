@@ -1,15 +1,13 @@
 package com.vzkz.match.presentation.active_match
 
 import com.vzkz.core.domain.DispatchersProvider
-import com.vzkz.core.domain.log.BeeLogger
 import com.vzkz.core.presentation.ui.BaseViewModel
 
 class ActiveMatchViewmodel(
     private val matchId: Int,
     private val dispatchers: DispatchersProvider,
-    private val beeLogger: BeeLogger
 ) :
-    BaseViewModel<ActiveMatchState, ActiveMatchIntent, ActiveMatchEvent>(ActiveMatchState.initial, dispatchers, beeLogger) {
+    BaseViewModel<ActiveMatchState, ActiveMatchIntent, ActiveMatchEvent>(ActiveMatchState.initial, dispatchers) {
 
     override fun reduce(intent: ActiveMatchIntent) {
         when (intent) {

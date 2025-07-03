@@ -9,5 +9,5 @@ import java.util.UUID
 interface MatchHistoryRepository {
     fun getMatchHistory(): Flow<List<Match>>
 
-    fun deleteMatch(matchId: UUID): EmptyResult<DataError.Local>
+    suspend fun deleteMatch(matchId: UUID): EmptyResult<DataError.Local>
 }

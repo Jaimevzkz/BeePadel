@@ -20,6 +20,8 @@ mockk = "1.13.13"
 assertk = "0.28.1"
 turbine = "1.2.0"
 junitPluginVersion="1.10.0.0"
+# SqlDelight
+sqlDelight ="2.1.0"
 
 #Gradle
 androidTools = "31.11.0"
@@ -30,10 +32,12 @@ uiTooling = "1.8.3"
 #Koin
 koin = "4.0.4"
 # Navigation 3
-nav3Core = "1.0.0-alpha04"
-nav3Lifecycle = "1.0.0-alpha02"
+nav3Core = "1.0.0-alpha05"
+nav3Lifecycle = "1.0.0-alpha03"
 kotlinSerialization = "2.1.21"
 kotlinxSerializationCore = "1.8.1"
+# Timber
+timber = "5.0.1"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
@@ -96,6 +100,12 @@ nav3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3C
 androidx-lifecycle-viewmodel-nav3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3Lifecycle" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
+# Timber
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+# SqlDelight
+sqlDelight-androidDriver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqlDelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -115,6 +125,9 @@ beepadel-android-feature-ui = { id = "beepadel.android.feature.ui", version = "u
 beepadel-jvm-library = { id = "beepadel.jvm.library", version = "unspecified" }
 #Test
 junit5 = {id = "de.mannodermaus.android-junit5", version.ref = "junitPluginVersion"}
+# SqlDelight
+sqlDelight = {id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+
 
 [bundles]
 compose = [

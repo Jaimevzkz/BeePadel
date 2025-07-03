@@ -1,6 +1,7 @@
 package com.vzkz.match.presentation.util
 
 import com.vzkz.match.domain.model.Match
+import com.vzkz.match.domain.model.Points
 import com.vzkz.match.domain.model.Set
 import com.vzkz.match.presentation.match_history.model.MatchUi
 import java.time.ZoneId
@@ -12,8 +13,8 @@ fun Set.toFormattedSet(): Pair<Int, Int> {
     var gamesPlayer1 = 0
     var gamesPlayer2 = 0
     gameList.forEach { game ->
-        if (game.serverPoints == com.vzkz.match.domain.model.Points.Won) gamesPlayer1++
-        else if (game.receiverPoints == com.vzkz.match.domain.model.Points.Won) gamesPlayer2++
+        if (game.serverPoints == Points.Won) gamesPlayer1++
+        else if (game.receiverPoints == Points.Won) gamesPlayer2++
     }
 
     return Pair(gamesPlayer1, gamesPlayer2)
@@ -45,6 +46,7 @@ fun Match.toMatchUi(): MatchUi {
     }
 
     return MatchUi(
+        matchId = matchId,
         isMatchWon = setDifference > 0,
         formatedSetList = formattedSetList,
         dateTimeUtc = formattedDateTime,

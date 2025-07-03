@@ -29,6 +29,8 @@ internal fun Project.configureAndroidCompose(
 
             // Navigation
             "implementation"(libs.findBundle("nav3").get())
+            // Timber
+            "implementation"(libs.findLibrary("timber").get())
         }
     }
 }

@@ -109,12 +109,15 @@ private fun MatchDurationSection(
             DropdownMenu(
                 expanded = isDropdownExpanded,
                 containerColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                onDismissRequest = {isDropdownExpanded = false}
+                onDismissRequest = { isDropdownExpanded = false }
             ) {
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { onDeleteMatch() }
+                        .clickable {
+                            isDropdownExpanded = false
+                            onDeleteMatch()
+                        }
                         .fillMaxWidth()
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -131,7 +134,7 @@ private fun MatchDurationSection(
                     )
                 }
             }
-            IconButton(onClick = {isDropdownExpanded = true}) {
+            IconButton(onClick = { isDropdownExpanded = true }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = stringResource(R.string.match_options),

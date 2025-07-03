@@ -15,4 +15,6 @@ fun DependencyHandlerScope.addUiLayerDependencies(project: Project) {
 
     "testImplementation"(project.libs.findBundle("test").get())
     "androidTestImplementation"(project.libs.findBundle("androidTest").get())
+    // Timber
+    "implementation"(project.libs.findLibrary("timber").get())
 }

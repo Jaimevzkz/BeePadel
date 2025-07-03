@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +40,7 @@ import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.match_history.components.MatchCard
 import com.vzkz.match.presentation.util.toMatchUi
 import org.koin.compose.viewmodel.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun MatchHistoryScreenRot(
@@ -84,7 +87,7 @@ private fun MatchHistoryScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {onAction(MatchHistoryIntent.NavigateToActiveMatch)},
+                onClick = { onAction(MatchHistoryIntent.NavigateToActiveMatch) },
                 content = {
                     Icon(
                         imageVector = PadelIcon,
@@ -97,7 +100,9 @@ private fun MatchHistoryScreen(
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .clip(RoundedCornerShape(12.dp))
+            ,
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -107,7 +112,7 @@ private fun MatchHistoryScreen(
                 MatchCard(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     match = matchUi,
-                    onDeleteMatch = {  }
+                    onDeleteMatch = { onAction(MatchHistoryIntent.DeleteMatch(matchUi.matchId)) }
                 )
             }
         }
