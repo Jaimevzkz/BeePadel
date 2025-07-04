@@ -54,11 +54,15 @@ fun generateSet(games1: Int, games2: Int): Set {
     repeat((1..games2).count()) {
         gameList.add(game(Fifteen, Won))
     }
-    return Set(gameList)
+    return Set(
+        setId = UUID.randomUUID(),
+        gameList = gameList
+    )
 }
 
 fun set(): Set {
     return Set(
+        setId = UUID.randomUUID(),
         gameList = listOf(
             game(Zero, Won),
             game(Won, Thirty),
@@ -76,8 +80,8 @@ fun set(): Set {
 
 fun game(serverPoints: Points, receiverPoints: Points): Game {
     return Game(
-        serverId = 0,
+        gameId = UUID.randomUUID(),
         serverPoints = serverPoints,
-        receiverPoints = receiverPoints
+        receiverPoints = receiverPoints,
     )
 }

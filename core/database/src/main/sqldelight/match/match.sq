@@ -1,6 +1,11 @@
+import java.time.ZonedDateTime;
+import java.util.UUID;
+import kotlin.time.Duration;
+
 CREATE TABLE matchEntity (
-  matchId TEXT NOT NULL PRIMARY KEY,
-  dateTimeUtc TEXT NOT NULL
+  matchId TEXT AS UUID NOT NULL PRIMARY KEY,
+  dateTimeUtc TEXT AS ZonedDateTime NOT NULL,
+  elapsedTime TEXT AS Duration NOT NULL
 );
 
 getAllMatches:
@@ -8,8 +13,8 @@ SELECT *
 FROM matchEntity;
 
 insertOrReplaceMatch:
-INSERT OR REPLACE INTO matchEntity(matchId, dateTimeUtc)
-VALUES (?, ?);
+INSERT OR REPLACE INTO matchEntity(matchId, dateTimeUtc, elapsedTime)
+VALUES (?, ?, ?);
 
 deleteMatchById:
 DELETE FROM matchEntity

@@ -1,13 +1,17 @@
-package com.vzkz.core.database
+package com.vzkz.core.database.data
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.vzkz.core.database.BeePadelDB
+import com.vzkz.core.database.domain.MatchDataSource
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
-import com.vzkz.match.domain.model.Match
 import kotlinx.coroutines.flow.Flow
 import match.MatchEntity
+import java.time.ZonedDateTime
+import java.util.UUID
+import kotlin.time.Duration
 
 class MatchDataSourceImpl(
     db: BeePadelDB,
@@ -22,16 +26,17 @@ class MatchDataSourceImpl(
             .mapToList(dispatchers.io)
     }
 
-    override suspend fun insertOrReplaceMatch(match: Match): Result<Unit, DataError.Local> {
+    override suspend fun insertOrReplaceMatch(matchId: UUID, dateTimeUtc: ZonedDateTime, elapsedTime: Duration): Result<Unit, DataError.Local> {
         val insert = queries.insertOrReplaceMatch(
-            matchId = match.matchId.toString(), // todo map this values correctly
-            dateTimeUtc = match.dateTimeUtc.toString()
+            matchId = matchId,
+            dateTimeUtc = dateTimeUtc,
+            elapsedTime = elapsedTime
         )
         return if (insert.value.toInt() != 1) Result.Error(DataError.Local.INSERT_MATCH_FAILED)
         else Result.Success(Unit)
     }
 
-    override suspend fun deleteMatchById(matchId: String): Result<Unit, DataError.Local> {
+    override suspend fun deleteMatchById(matchId: UUID): Result<Unit, DataError.Local> {
         val delete = queries.deleteMatchById(
             id = matchId
         )
