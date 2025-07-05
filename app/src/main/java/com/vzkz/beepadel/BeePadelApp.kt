@@ -2,7 +2,7 @@ package com.vzkz.beepadel
 
 import android.app.Application
 import com.vzkz.core.data.di.coreDataModule
-import com.vzkz.core.database.di.databaseModule
+import com.vzkz.core.database.data.di.databaseModule
 import com.vzkz.match.data.di.matchDataModule
 import com.vzkz.match.presentation.di.matchViewmodelModule
 import org.koin.android.ext.koin.androidContext

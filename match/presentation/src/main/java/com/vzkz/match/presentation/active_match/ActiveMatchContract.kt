@@ -16,7 +16,9 @@ data class ActiveMatchState(
 }
 
 sealed class ActiveMatchIntent: Intent {
+    data object FinishMatch: ActiveMatchIntent()
 }
 
 sealed class ActiveMatchEvent: Event {
+    data object NavToHistoryScreen: ActiveMatchEvent()
 }

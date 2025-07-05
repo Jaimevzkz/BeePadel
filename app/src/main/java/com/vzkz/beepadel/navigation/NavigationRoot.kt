@@ -1,5 +1,7 @@
 package com.vzkz.beepadel.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -13,6 +15,7 @@ import com.vzkz.match.presentation.match_history.MatchHistoryScreenRot
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
@@ -45,7 +48,7 @@ fun NavigationRoot(
                         key = key,
                     ) {
                         ActiveMatchScreenRot(
-
+                            onNavigateToMatchHistory = { backStack.removeLast() }
                         )
                     }
                 }

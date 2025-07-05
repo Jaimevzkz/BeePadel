@@ -10,6 +10,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.project
 
 class AndroidLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
@@ -36,6 +37,8 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
                "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
                "implementation"(libs.findBundle("koin").get())
                "testImplementation"(libs.findBundle("test").get())
+               // Timber
+               "implementation"(project.libs.findLibrary("timber").get())
            }
        }
     }

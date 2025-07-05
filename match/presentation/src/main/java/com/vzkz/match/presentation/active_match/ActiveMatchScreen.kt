@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,13 +22,18 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ActiveMatchScreenRot(
     viewModel: ActiveMatchViewmodel = koinViewModel(),
+    onNavigateToMatchHistory: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
 
     LaunchedEffect(events) {
         when (events) {
-            else -> {}
+            ActiveMatchEvent.NavToHistoryScreen -> {
+                onNavigateToMatchHistory()
+            }
+
+            null -> {}
         }
     }
 
@@ -43,7 +50,12 @@ private fun ActiveMatchScreen(
 ) {
     BeePadelScaffold {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Active match screen")
+            Column {
+                Text("Active match screen")
+                Button(onClick = { onAction(ActiveMatchIntent.FinishMatch) }) {
+                    Text("Create match [Debug]")
+                }
+            }
         }
     }
 }

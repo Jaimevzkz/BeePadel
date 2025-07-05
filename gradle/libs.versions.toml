@@ -105,6 +105,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # SqlDelight
 sqlDelight-androidDriver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqlDelight-sqliteDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 
 [plugins]
@@ -167,6 +168,15 @@ test = [
     "mockk-android",
     "assertk",
     "turbine"
+]
+
+reducedTest = [
+    "junit",
+    "junit-jupiter-api",
+    "junit-jupiter-params",
+    "junit-jupiter-engine",
+    "kotlintest-runner-junit5",
+    "kotlinx-coroutines-test",
 ]
 
 androidTest = [

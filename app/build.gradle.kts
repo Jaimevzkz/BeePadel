@@ -13,7 +13,8 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(projects.core.database)
+    implementation(projects.core.database.data)
+    implementation(projects.core.database.domain)
     implementation(projects.core.domain)
     implementation(projects.core.presentation.ui)
     implementation(projects.core.presentation.designsystem)

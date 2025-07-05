@@ -9,6 +9,7 @@ import com.vzkz.match.presentation.match_history.model.MatchUi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.util.UUID
 import kotlin.math.min
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -19,7 +20,8 @@ class MatchMappersTest {
         isMatchWon = true,
         formatedSetList = match().setList.map { it.toFormattedSet() },
         dateTimeUtc = "Jun 29, 2025 - 02:30PM",
-        elapsedTime = "01:30:43"
+        elapsedTime = "01:30:43",
+        matchId = UUID.randomUUID()
     )
 
     @Test

@@ -1,0 +1,26 @@
+import java.util.UUID;
+
+CREATE TABLE setEntity(
+  setId TEXT AS UUID NOT NULL PRIMARY KEY,
+  matchId TEXT AS UUID NOT NULL,
+  FOREIGN KEY (matchId) REFERENCES matchEntity(matchId)
+);
+
+getSetListWithMatchId:
+SELECT *
+FROM setEntity
+WHERE matchId=:matchId;
+
+getSetIdList:
+SELECT setId
+FROM setEntity
+WHERE matchId=:matchId;
+
+insertOrReplaceSet:
+INSERT OR REPLACE INTO setEntity(setId, matchId)
+VALUES (?, ?);
+
+deleteAllSetsFromMatch:
+DELETE FROM setEntity
+WHERE  matchId = :matchId;
+
