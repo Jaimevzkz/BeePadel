@@ -48,7 +48,9 @@ fun NavigationRoot(
                         key = key,
                     ) {
                         ActiveMatchScreenRot(
-                            onNavigateToMatchHistory = { backStack.removeLast() }
+                            onNavigateToMatchHistory = {
+                                backStack.add(KeyMatchHistoryScreen)
+                            }
                         )
                     }
                 }

@@ -5,16 +5,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.vzkz.core.database.SqlDelightRepository
 import com.vzkz.core.database.data.BeePadelDB
-import com.vzkz.core.database.data.GameDataSourceImpl
-import com.vzkz.core.database.data.MatchDataSourceImpl
-import com.vzkz.core.database.data.SetDataSourceImpl
+import com.vzkz.core.database.data.GameDataSource
+import com.vzkz.core.database.data.MatchDataSource
+import com.vzkz.core.database.data.SetDataSource
 import com.vzkz.core.database.data.adapters.durationAdapter
 import com.vzkz.core.database.data.adapters.uuidAdapter
 import com.vzkz.core.database.data.adapters.zonedDateTimeAdapter
-import com.vzkz.core.database.domain.GameDataSource
-import com.vzkz.core.database.domain.MatchDataSource
-import com.vzkz.core.database.domain.SetDataSource
+import com.vzkz.core.database.domain.LocalStorageRepository
 import game.GameEntity
 import match.MatchEntity
 import org.koin.core.module.dsl.singleOf
@@ -57,9 +56,11 @@ val databaseModule = module {
         )
     }
 
-    singleOf(::MatchDataSourceImpl).bind<MatchDataSource>()
-    singleOf(::SetDataSourceImpl).bind<SetDataSource>()
-    singleOf(::GameDataSourceImpl).bind<GameDataSource>()
+    singleOf(::SqlDelightRepository).bind<LocalStorageRepository>()
+
+    singleOf(::MatchDataSource)
+    singleOf(::SetDataSource)
+    singleOf(::GameDataSource)
 
 }
 
