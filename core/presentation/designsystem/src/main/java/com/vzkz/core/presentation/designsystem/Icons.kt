@@ -15,3 +15,15 @@ val TrophyIcon: ImageVector
 val PadelIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.padel)
+
+val BallIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ball)
+
+val PlusOneIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.plus1)
+
+val UndoIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.undo)

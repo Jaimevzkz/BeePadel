@@ -1,10 +1,10 @@
 package com.vzkz.match.domain.model
 
-enum class Points {
-    Zero,
-    Fifteen,
-    Thirty,
-    Forty,
-    Advantage,
-    Won
+enum class Points(val string: String) {
+    Zero("00"),
+    Fifteen("15"),
+    Thirty("30"),
+    Forty("40"),
+    Advantage("Ad"),
+    Won("W")
 }

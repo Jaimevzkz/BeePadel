@@ -4,4 +4,9 @@
     <string name="start_match">Start match</string>
     <string name="match_options">Match options</string>
     <string name="delete_match">Delete Match</string>
+    <string name="own_player_serving">Own player serving</string>
+    <string name="add_own_point">Add own point</string>
+    <string name="undo">Undo</string>
+    <string name="discard_match">Discard Match</string>
+    <string name="end_match">End Match</string>
 </resources>
