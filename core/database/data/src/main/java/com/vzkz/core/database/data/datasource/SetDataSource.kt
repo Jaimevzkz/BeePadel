@@ -1,5 +1,6 @@
-package com.vzkz.core.database.data
+package com.vzkz.core.database.data.datasource
 
+import com.vzkz.core.database.data.BeePadelDB
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result

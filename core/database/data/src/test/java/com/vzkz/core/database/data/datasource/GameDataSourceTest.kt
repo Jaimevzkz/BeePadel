@@ -1,4 +1,4 @@
-package com.vzkz.core.database.data
+package com.vzkz.core.database.data.datasource
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo

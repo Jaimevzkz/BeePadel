@@ -1,15 +1,15 @@
-package com.vzkz.core.database
+package com.vzkz.core.database.data
 
-import com.vzkz.core.database.data.BeePadelDB
-import com.vzkz.core.database.data.GameDataSource
-import com.vzkz.core.database.data.MatchDataSource
-import com.vzkz.core.database.data.SetDataSource
+import com.vzkz.core.database.data.datasource.GameDataSource
+import com.vzkz.core.database.data.datasource.MatchDataSource
+import com.vzkz.core.database.data.datasource.SetDataSource
 import com.vzkz.core.database.data.util.toDomain
 import com.vzkz.core.database.domain.LocalStorageRepository
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.asEmptyDataResult
+import com.vzkz.match.domain.model.Game
 import com.vzkz.match.domain.model.Match
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -43,22 +43,27 @@ class SqlDelightRepository(
     override suspend fun insertOrReplaceMatch(match: Match): Result<Unit, DataError.Local> {
         return withContext(dispatchers.io) {
             try {
+                var result: Result<Unit, DataError.Local> = Result.Success(Unit)
                 localDB.transaction {
                     val insertMatch = matchDataSource.insertOrReplaceMatch(
                         matchId = match.matchId,
                         dateTimeUtc = match.dateTimeUtc,
                         elapsedTime = match.elapsedTime
                     )
-                    if (insertMatch is Result.Error)
-                        insertMatch.asEmptyDataResult()
+                    if (insertMatch is Result.Error) {
+                        result = insertMatch.asEmptyDataResult()
+                        return@transaction
+                    }
 
                     match.setList.forEach { set ->
                         val insertSet = setDataSource.insertOrReplaceSetForMatch(
                             setId = set.setId,
                             matchId = match.matchId
                         )
-                        if (insertSet is Result.Error)
-                            insertSet.asEmptyDataResult()
+                        if (insertSet is Result.Error) {
+                            result = insertSet.asEmptyDataResult()
+                            return@transaction
+                        }
 
                         set.gameList.forEach { game ->
                             val insertGame = gameDataSource.insertOrReplaceGameForSet(
@@ -67,22 +72,24 @@ class SqlDelightRepository(
                                 serverPoints = game.serverPoints,
                                 receiverPoints = game.receiverPoints
                             )
-                            if (insertGame is Result.Error)
-                                insertGame.asEmptyDataResult()
+                            if (insertGame is Result.Error) {
+                                result = insertGame.asEmptyDataResult()
+                                return@transaction
+                            }
                         }
-
                     }
                 }
-                Result.Success(Unit)
+                result
             } catch (e: Exception) {
                 Result.Error(DataError.Local.INSERT_MATCH_FAILED)
             }
         }
     }
 
-    override suspend fun deleteMatch(matchId: UUID): Result<Unit, DataError.Local> {
+    override suspend fun deleteMatch(matchId: UUID): Result<Unit, DataError.Local> { // Turn into transaction??
         return withContext(dispatchers.io) {
-            val deleteGamesDeferredList = mutableListOf<Deferred<Result<Unit, DataError.Local>>>()
+            val deleteGamesDeferredList =
+                mutableListOf<Deferred<Result<Unit, DataError.Local>>>()
             setDataSource.getSetIdList(matchId).forEach { setId ->
                 deleteGamesDeferredList.add(async { gameDataSource.deleteGamesWithSetId(setId) })
             }
@@ -90,16 +97,16 @@ class SqlDelightRepository(
             deleteGamesDeferredList.forEach { deferred ->
                 val gamesResult = deferred.await()
                 if (gamesResult is Result.Error)
-                    gamesResult.asEmptyDataResult()
+                    return@withContext gamesResult.asEmptyDataResult()
             }
 
             val setsResult = setDataSource.deleteSetsWithMatchId(matchId)
             if (setsResult is Result.Error)
-                setsResult.asEmptyDataResult()
+                return@withContext setsResult.asEmptyDataResult()
 
             val matchResult = matchDataSource.deleteMatchById(matchId)
             if (matchResult is Result.Error)
-                matchResult.asEmptyDataResult()
+                return@withContext matchResult.asEmptyDataResult()
 
             Result.Success(Unit)
         }

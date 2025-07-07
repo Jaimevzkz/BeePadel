@@ -1,7 +1,8 @@
-package com.vzkz.core.database.data
+package com.vzkz.core.database.data.datasource
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.vzkz.core.database.data.BeePadelDB
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
@@ -34,6 +35,7 @@ class MatchDataSource(
             dateTimeUtc = dateTimeUtc,
             elapsedTime = elapsedTime
         )
+
         return if (insert.value.toInt() != 1) Result.Error(DataError.Local.INSERT_MATCH_FAILED)
         else Result.Success(Unit)
     }

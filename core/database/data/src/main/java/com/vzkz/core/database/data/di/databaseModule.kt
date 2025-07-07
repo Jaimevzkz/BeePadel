@@ -5,11 +5,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import com.vzkz.core.database.SqlDelightRepository
+import com.vzkz.core.database.data.SqlDelightRepository
 import com.vzkz.core.database.data.BeePadelDB
-import com.vzkz.core.database.data.GameDataSource
-import com.vzkz.core.database.data.MatchDataSource
-import com.vzkz.core.database.data.SetDataSource
+import com.vzkz.core.database.data.datasource.GameDataSource
+import com.vzkz.core.database.data.datasource.MatchDataSource
+import com.vzkz.core.database.data.datasource.SetDataSource
 import com.vzkz.core.database.data.adapters.durationAdapter
 import com.vzkz.core.database.data.adapters.uuidAdapter
 import com.vzkz.core.database.data.adapters.zonedDateTimeAdapter
