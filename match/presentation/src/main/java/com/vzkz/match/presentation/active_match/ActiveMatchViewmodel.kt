@@ -15,6 +15,11 @@ class ActiveMatchViewmodel(
     override fun reduce(intent: ActiveMatchIntent) {
         when (intent) {
             ActiveMatchIntent.FinishMatch -> finishMatch()
+            ActiveMatchIntent.AddOtherPoint -> {}
+            ActiveMatchIntent.AddOwnPoint -> {}
+            ActiveMatchIntent.DiscardMatch -> {}
+            ActiveMatchIntent.EndMatch -> {}
+            ActiveMatchIntent.UndoPoint -> {}
         }
     }
 

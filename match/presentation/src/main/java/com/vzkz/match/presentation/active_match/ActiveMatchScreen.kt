@@ -75,8 +75,8 @@ private fun ActiveMatchScreen(
     BeePadelScaffold(withGradient = false) {
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             TopSection(
-                onDiscardMatchClicked = {},
-                onEndMatchClicked = {}
+                onDiscardMatchClicked = { onAction(ActiveMatchIntent.DiscardMatch) },
+                onEndMatchClicked = { onAction(ActiveMatchIntent.EndMatch) }
             )
             CurrentGameScoreCard(
                 modifier = Modifier,
@@ -84,16 +84,16 @@ private fun ActiveMatchScreen(
                 otherPoints = state.otherPoints,
                 currentOwnGames = state.ownGames,
                 currentOtherGames = state.otherGames,
-                isServing = true
+                isServing = state.isServing
             )
             ControlsSection(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
                 ownSets = state.ownSets,
                 otherSets = state.otherSets,
-                onAddOwnPoint = { },
-                onAddOtherPoint = {},
-                onUndo = {},
+                onAddOwnPoint = { onAction(ActiveMatchIntent.AddOwnPoint) },
+                onAddOtherPoint = { onAction(ActiveMatchIntent.AddOtherPoint) },
+                onUndo = { onAction(ActiveMatchIntent.UndoPoint) },
             )
             Spacer(Modifier)
         }
@@ -117,7 +117,7 @@ fun TopSection(
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = MaterialTheme.colorScheme.error,
-                contentColor = MaterialTheme.colorScheme.onBackground
+                contentColor = MaterialTheme.colorScheme.onError
             )
         ) {
             Text(stringResource(R.string.discard_match))

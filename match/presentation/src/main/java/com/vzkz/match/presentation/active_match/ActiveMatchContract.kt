@@ -30,6 +30,11 @@ data class ActiveMatchState(
 
 sealed class ActiveMatchIntent : Intent {
     data object FinishMatch : ActiveMatchIntent()
+    data object DiscardMatch : ActiveMatchIntent()
+    data object EndMatch : ActiveMatchIntent()
+    data object AddOwnPoint : ActiveMatchIntent()
+    data object AddOtherPoint : ActiveMatchIntent()
+    data object UndoPoint : ActiveMatchIntent()
 }
 
 sealed class ActiveMatchEvent : Event {

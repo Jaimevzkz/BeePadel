@@ -17,6 +17,7 @@ val DarkColorScheme = darkColorScheme(
     onSurface = BeePadelWhite,
     onSurfaceVariant = BeePadelGray,
     error = BeePadelDarkRed,
+    onError = BeePadelLightRed,
     errorContainer = BeePadelDarkRed5
 )
 
