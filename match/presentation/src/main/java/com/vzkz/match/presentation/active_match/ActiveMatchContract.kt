@@ -4,6 +4,7 @@ import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
 import com.vzkz.match.domain.model.Points
+import kotlin.time.Duration
 
 data class ActiveMatchState(
     val ownSets: Int,
@@ -12,7 +13,8 @@ data class ActiveMatchState(
     val otherSets: Int,
     val otherGames: Int,
     val otherPoints: Points,
-    val isServing: Boolean
+    val isServing: Boolean,
+    val elapsedTime: Duration,
 
     ) : State {
     companion object {
@@ -24,6 +26,7 @@ data class ActiveMatchState(
             otherGames = 0,
             otherPoints = Points.Zero,
             isServing = true,
+            elapsedTime = Duration.ZERO,
         )
     }
 }

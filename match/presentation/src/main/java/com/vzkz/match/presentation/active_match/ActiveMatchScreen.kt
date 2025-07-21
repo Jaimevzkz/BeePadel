@@ -41,7 +41,9 @@ import com.vzkz.core.presentation.designsystem.UndoIcon
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.presentation.R
+import com.vzkz.match.presentation.util.formatted
 import org.koin.androidx.compose.koinViewModel
+import kotlin.time.Duration
 
 @Composable
 fun ActiveMatchScreenRot(
@@ -84,8 +86,10 @@ private fun ActiveMatchScreen(
                 otherPoints = state.otherPoints,
                 currentOwnGames = state.ownGames,
                 currentOtherGames = state.otherGames,
-                isServing = state.isServing
+                isServing = state.isServing,
+                elapsedTime = state.elapsedTime
             )
+            Spacer(Modifier)
             ControlsSection(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
@@ -233,7 +237,8 @@ fun CurrentGameScoreCard(
     otherPoints: Points,
     currentOwnGames: Int,
     currentOtherGames: Int,
-    isServing: Boolean
+    isServing: Boolean,
+    elapsedTime: Duration
 ) {
     val pointsFontSize = 60.sp
     val gameFontSize = 30.sp
@@ -242,6 +247,16 @@ fun CurrentGameScoreCard(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clip(RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(12.dp),
+            text = elapsedTime.formatted(),
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 30.sp
+        )
         Row(
             modifier = Modifier
                 .padding(8.dp)

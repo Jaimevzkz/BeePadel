@@ -20,6 +20,25 @@ fun Set.toFormattedSet(): Pair<Int, Int> {
     return Pair(gamesPlayer1, gamesPlayer2)
 }
 
+private fun Set.getWinner(): Boolean? { // true -> player1
+    val formattedSet = this.toFormattedSet()
+
+    return if ((formattedSet.first == 6 && formattedSet.second < 5) || formattedSet.first == 7) true
+    else if ((formattedSet.second == 6 && formattedSet.first < 5) || formattedSet.second == 7) false
+    else null
+}
+
+fun Match.toFormattedMatch(): Pair<Int, Int> {
+    var setsPlayer1 = 0
+    var setsPlayer2 = 0
+    setList.forEach { set ->
+        if (set.getWinner() == true) setsPlayer1++
+        else if (set.getWinner() == false) setsPlayer2++
+    }
+
+    return Pair(setsPlayer1, setsPlayer2)
+}
+
 fun Duration.formatted(): String {
     val totalSeconds = inWholeSeconds
     val hours = String.format(Locale.ENGLISH, "%02d", totalSeconds / 3600)

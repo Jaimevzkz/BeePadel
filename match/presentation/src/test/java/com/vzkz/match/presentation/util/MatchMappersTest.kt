@@ -2,15 +2,14 @@ package com.vzkz.match.presentation.util
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.vzkz.common.generateSet
-import com.vzkz.common.match
-import com.vzkz.common.set
+import com.vzkz.common.general.data_generator.generateSet
+import com.vzkz.common.general.data_generator.match
+import com.vzkz.common.general.data_generator.set
 import com.vzkz.match.presentation.match_history.model.MatchUi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.util.UUID
-import kotlin.math.min
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -40,6 +39,33 @@ class MatchMappersTest {
         val set = set().copy(gameList = set().gameList.dropLast(1))
 
         val result = set.toFormattedSet()
+
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `formatting a complete match works`(){
+        val expectedResult = Pair(3,1)
+
+        val result = match().toFormattedMatch()
+
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `formatting a match with incomplete sets ignores them`(){
+        val expectedResult = Pair(2,1)
+        val modifiedMatch = match().copy(
+            setList = listOf(
+                generateSet(5,3),
+                generateSet(6,3),
+                generateSet(2,6),
+                generateSet(6,4),
+                generateSet(6,5),
+            )
+        )
+
+        val result = modifiedMatch.toFormattedMatch()
 
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -80,7 +106,7 @@ class MatchMappersTest {
 
         val result = match()
             .copy(
-                setList = List(6) { generateSet(0, 6) }
+               setList = List(6) { generateSet(0, 6) }
             )
             .toMatchUi()
 
