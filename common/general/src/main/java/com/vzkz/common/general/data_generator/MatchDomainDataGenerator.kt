@@ -35,12 +35,12 @@ fun match(): Match {
             generateSet(2, 6),
             generateSet(7, 5),
         ),
-        elapsedTime = 1.hours + 30.minutes + 43.seconds,
         dateTimeUtc = ZonedDateTime.of(
             2025, 6, 29,
             14, 30, 0, 0,
             ZoneId.of("UTC")
         ),
+        elapsedTime = 1.hours + 30.minutes + 43.seconds,
         matchId = UUID.randomUUID()
     )
 }
@@ -53,12 +53,12 @@ fun secondMatch(): Match {
             generateSet(6, 4),
             generateSet(6, 7),
         ),
-        elapsedTime = 1.hours + 30.minutes + 43.seconds,
         dateTimeUtc = ZonedDateTime.of(
             2025, 6, 29,
             14, 30, 0, 0,
             ZoneId.of("UTC")
         ),
+        elapsedTime = 1.hours + 30.minutes + 43.seconds,
         matchId = UUID.randomUUID()
     )
 }
@@ -98,7 +98,7 @@ fun set(): Set {
 fun game(serverPoints: Points, receiverPoints: Points): Game {
     return Game(
         gameId = UUID.randomUUID(),
-        serverPoints = serverPoints,
-        receiverPoints = receiverPoints,
+        player1Points = serverPoints,
+        player2Points = receiverPoints,
     )
 }

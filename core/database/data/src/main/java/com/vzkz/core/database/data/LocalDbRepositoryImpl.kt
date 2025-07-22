@@ -9,7 +9,6 @@ import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.asEmptyDataResult
-import com.vzkz.match.domain.model.Game
 import com.vzkz.match.domain.model.Match
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -69,8 +68,8 @@ class SqlDelightRepository(
                             val insertGame = gameDataSource.insertOrReplaceGameForSet(
                                 gameId = game.gameId,
                                 setId = set.setId,
-                                serverPoints = game.serverPoints,
-                                receiverPoints = game.receiverPoints
+                                serverPoints = game.player1Points,
+                                receiverPoints = game.player2Points
                             )
                             if (insertGame is Result.Error) {
                                 result = insertGame.asEmptyDataResult()

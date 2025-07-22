@@ -82,10 +82,10 @@ private fun ActiveMatchScreen(
             )
             CurrentGameScoreCard(
                 modifier = Modifier,
-                ownPoints = state.ownPoints,
-                otherPoints = state.otherPoints,
-                currentOwnGames = state.ownGames,
-                currentOtherGames = state.otherGames,
+                ownPoints = state.pointsPlayer1,
+                otherPoints = state.pointsPlayer2,
+                currentOwnGames = state.gamesPlayer1,
+                currentOtherGames = state.gamesPlayer2,
                 isServing = state.isServing,
                 elapsedTime = state.elapsedTime
             )
@@ -93,10 +93,10 @@ private fun ActiveMatchScreen(
             ControlsSection(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                ownSets = state.ownSets,
-                otherSets = state.otherSets,
-                onAddOwnPoint = { onAction(ActiveMatchIntent.AddOwnPoint) },
-                onAddOtherPoint = { onAction(ActiveMatchIntent.AddOtherPoint) },
+                ownSets = state.setsPlayer1,
+                otherSets = state.setsPlayer2,
+                onAddOwnPoint = { onAction(ActiveMatchIntent.AddPointToPlayer1) },
+                onAddOtherPoint = { onAction(ActiveMatchIntent.AddPointToPlayer2) },
                 onUndo = { onAction(ActiveMatchIntent.UndoPoint) },
             )
             Spacer(Modifier)
@@ -352,12 +352,12 @@ private fun ActiveMatchScreenPreview() {
     BeePadelTheme {
         ActiveMatchScreen(
             state = ActiveMatchState.initial.copy(
-                ownSets = 1,
-                ownGames = 5,
-                ownPoints = Points.Forty,
-                otherSets = 1,
-                otherGames = 3,
-                otherPoints = Points.Fifteen
+                setsPlayer1 = 1,
+                gamesPlayer1 = 5,
+                pointsPlayer1 = Points.Forty,
+                setsPlayer2 = 1,
+                gamesPlayer2 = 3,
+                pointsPlayer2 = Points.Fifteen
             ),
             onAction = {}
         )

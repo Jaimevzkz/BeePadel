@@ -17,7 +17,7 @@ import kotlin.time.Duration.Companion.seconds
 class MatchMappersTest {
     private val matchUI = MatchUi(
         isMatchWon = true,
-        formatedSetList = match().setList.map { it.toFormattedSet() },
+        formatedSetList = match().setList.map { it.getGamesForSet() },
         dateTimeUtc = "Jun 29, 2025 - 02:30PM",
         elapsedTime = "01:30:43",
         matchId = UUID.randomUUID()
@@ -28,7 +28,7 @@ class MatchMappersTest {
         val expectedResult = Pair(6, 4)
         val set = set()
 
-        val result = set.toFormattedSet()
+        val result = set.getGamesForSet()
 
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -38,7 +38,7 @@ class MatchMappersTest {
         val expectedResult = Pair(5, 4)
         val set = set().copy(gameList = set().gameList.dropLast(1))
 
-        val result = set.toFormattedSet()
+        val result = set.getGamesForSet()
 
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -47,7 +47,7 @@ class MatchMappersTest {
     fun `formatting a complete match works`(){
         val expectedResult = Pair(3,1)
 
-        val result = match().toFormattedMatch()
+        val result = match().getSetsForMatch()
 
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -65,7 +65,7 @@ class MatchMappersTest {
             )
         )
 
-        val result = modifiedMatch.toFormattedMatch()
+        val result = modifiedMatch.getSetsForMatch()
 
         assertThat(result).isEqualTo(expectedResult)
     }

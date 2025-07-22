@@ -7,24 +7,23 @@ import com.vzkz.match.domain.model.Points
 import kotlin.time.Duration
 
 data class ActiveMatchState(
-    val ownSets: Int,
-    val ownGames: Int,
-    val ownPoints: Points,
-    val otherSets: Int,
-    val otherGames: Int,
-    val otherPoints: Points,
+    val setsPlayer1: Int,
+    val gamesPlayer1: Int,
+    val pointsPlayer1: Points,
+    val setsPlayer2: Int,
+    val gamesPlayer2: Int,
+    val pointsPlayer2: Points,
     val isServing: Boolean,
     val elapsedTime: Duration,
-
     ) : State {
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
-            ownSets = 0,
-            ownGames = 0,
-            ownPoints = Points.Zero,
-            otherSets = 0,
-            otherGames = 0,
-            otherPoints = Points.Zero,
+            setsPlayer1 = 0,
+            gamesPlayer1 = 0,
+            pointsPlayer1 = Points.Zero,
+            setsPlayer2 = 0,
+            gamesPlayer2 = 0,
+            pointsPlayer2 = Points.Zero,
             isServing = true,
             elapsedTime = Duration.ZERO,
         )
@@ -34,9 +33,8 @@ data class ActiveMatchState(
 sealed class ActiveMatchIntent : Intent {
     data object FinishMatch : ActiveMatchIntent()
     data object DiscardMatch : ActiveMatchIntent()
-    data object EndMatch : ActiveMatchIntent()
-    data object AddOwnPoint : ActiveMatchIntent()
-    data object AddOtherPoint : ActiveMatchIntent()
+    data object AddPointToPlayer1 : ActiveMatchIntent()
+    data object AddPointToPlayer2 : ActiveMatchIntent()
     data object UndoPoint : ActiveMatchIntent()
 }
 

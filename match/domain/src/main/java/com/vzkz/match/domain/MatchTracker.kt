@@ -1,26 +1,19 @@
 package com.vzkz.match.domain
 
-import com.vzkz.core.domain.Timer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import com.vzkz.core.domain.error.DataError
+import com.vzkz.core.domain.error.Result
+import com.vzkz.match.domain.model.Match
+import kotlinx.coroutines.flow.Flow
 import kotlin.time.Duration
 
-class MatchTracker(
-    private val applicationScope: CoroutineScope,
-) {
-    private val _elapsedTime = MutableStateFlow(Duration.ZERO)
-    val elapsedTime = _elapsedTime.asStateFlow()
+interface MatchTracker {
+    val activeMatch: Flow<Match>
+    val elapsedTime: Flow<Duration>
 
-    init {
-        Timer
-            .timeAndEmit()
-            .onEach { timer ->
-                _elapsedTime.value += timer
-            }
-            .launchIn(applicationScope)
-    }
+    suspend fun finishMatch(): Result<Unit, DataError.Local>
+    fun addPointToPlayer1()
+    fun addPointToPlayer2()
+    fun undoPoint()
+    fun discardMatch()
 
 }

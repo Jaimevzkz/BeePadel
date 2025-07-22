@@ -10,8 +10,8 @@ import set.SetEntity
 fun GameEntity.toDomain(): Game {
     return Game(
         gameId = gameId,
-        serverPoints = serverPoints,
-        receiverPoints = receiverPoints
+        player1Points = serverPoints,
+        player2Points = receiverPoints
     )
 }
 
@@ -24,7 +24,6 @@ fun SetEntity.toDomain(gameList: List<Game>): Set {
 
 fun MatchEntity.toDomain(setList: List<Set>): Match {
     return Match(
-        matchId = matchId,
         setList = setList,
         dateTimeUtc = dateTimeUtc,
         elapsedTime = elapsedTime
