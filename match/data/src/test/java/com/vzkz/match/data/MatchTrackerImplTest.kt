@@ -134,7 +134,41 @@ class MatchTrackerImplTest {
             val expectedGame = Game(randomUUID, Points.Zero, Points.Zero)
             val expectedPreviousGame = Game(randomUUID, Points.Forty, Points.Won)
             assertThat(firstEmission.setList.first().gameList[1]).isEqualTo(expectedGame)
-            assertThat(firstEmission.setList.first().gameList.first()).isEqualTo(expectedPreviousGame)
+            assertThat(firstEmission.setList.first().gameList.first()).isEqualTo(
+                expectedPreviousGame
+            )
+        }
+    }
+
+    @Test
+    fun `Finishing a set`() = runTest {
+        matchTrackerImpl.activeMatch.test {
+            var emission = awaitItem()
+            (0..<6).forEach { _ ->
+                matchTrackerImpl.addPointToPlayer1()
+                awaitItem()
+                matchTrackerImpl.addPointToPlayer1()
+                awaitItem()
+                matchTrackerImpl.addPointToPlayer1()
+                awaitItem()
+                matchTrackerImpl.addPointToPlayer1()
+                emission = awaitItem()
+            } // 6-0
+
+            assertThat(emission.setList.size).isEqualTo(2)
+            assertThat(emission.setList.first().getGamesForSet()).isEqualTo(Pair(6, 0))
+            assertThat(emission.setList[1].getGamesForSet()).isEqualTo(Pair(0,0))
+
+            matchTrackerImpl.addPointToPlayer1()
+            awaitItem()
+            matchTrackerImpl.addPointToPlayer1()
+            awaitItem()
+            matchTrackerImpl.addPointToPlayer1()
+            awaitItem()
+            matchTrackerImpl.addPointToPlayer1()
+            emission = awaitItem()
+            assertThat(emission.setList[1].getGamesForSet()).isEqualTo(Pair(1,0))
+
         }
     }
 }

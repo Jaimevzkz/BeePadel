@@ -4,11 +4,13 @@ import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.match.domain.model.Match
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlin.time.Duration
 
 interface MatchTracker {
     val activeMatch: Flow<Match>
     val elapsedTime: Flow<Duration>
+    val isMatchPlaying: Flow<Boolean>
 
     suspend fun finishMatch(): Result<Unit, DataError.Local>
     fun addPointToPlayer1()

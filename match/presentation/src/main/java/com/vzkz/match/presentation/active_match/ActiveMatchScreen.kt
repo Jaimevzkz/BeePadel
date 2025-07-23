@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +39,9 @@ import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.designsystem.PlusOneIcon
 import com.vzkz.core.presentation.designsystem.UndoIcon
+import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
+import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
+import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.presentation.R
@@ -78,7 +82,7 @@ private fun ActiveMatchScreen(
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             TopSection(
                 onDiscardMatchClicked = { onAction(ActiveMatchIntent.DiscardMatch) },
-                onEndMatchClicked = { onAction(ActiveMatchIntent.EndMatch) }
+                onEndMatchClicked = { onAction(ActiveMatchIntent.FinishMatch) }
             )
             CurrentGameScoreCard(
                 modifier = Modifier,
@@ -100,6 +104,9 @@ private fun ActiveMatchScreen(
                 onUndo = { onAction(ActiveMatchIntent.UndoPoint) },
             )
             Spacer(Modifier)
+        }
+        if (!state.isMatchPlaying){
+            ServingDialog()
         }
     }
 }
@@ -237,7 +244,7 @@ fun CurrentGameScoreCard(
     otherPoints: Points,
     currentOwnGames: Int,
     currentOtherGames: Int,
-    isServing: Boolean,
+    isServing: Boolean?,
     elapsedTime: Duration
 ) {
     val pointsFontSize = 60.sp
@@ -289,7 +296,7 @@ fun CurrentGameScoreCard(
                 fontFamily = Exo2,
                 color = MaterialTheme.colorScheme.onPrimary
             )
-            if (isServing) {
+            if (isServing == true) {
                 Spacer(Modifier.size(12.dp))
                 Icon(
                     imageVector = BallIcon,
@@ -317,7 +324,7 @@ fun CurrentGameScoreCard(
             horizontalArrangement = Arrangement.End
 
         ) {
-            if (!isServing) {
+            if (isServing == false) {
                 Icon(
                     imageVector = BallIcon,
                     contentDescription = stringResource(R.string.own_player_serving),
@@ -343,7 +350,59 @@ fun CurrentGameScoreCard(
 
         }
     }
+}
 
+@Composable
+fun ServingDialog(
+    modifier: Modifier = Modifier,
+) {
+    BeePadelDialog(
+        modifier = modifier,
+        title = "Who starts serving?",
+        onDismiss = {},
+        body = {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    RadioButton(
+                        selected = false,
+                        onClick = { },
+                    )
+                    Text("Player 1", style = MaterialTheme.typography.labelLarge)
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    RadioButton(
+                        selected = true,
+                        onClick = { },
+                    )
+                    Text("Player 2", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        },
+        primaryButton = {
+            BeePadelActionButton(
+                text = "Start Match",
+                isLoading = false,
+                onClick = {
+                }
+            )
+        },
+//        secondaryButton = {
+//            BeePadelOutlinedActionButton(
+//                modifier = Modifier.weight(1f),
+//                text = "Finish",
+//                isLoading = false,
+//                onClick = {
+//                }
+//            )
+//        }
+    )
 }
 
 @Preview
@@ -352,12 +411,12 @@ private fun ActiveMatchScreenPreview() {
     BeePadelTheme {
         ActiveMatchScreen(
             state = ActiveMatchState.initial.copy(
-                setsPlayer1 = 1,
-                gamesPlayer1 = 5,
-                pointsPlayer1 = Points.Forty,
-                setsPlayer2 = 1,
-                gamesPlayer2 = 3,
-                pointsPlayer2 = Points.Fifteen
+//                setsPlayer1 = 1,
+//                gamesPlayer1 = 5,
+//                pointsPlayer1 = Points.Forty,
+//                setsPlayer2 = 1,
+//                gamesPlayer2 = 3,
+//                pointsPlayer2 = Points.Fifteen
             ),
             onAction = {}
         )

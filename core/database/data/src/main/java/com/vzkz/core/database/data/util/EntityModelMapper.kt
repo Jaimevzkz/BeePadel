@@ -26,6 +26,7 @@ fun MatchEntity.toDomain(setList: List<Set>): Match {
     return Match(
         setList = setList,
         dateTimeUtc = dateTimeUtc,
-        elapsedTime = elapsedTime
+        elapsedTime = elapsedTime,
+        matchId = matchId
     )
 }

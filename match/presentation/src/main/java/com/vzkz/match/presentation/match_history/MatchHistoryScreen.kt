@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -28,8 +29,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.common.general.data_generator.matchList
+import com.vzkz.core.presentation.designsystem.BeePadelBlack
+import com.vzkz.core.presentation.designsystem.BeePadelGray
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.PadelIcon
+import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
+import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
+import com.vzkz.core.presentation.designsystem.components.BeePadelFloatingActionButton
+import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.match_history.components.MatchCard
@@ -80,14 +87,10 @@ private fun MatchHistoryScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
+            BeePadelFloatingActionButton(
                 onClick = { onAction(MatchHistoryIntent.NavigateToActiveMatch) },
-                content = {
-                    Icon(
-                        imageVector = PadelIcon,
-                        contentDescription = stringResource(R.string.start_match)
-                    )
-                }
+                icon = PadelIcon,
+                contentDescription = stringResource(R.string.start_match)
             )
         }
     ) { innerPadding ->
@@ -105,9 +108,41 @@ private fun MatchHistoryScreen(
                 MatchCard(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     match = matchUi,
-                    onDeleteMatch = { onAction(MatchHistoryIntent.DeleteMatch(matchUi.matchId)) }
+                    onDeleteMatch = {
+                        onAction(
+                            MatchHistoryIntent.ToggleDeleteDialog(
+                                true,
+                                matchUi.matchId
+                            )
+                        )
+                    }
                 )
             }
+        }
+
+        if (state.showDeleteDialog) {
+            BeePadelDialog(
+                title = "Permanently delete?",
+                onDismiss = {
+                    onAction(MatchHistoryIntent.ToggleDeleteDialog(false))
+                },
+                description = "Once deleted, the match can't be recovered",
+                primaryButton = {
+                    BeePadelActionButton(
+                        modifier = Modifier.weight(1f),
+                        text = "Confirm",
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            disabledContainerColor = BeePadelGray,
+                            disabledContentColor = BeePadelBlack
+                        ),
+                        isLoading = false,
+                        onClick = { onAction(MatchHistoryIntent.DeleteMatch) }
+                    )
+                },
+
+                )
         }
     }
 }
@@ -117,7 +152,10 @@ private fun MatchHistoryScreen(
 private fun MatchHistoryScreenPreview() {
     BeePadelTheme {
         MatchHistoryScreen(
-            state = MatchHistoryState.initial.copy(matchHistory = matchList().map { it.toMatchUi() }),
+            state = MatchHistoryState.initial.copy(
+                matchHistory = matchList().map { it.toMatchUi() },
+                showDeleteDialog = true
+            ),
             onAction = {}
         )
     }

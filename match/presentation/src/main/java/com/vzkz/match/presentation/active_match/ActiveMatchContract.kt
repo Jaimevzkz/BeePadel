@@ -13,8 +13,9 @@ data class ActiveMatchState(
     val setsPlayer2: Int,
     val gamesPlayer2: Int,
     val pointsPlayer2: Points,
-    val isServing: Boolean,
+    val isServing: Boolean?,
     val elapsedTime: Duration,
+    val isMatchPlaying: Boolean
     ) : State {
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
@@ -24,8 +25,9 @@ data class ActiveMatchState(
             setsPlayer2 = 0,
             gamesPlayer2 = 0,
             pointsPlayer2 = Points.Zero,
-            isServing = true,
+            isServing = null,
             elapsedTime = Duration.ZERO,
+            isMatchPlaying = false,
         )
     }
 }

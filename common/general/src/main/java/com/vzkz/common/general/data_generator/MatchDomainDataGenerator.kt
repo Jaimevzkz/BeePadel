@@ -102,3 +102,19 @@ fun game(serverPoints: Points, receiverPoints: Points): Game {
         player2Points = receiverPoints,
     )
 }
+
+fun emptyGame(): Game {
+    return Game(
+        gameId = UUID.randomUUID(),
+        player1Points = Zero,
+        player2Points = Zero
+    )
+}
+
+fun emptySet(): Set {
+    return Set(
+        setId = UUID.randomUUID(),
+        gameList = listOf(emptyGame())
+    )
+
+}

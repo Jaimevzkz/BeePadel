@@ -21,6 +21,14 @@ class ActiveMatchViewmodel(
 
     init {
         matchTracker
+            .isMatchPlaying
+            .onEach { isMatchPlaying ->
+                _state.update { it.copy(isMatchPlaying = isMatchPlaying) }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
+
+        matchTracker
             .elapsedTime
             .onEach { elapsedTime ->
                 _state.update { it.copy(elapsedTime = elapsedTime) }

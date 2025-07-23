@@ -14,16 +14,21 @@ import java.util.UUID
 class MatchHistoryViewModel(
     private val dispatchers: DispatchersProvider,
     private val matchHistoryRepository: MatchHistoryRepository
-) :
-    BaseViewModel<MatchHistoryState, MatchHistoryIntent, MatchHistoryEvent>(
-        MatchHistoryState.initial,
-        dispatchers
-    ) {
+) : BaseViewModel<MatchHistoryState, MatchHistoryIntent, MatchHistoryEvent>(
+    MatchHistoryState.initial,
+    dispatchers
+) {
+
+    private var uuidOfMatchToDelete: UUID? = null
 
     override fun reduce(intent: MatchHistoryIntent) {
         when (intent) {
             is MatchHistoryIntent.NavigateToActiveMatch -> sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
-            is MatchHistoryIntent.DeleteMatch -> deleteMatch(intent.matchId)
+            is MatchHistoryIntent.DeleteMatch -> deleteMatch()
+            is MatchHistoryIntent.ToggleDeleteDialog -> {
+                uuidOfMatchToDelete = intent.matchId
+                _state.update { it.copy(showDeleteDialog = intent.showDialog) }
+            }
         }
     }
 
@@ -39,9 +44,13 @@ class MatchHistoryViewModel(
             .launchIn(viewModelScope)
     }
 
-    private fun deleteMatch(matchId: UUID) {
-        ioLaunch {
-            matchHistoryRepository.deleteMatch(matchId)
+    private fun deleteMatch() {
+        uuidOfMatchToDelete?.let { uuid ->
+            ioLaunch {
+                matchHistoryRepository.deleteMatch(uuid)
+                _state.update { it.copy(showDeleteDialog = false) }
+                uuidOfMatchToDelete = null
+            }
         }
     }
 }

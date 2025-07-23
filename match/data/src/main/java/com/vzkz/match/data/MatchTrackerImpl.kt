@@ -6,10 +6,8 @@ import com.vzkz.core.domain.Timer
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.match.domain.MatchTracker
-import com.vzkz.match.domain.model.Game
 import com.vzkz.match.domain.model.Match
 import com.vzkz.match.domain.model.Points
-import com.vzkz.match.domain.model.Set
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +18,12 @@ import kotlinx.coroutines.flow.update
 import java.time.ZonedDateTime
 import java.util.UUID
 import kotlin.time.Duration
+import com.vzkz.common.general.data_generator.emptySet
+import com.vzkz.common.general.data_generator.emptyGame
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class MatchTrackerImpl(
     private val applicationScope: CoroutineScope,
     private val dispatchers: DispatchersProvider,
@@ -32,15 +35,7 @@ class MatchTrackerImpl(
     private val initialMatchState = Match(
         matchId = UUID.randomUUID(),
         setList = listOf(
-            Set(
-                UUID.randomUUID(), listOf(
-                    Game(
-                        gameId = UUID.randomUUID(),
-                        player1Points = Points.Zero,
-                        player2Points = Points.Zero
-                    )
-                )
-            )
+            emptySet()
         ),
         dateTimeUtc = ZonedDateTime.now(),
         elapsedTime = Duration.ZERO,
@@ -49,7 +44,10 @@ class MatchTrackerImpl(
     private val _activeMatch = MutableStateFlow(initialMatchState)
     override val activeMatch = _activeMatch.asStateFlow()
 
-    private val previousMatchState = activeMatch.value
+    private var previousMatchStateList = mutableListOf(activeMatch.value)
+
+    private val _isMatchPlaying = MutableStateFlow(false)
+    override val isMatchPlaying = _isMatchPlaying.asStateFlow()
 
     init {
         Timer
@@ -58,6 +56,17 @@ class MatchTrackerImpl(
                 _elapsedTime.value += timer
             }
             .flowOn(dispatchers.default)
+            .launchIn(applicationScope)
+
+        isMatchPlaying
+            .flatMapLatest { isMatchPlaying ->
+                if (isMatchPlaying) {
+                    Timer.timeAndEmit()
+                } else flowOf()
+            }
+            .onEach {
+                _elapsedTime.value += it
+            }
             .launchIn(applicationScope)
     }
 
@@ -78,7 +87,10 @@ class MatchTrackerImpl(
     }
 
     override fun undoPoint() {
-        _activeMatch.update { previousMatchState }
+        _activeMatch.update { previousMatchStateList.last() }
+
+        if (previousMatchStateList.size > 1)
+            previousMatchStateList.removeAt(previousMatchStateList.size - 1)
     }
 
     override fun discardMatch() {
@@ -95,30 +107,29 @@ class MatchTrackerImpl(
 
         newGameList[newGameList.size - 1] = newGame
 
+        newSetList[newSetList.size - 1] =
+            newSetList[newSetList.size - 1].copy(gameList = newGameList)
+
         if (newGame.player1Points == Points.Won || newGame.player2Points == Points.Won) {
-            if (activeMatch.value.setList.last().getWinner() != null) {
+            if (newSetList.last().getWinner() != null) {
                 newSetList.add(
-                    Set(
-                        setId = UUID.randomUUID(),
-                        gameList = emptyList()
-                    )
+                    emptySet()
                 )
             } else {
                 newGameList.add(
-                    Game(
-                        gameId = UUID.randomUUID(),
-                        player1Points = Points.Zero,
-                        player2Points = Points.Zero
-                    )
+                    emptyGame()
                 )
             }
         }
-        newSetList[newSetList.size - 1] =
-            newSetList[newSetList.size - 1].copy(gameList = newGameList)
+        previousMatchStateList.add(activeMatch.value)
         _activeMatch.update {
             it.copy(
                 setList = newSetList
             )
         }
+    }
+
+    fun setPlayingMatch(isPlayingMatch: Boolean) {
+        this._isMatchPlaying.value = isPlayingMatch
     }
 }
