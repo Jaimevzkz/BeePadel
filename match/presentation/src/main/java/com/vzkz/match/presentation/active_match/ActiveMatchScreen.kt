@@ -2,6 +2,7 @@ package com.vzkz.match.presentation.active_match
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +49,7 @@ import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedAction
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.presentation.R
+import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.formatted
 import org.koin.androidx.compose.koinViewModel
 import kotlin.time.Duration
@@ -78,35 +83,117 @@ private fun ActiveMatchScreen(
     state: ActiveMatchState,
     onAction: (ActiveMatchIntent) -> Unit
 ) {
-    BeePadelScaffold(withGradient = false) {
-        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-            TopSection(
-                onDiscardMatchClicked = { onAction(ActiveMatchIntent.DiscardMatch) },
-                onEndMatchClicked = { onAction(ActiveMatchIntent.FinishMatch) }
-            )
-            CurrentGameScoreCard(
-                modifier = Modifier,
-                ownPoints = state.pointsPlayer1,
-                otherPoints = state.pointsPlayer2,
-                currentOwnGames = state.gamesPlayer1,
-                currentOtherGames = state.gamesPlayer2,
-                isServing = state.isServing,
-                elapsedTime = state.elapsedTime
-            )
-            Spacer(Modifier)
-            ControlsSection(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                ownSets = state.setsPlayer1,
-                otherSets = state.setsPlayer2,
-                onAddOwnPoint = { onAction(ActiveMatchIntent.AddPointToPlayer1) },
-                onAddOtherPoint = { onAction(ActiveMatchIntent.AddPointToPlayer2) },
-                onUndo = { onAction(ActiveMatchIntent.UndoPoint) },
-            )
-            Spacer(Modifier)
-        }
-        if (!state.isMatchPlaying){
-            ServingDialog()
+    BeePadelScaffold(withGradient = false) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+                TopSection(
+                    onDiscardMatchClicked = {
+                        onAction(
+                            ActiveMatchIntent.ShowActiveDialog(
+                                ActiveMatchDialog.DISCARD_MATCH
+                            )
+                        )
+                    },
+                    onEndMatchClicked = {
+                        onAction(
+                            ActiveMatchIntent.ShowActiveDialog(
+                                ActiveMatchDialog.FINISH_MATCH
+                            )
+                        )
+                    }
+                )
+
+                CurrentGameScoreCard(
+                    modifier = Modifier,
+                    ownPoints = state.pointsPlayer1,
+                    otherPoints = state.pointsPlayer2,
+                    currentOwnGames = state.gamesPlayer1,
+                    currentOtherGames = state.gamesPlayer2,
+                    isServing = state.isTeam1Serving,
+                    elapsedTime = state.elapsedTime
+                )
+                Spacer(Modifier)
+                ControlsSection(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    ownSets = state.setsPlayer1,
+                    otherSets = state.setsPlayer2,
+                    onAddOwnPoint = { onAction(ActiveMatchIntent.AddPointToPlayer1) },
+                    onAddOtherPoint = { onAction(ActiveMatchIntent.AddPointToPlayer2) },
+                    onUndo = { onAction(ActiveMatchIntent.UndoPoint) },
+                )
+                Spacer(Modifier)
+            }
+            if (!state.isMatchStarted) {
+                ServingDialog(
+                    modifier = Modifier,
+                    onStartMatch = { onAction(ActiveMatchIntent.StartMatch(it)) },
+                    onCancel = {
+                        onAction(ActiveMatchIntent.NavToHistoryScreen)
+                    },
+                )
+            }
+            if (state.activeMatchDialogToShow != null) {
+                val activeDialogTitle: Int
+                val onClickIntent: ActiveMatchIntent
+                val errorButtonColor: Boolean
+                val activeDialogDescription: String?
+                val primaryButtonText: String
+                when (state.activeMatchDialogToShow) {
+                    ActiveMatchDialog.DISCARD_MATCH -> {
+                        activeDialogTitle = R.string.discard_match_question
+                        onClickIntent = ActiveMatchIntent.DiscardMatch
+                        errorButtonColor = true
+                        activeDialogDescription = null
+                        primaryButtonText = stringResource(R.string.confirm)
+                    }
+
+                    ActiveMatchDialog.FINISH_MATCH -> {
+                        activeDialogTitle = R.string.end_match_question
+                        onClickIntent = ActiveMatchIntent.FinishMatch
+                        errorButtonColor = false
+                        activeDialogDescription = null
+                        primaryButtonText = stringResource(R.string.confirm)
+                    }
+
+                    ActiveMatchDialog.ERROR -> {
+                        activeDialogTitle = R.string.error_occurred
+                        onClickIntent = ActiveMatchIntent.DiscardMatch
+                        errorButtonColor = true
+                        activeDialogDescription = state.error?.asString()
+                        primaryButtonText = stringResource(R.string.discard)
+                    }
+                }
+
+                BeePadelDialog(
+                    modifier = Modifier,
+                    title = stringResource(activeDialogTitle),
+                    description = activeDialogDescription,
+                    onDismiss = {
+                        onAction(ActiveMatchIntent.CloseActiveDialog)
+                    },
+                    primaryButton = {
+                        BeePadelActionButton(
+                            modifier = Modifier.weight(1f),
+                            text = primaryButtonText,
+                            isLoading = state.insertMatchLoading,
+                            errorButtonColors = errorButtonColor,
+                            onClick = {
+                                onAction(onClickIntent)
+                            }
+                        )
+                    },
+                    secondaryButton = {
+                        BeePadelOutlinedActionButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.cancel),
+                            onClick = {
+                                onAction(ActiveMatchIntent.CloseActiveDialog)
+                            }
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -154,7 +241,7 @@ fun ControlsSection(
     onUndo: () -> Unit,
 ) {
     val setFontSize = 36.sp
-    val iconButtonPadding = 12.dp
+    val iconButtonPadding = 16.dp
     val iconSize = 40.dp
     Column(
         modifier = modifier,
@@ -166,19 +253,22 @@ fun ControlsSection(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
+            Box(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable { onAddOwnPoint() }
                     .background(MaterialTheme.colorScheme.primary)
-                    .padding(iconButtonPadding),
-                onClick = { onAddOwnPoint() }) {
+                    .padding(iconButtonPadding)
+            ) {
                 Icon(
-                    modifier = Modifier.size(iconSize),
+                    modifier = Modifier
+                        .size(iconSize),
                     imageVector = PlusOneIcon,
                     contentDescription = stringResource(R.string.add_own_point),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
+
             Box(
                 modifier = Modifier
                     .border(
@@ -201,12 +291,13 @@ fun ControlsSection(
                 )
             }
 
-            IconButton(
+            Box(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable { onAddOtherPoint() }
                     .background(MaterialTheme.colorScheme.secondary)
-                    .padding(iconButtonPadding),
-                onClick = { onAddOtherPoint() }) {
+                    .padding(iconButtonPadding)
+            ) {
                 Icon(
                     modifier = Modifier.size(iconSize),
                     imageVector = PlusOneIcon,
@@ -269,6 +360,18 @@ fun CurrentGameScoreCard(
                 .padding(8.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
+                .then(
+                    if (isServing == true)
+                        Modifier.border(
+                            2.dp, Brush.horizontalGradient(
+                                listOf(
+                                    MaterialTheme.colorScheme.onPrimary,
+                                    Color.Transparent
+                                )
+                            ), RoundedCornerShape(8.dp)
+                        )
+                    else Modifier
+                )
                 .background(
                     brush = Brush.horizontalGradient(
                         listOf(
@@ -277,6 +380,7 @@ fun CurrentGameScoreCard(
                         )
                     )
                 )
+
                 .padding(32.dp),
             verticalAlignment = Alignment.CenterVertically,
 
@@ -311,6 +415,18 @@ fun CurrentGameScoreCard(
                 .padding(8.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
+                .then(
+                    if (isServing == false)
+                        Modifier.border(
+                            2.dp, Brush.horizontalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.onSecondary
+                                )
+                            ), RoundedCornerShape(8.dp)
+                        )
+                    else Modifier
+                )
                 .background(
                     brush = Brush.horizontalGradient(
                         listOf(
@@ -355,10 +471,13 @@ fun CurrentGameScoreCard(
 @Composable
 fun ServingDialog(
     modifier: Modifier = Modifier,
+    onStartMatch: (team1Serving: Boolean) -> Unit,
+    onCancel: () -> Unit
 ) {
+    var team1Serving by remember { mutableStateOf(true) }
     BeePadelDialog(
         modifier = modifier,
-        title = "Who starts serving?",
+        title = stringResource(R.string.who_starts_serving),
         onDismiss = {},
         body = {
             Column {
@@ -367,10 +486,13 @@ fun ServingDialog(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     RadioButton(
-                        selected = false,
-                        onClick = { },
+                        selected = team1Serving,
+                        onClick = { team1Serving = true },
                     )
-                    Text("Player 1", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = stringResource(R.string.team_1),
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
 
                 Row(
@@ -378,30 +500,36 @@ fun ServingDialog(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     RadioButton(
-                        selected = true,
-                        onClick = { },
+                        selected = !team1Serving,
+                        onClick = { team1Serving = false },
                     )
-                    Text("Player 2", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = stringResource(R.string.team_2),
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
         },
         primaryButton = {
             BeePadelActionButton(
-                text = "Start Match",
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.start_match),
                 isLoading = false,
                 onClick = {
+                    onStartMatch(team1Serving)
                 }
             )
         },
-//        secondaryButton = {
-//            BeePadelOutlinedActionButton(
-//                modifier = Modifier.weight(1f),
-//                text = "Finish",
-//                isLoading = false,
-//                onClick = {
-//                }
-//            )
-//        }
+        secondaryButton = {
+            BeePadelOutlinedActionButton(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.cancel),
+                isLoading = false,
+                onClick = {
+                    onCancel()
+                }
+            )
+        }
     )
 }
 
@@ -416,7 +544,8 @@ private fun ActiveMatchScreenPreview() {
 //                pointsPlayer1 = Points.Forty,
 //                setsPlayer2 = 1,
 //                gamesPlayer2 = 3,
-//                pointsPlayer2 = Points.Fifteen
+//                pointsPlayer2 = Points.Fifteen,
+                isTeam1Serving = true
             ),
             onAction = {}
         )

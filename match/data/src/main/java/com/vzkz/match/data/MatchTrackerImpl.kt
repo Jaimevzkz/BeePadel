@@ -11,7 +11,6 @@ import com.vzkz.match.domain.model.Points
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -20,8 +19,12 @@ import java.util.UUID
 import kotlin.time.Duration
 import com.vzkz.common.general.data_generator.emptySet
 import com.vzkz.common.general.data_generator.emptyGame
+import com.vzkz.core.domain.error.asEmptyDataResult
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class MatchTrackerImpl(
@@ -32,7 +35,7 @@ class MatchTrackerImpl(
     private val _elapsedTime = MutableStateFlow(Duration.ZERO)
     override val elapsedTime = _elapsedTime.asStateFlow()
 
-    private val initialMatchState = Match(
+    private fun initialMatchState() = Match(
         matchId = UUID.randomUUID(),
         setList = listOf(
             emptySet()
@@ -41,24 +44,22 @@ class MatchTrackerImpl(
         elapsedTime = Duration.ZERO,
     )
 
-    private val _activeMatch = MutableStateFlow(initialMatchState)
+    private val _activeMatch = MutableStateFlow(initialMatchState())
     override val activeMatch = _activeMatch.asStateFlow()
 
     private var previousMatchStateList = mutableListOf(activeMatch.value)
 
-    private val _isMatchPlaying = MutableStateFlow(false)
-    override val isMatchPlaying = _isMatchPlaying.asStateFlow()
+    private val _isTeam1Serving: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    override val isTeam1Serving = _isTeam1Serving.asStateFlow()
+
+    private val _isMatchResumed = MutableStateFlow(false)
+    override val isMatchResumed = _isMatchResumed.asStateFlow()
+
+    private val _isMatchStarted = MutableStateFlow(false)
+    override val isMatchStarted: Flow<Boolean> = _isMatchStarted.asStateFlow()
 
     init {
-        Timer
-            .timeAndEmit()
-            .onEach { timer ->
-                _elapsedTime.value += timer
-            }
-            .flowOn(dispatchers.default)
-            .launchIn(applicationScope)
-
-        isMatchPlaying
+        isMatchResumed
             .flatMapLatest { isMatchPlaying ->
                 if (isMatchPlaying) {
                     Timer.timeAndEmit()
@@ -70,12 +71,30 @@ class MatchTrackerImpl(
             .launchIn(applicationScope)
     }
 
-    override suspend fun finishMatch(): Result<Unit, DataError.Local> {
+    override suspend fun finishMatch(): Result<Unit, DataError> {
+        val finalSetList = if (activeMatch.value.setList.last().getWinner() == null)
+            activeMatch.value.setList.toMutableList().dropLast(1)
+        else activeMatch.value.setList
+
+        if (finalSetList.isEmpty()) return Result.Error(DataError.Logic.EMPTY_SET_LIST)
+
         val finalMatch = activeMatch.value.copy(
-            elapsedTime = elapsedTime.value
+            elapsedTime = elapsedTime.value,
+            setList = finalSetList
         )
-        _activeMatch.update { finalMatch }
-        return localStorageRepository.insertOrReplaceMatch(finalMatch)
+        return when (val insert = localStorageRepository.insertOrReplaceMatch(finalMatch)) {
+            is Result.Success -> {
+                applicationScope.launch {
+                    resetMatchTrackerState()
+                }
+
+                Result.Success(Unit)
+            }
+
+            is Result.Error -> {
+                return insert.asEmptyDataResult()
+            }
+        }
     }
 
     override fun addPointToPlayer1() {
@@ -93,8 +112,8 @@ class MatchTrackerImpl(
             previousMatchStateList.removeAt(previousMatchStateList.size - 1)
     }
 
-    override fun discardMatch() {
-        _activeMatch.update { initialMatchState }
+    override suspend fun discardMatch() {
+        resetMatchTrackerState()
     }
 
     private fun addPointTo(isPlayer1: Boolean) {
@@ -111,15 +130,16 @@ class MatchTrackerImpl(
             newSetList[newSetList.size - 1].copy(gameList = newGameList)
 
         if (newGame.player1Points == Points.Won || newGame.player2Points == Points.Won) {
-            if (newSetList.last().getWinner() != null) {
+            if (newSetList.last().getWinner() != null) { // New set
                 newSetList.add(
                     emptySet()
                 )
-            } else {
+            } else { // new game
                 newGameList.add(
                     emptyGame()
                 )
             }
+            setIsTeam1Serving(!_isTeam1Serving.value!!)
         }
         previousMatchStateList.add(activeMatch.value)
         _activeMatch.update {
@@ -129,7 +149,25 @@ class MatchTrackerImpl(
         }
     }
 
-    fun setPlayingMatch(isPlayingMatch: Boolean) {
-        this._isMatchPlaying.value = isPlayingMatch
+    override fun setPlayingMatch(isPlayingMatch: Boolean) {
+        this._isMatchResumed.value = isPlayingMatch
+    }
+
+    override fun setIsMatchStarted(isMatchStarted: Boolean) {
+        _isMatchStarted.value = isMatchStarted
+    }
+
+    override fun setIsTeam1Serving(isTeam1Serving: Boolean?) {
+        _isTeam1Serving.value = isTeam1Serving
+    }
+
+    private suspend fun resetMatchTrackerState() {
+        delay(1000L)
+        _activeMatch.update { initialMatchState() }
+        setPlayingMatch(false)
+        setIsMatchStarted(false)
+        setIsTeam1Serving(null)
+        previousMatchStateList = mutableListOf(activeMatch.value)
+        _elapsedTime.value = Duration.ZERO
     }
 }

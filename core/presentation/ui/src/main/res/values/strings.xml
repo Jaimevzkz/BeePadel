@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_unknown">Oops, an unknown error occurred</string>
+    <string name="error_insert_match">Oops, an error occurred while saving the match</string>
+    <string name="error_insert_set">Oops, an error occurred while saving the match (set)</string>
+    <string name="error_insert_game">Oops, an error occurred while saving the match (game)</string>
+    <string name="error_delete_match">Oops, an error occurred while deleting the match</string>
+    <string name="error_delete_set">Oops, an error occurred while deleting the match (set)</string>
+    <string name="error_delete_game">Oops, an error occurred while deleting the match (game)</string>
+    <string name="error_empty_set_list">In order to save a match you must finish at least 1 set</string>
+</resources>

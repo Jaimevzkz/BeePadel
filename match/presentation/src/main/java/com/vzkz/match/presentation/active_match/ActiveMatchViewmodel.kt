@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.ui.BaseViewModel
+import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
+import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,9 +23,25 @@ class ActiveMatchViewmodel(
 
     init {
         matchTracker
-            .isMatchPlaying
+            .isTeam1Serving
+            .onEach { isTeam1Serving ->
+                _state.update { it.copy(isTeam1Serving = isTeam1Serving) }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
+
+        matchTracker
+            .isMatchResumed
             .onEach { isMatchPlaying ->
-                _state.update { it.copy(isMatchPlaying = isMatchPlaying) }
+                _state.update { it.copy(isMatchResumed = isMatchPlaying) }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
+
+        matchTracker
+            .isMatchStarted
+            .onEach { isMatchStarted ->
+                _state.update { it.copy(isMatchStarted = isMatchStarted) }
             }
             .flowOn(dispatchers.default)
             .launchIn(viewModelScope)
@@ -62,21 +80,52 @@ class ActiveMatchViewmodel(
             ActiveMatchIntent.FinishMatch -> finishMatch()
             ActiveMatchIntent.AddPointToPlayer2 -> matchTracker.addPointToPlayer2()
             ActiveMatchIntent.AddPointToPlayer1 -> matchTracker.addPointToPlayer1()
-            ActiveMatchIntent.DiscardMatch -> matchTracker.discardMatch()
+            ActiveMatchIntent.DiscardMatch -> discardMatch()
             ActiveMatchIntent.UndoPoint -> matchTracker.undoPoint()
+            ActiveMatchIntent.NavToHistoryScreen -> sendEvent(ActiveMatchEvent.NavToHistoryScreen)
+            is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
+            ActiveMatchIntent.CloseActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = null) }
+            is ActiveMatchIntent.ShowActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
         }
     }
 
-    private fun finishMatch() { //todo impl
+    private fun startMatch(isTeam1Serving: Boolean) {
+        matchTracker.setIsTeam1Serving(isTeam1Serving)
+        matchTracker.setIsMatchStarted(true)
+        matchTracker.setPlayingMatch(true)
+    }
+
+    private fun finishMatch() {
+        _state.update { it.copy(insertMatchLoading = true) }
         ioLaunch {
-            when (matchTracker.finishMatch()) {
-                is Result.Success -> sendEvent(ActiveMatchEvent.NavToHistoryScreen)
+            when (val insert = matchTracker.finishMatch()) {
+                is Result.Success -> {
+                    _state.update {
+                        it.copy(
+                            insertMatchLoading = false,
+                            activeMatchDialogToShow = null
+                        )
+                    }
+                    sendEvent(ActiveMatchEvent.NavToHistoryScreen)
+                }
+
                 is Result.Error -> {
-                    //todo handle errors
+                    _state.update {
+                        it.copy(
+                            insertMatchLoading = false,
+                            activeMatchDialogToShow = ActiveMatchDialog.ERROR,
+                            error = insert.error.asUiText()
+                        )
+                    }
                 }
             }
 
         }
+    }
 
+    private fun discardMatch() {
+        ioLaunch { matchTracker.discardMatch() }
+        _state.update { it.copy(activeMatchDialogToShow = null) }
+        sendEvent(ActiveMatchEvent.NavToHistoryScreen)
     }
 }

@@ -1,6 +1,7 @@
 package com.vzkz.core.presentation.designsystem.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,7 +23,9 @@ fun BeePadelScaffold(
         topBar = topAppBar
     ) { innerPadding ->
         if (withGradient) {
-            GradientBackground {
+            GradientBackground(
+//                modifier = Modifier.padding(innerPadding)
+            ) {
                 content(innerPadding)
             }
         } else {

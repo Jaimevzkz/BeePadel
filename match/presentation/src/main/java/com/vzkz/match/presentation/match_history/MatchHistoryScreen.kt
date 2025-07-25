@@ -103,7 +103,7 @@ private fun MatchHistoryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(
-                state.matchHistory
+                state.matchHistory.sortedByDescending { it.dateTimeUtc }
             ) { matchUi ->
                 MatchCard(
                     modifier = Modifier.padding(horizontal = 12.dp),
@@ -131,12 +131,7 @@ private fun MatchHistoryScreen(
                     BeePadelActionButton(
                         modifier = Modifier.weight(1f),
                         text = "Confirm",
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError,
-                            disabledContainerColor = BeePadelGray,
-                            disabledContentColor = BeePadelBlack
-                        ),
+                        errorButtonColors = true,
                         isLoading = false,
                         onClick = { onAction(MatchHistoryIntent.DeleteMatch) }
                     )

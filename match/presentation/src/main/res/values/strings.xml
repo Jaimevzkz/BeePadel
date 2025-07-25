@@ -9,4 +9,13 @@
     <string name="undo">Undo</string>
     <string name="discard_match">Discard Match</string>
     <string name="end_match">End Match</string>
+    <string name="who_starts_serving">Who starts serving?</string>
+    <string name="team_1">Team 1</string>
+    <string name="team_2">Team 2</string>
+    <string name="cancel">Cancel</string>
+    <string name="end_match_question">End match?</string>
+    <string name="confirm">Confirm</string>
+    <string name="discard_match_question">Discard match?</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="discard">Discard</string>
 </resources>

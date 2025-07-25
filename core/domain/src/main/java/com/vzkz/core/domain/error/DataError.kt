@@ -8,7 +8,10 @@ sealed interface DataError: RootError {
         DELETE_MATCH_FAILED,
         DELETE_SET_FAILED,
         DELETE_GAME_FAILED,
+    }
 
+    enum class Logic: DataError{
+        EMPTY_SET_LIST
     }
 
 }

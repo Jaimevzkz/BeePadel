@@ -29,17 +29,24 @@ import com.vzkz.core.presentation.designsystem.BeePadelTheme
 @Composable
 fun BeePadelActionButton(
     text: String,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: ButtonColors = ButtonDefaults.buttonColors(
+    errorButtonColors: Boolean = false,
+    onClick: () -> Unit
+) {
+    val colors = if (!errorButtonColors) ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         disabledContainerColor = BeePadelGray,
         disabledContentColor = BeePadelBlack
-    ),
-    onClick: () -> Unit
-) {
+    ) else
+        ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.error,
+            contentColor = MaterialTheme.colorScheme.onError,
+            disabledContainerColor = BeePadelGray,
+            disabledContentColor = BeePadelBlack
+        )
     Button(
         modifier = modifier
             .height(IntrinsicSize.Min),
@@ -74,7 +81,7 @@ fun BeePadelActionButton(
 @Composable
 fun BeePadelOutlinedActionButton(
     text: String,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onClick: () -> Unit
@@ -120,7 +127,8 @@ private fun Preview() {
         BeePadelActionButton(
             text = "hola",
             isLoading = false,
-            onClick = { }
+            onClick = { },
+            errorButtonColors = true
         )
     }
 }
