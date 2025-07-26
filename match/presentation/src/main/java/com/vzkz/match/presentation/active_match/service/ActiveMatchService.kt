@@ -32,7 +32,7 @@ class ActiveMatchService : Service() {
 
     private val baseNotification by lazy {
         NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-            .setSmallIcon(com.vzkz.core.presentation.designsystem.R.drawable.ball)
+            .setSmallIcon(com.vzkz.core.presentation.designsystem.R.drawable.logo_no_bg)
             .setContentTitle(getString(R.string.active_match))
     }
 

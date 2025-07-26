@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "com.vzkz.core.presentation.designsystem"
 }
-
-dependencies {
-
-}

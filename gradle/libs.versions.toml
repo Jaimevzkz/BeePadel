@@ -38,6 +38,16 @@ kotlinSerialization = "2.2.0"
 kotlinxSerializationCore = "1.9.0"
 # Timber
 timber = "5.0.1"
+# Wear
+coreSplashscreen = "1.0.1"
+composeFoundation = "1.2.1"
+wearToolingPreview = "1.0.0"
+
+composeWearOs = "1.4.1"
+composeMaterialWearOs = "1.0.0-alpha37"
+health = "1.0.0"
+wear = "1.3.0"
+play-services-wearable = "19.0.0"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
@@ -90,6 +100,15 @@ androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", vers
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+# Wear
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "composeMaterialWearOs" }
+androidx-wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "composeWearOs" }
+androidx-wear-compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "composeWearOs" }
+androidx-health-services-client = { group = "androidx.health", name = "health-services-client", version.ref = "health" }
+androidx-wear = { group = "androidx.wear", name = "wear", version.ref = "wear" }
+androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
+play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "play-services-wearable" }
 #Koin
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
@@ -102,7 +121,6 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
 # Timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-
 # SqlDelight
 sqlDelight-androidDriver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-sqliteDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
@@ -120,6 +138,7 @@ jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serializati
 # Convention plugins
 beepadel-android-application = { id = "beepadel.android.application", version = "unspecified" }
 beepadel-android-application-compose = { id = "beepadel.android.application.compose", version = "unspecified" }
+beepadel-android-application-wear-compose = { id = "beepadel.android.application.wear.compose", version = "unspecified" }
 beepadel-android-library = { id = "beepadel.android.library", version = "unspecified" }
 beepadel-android-library-compose = { id = "beepadel.android.library.compose", version = "unspecified" }
 beepadel-android-feature-ui = { id = "beepadel.android.feature.ui", version = "unspecified" }

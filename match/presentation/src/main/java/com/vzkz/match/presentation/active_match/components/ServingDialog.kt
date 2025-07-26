@@ -1,5 +1,7 @@
 package com.vzkz.match.presentation.active_match.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +28,7 @@ fun ServingDialog(
     onCancel: () -> Unit
 ) {
     var team1Serving by remember { mutableStateOf(true) }
+    val mutableInteractionSource = remember { MutableInteractionSource() }
     BeePadelDialog(
         modifier = modifier,
         title = stringResource(R.string.who_starts_serving),
@@ -33,6 +36,11 @@ fun ServingDialog(
         body = {
             Column {
                 Row(
+                    modifier = Modifier
+                        .clickable(
+                            indication = null,
+                            interactionSource = mutableInteractionSource
+                        ) { team1Serving = true },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -47,6 +55,11 @@ fun ServingDialog(
                 }
 
                 Row(
+                    modifier = Modifier
+                        .clickable(
+                            indication = null,
+                            interactionSource = mutableInteractionSource
+                        ) { team1Serving = false },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {

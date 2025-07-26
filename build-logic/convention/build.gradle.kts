@@ -23,6 +23,12 @@ gradlePlugin {
             implementationClass = "application.AndroidApplicationComposeConventionPlugin"
         }
 
+
+        register("androidApplicationWearCompose") {
+            id = "beepadel.android.application.wear.compose"
+            implementationClass = "application.AndroidApplicationWearComposeConventionPlugin"
+        }
+
         register("androidLibrary") {
             id = "beepadel.android.library"
             implementationClass = "library.AndroidLibraryConventionPlugin"
