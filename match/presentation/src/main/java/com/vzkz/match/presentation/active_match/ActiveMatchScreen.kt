@@ -596,7 +596,7 @@ fun ServingDialog(
         primaryButton = {
             BeePadelActionButton(
                 modifier = Modifier.weight(1f),
-                text = stringResource(R.string.start_match),
+                text = stringResource(R.string.start),
                 isLoading = false,
                 onClick = {
                     onStartMatch(team1Serving)
