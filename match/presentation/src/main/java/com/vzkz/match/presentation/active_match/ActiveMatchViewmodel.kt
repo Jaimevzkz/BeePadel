@@ -6,6 +6,7 @@ import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.ui.BaseViewModel
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
+import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +23,9 @@ class ActiveMatchViewmodel(
     ) {
 
     init {
+//        _state.update { it.copy(isMatchFinished = false) } //todo don't know if this is necessary
+        _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
+
         matchTracker
             .isTeam1Serving
             .onEach { isTeam1Serving ->
@@ -86,6 +90,18 @@ class ActiveMatchViewmodel(
             is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
             ActiveMatchIntent.CloseActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = null) }
             is ActiveMatchIntent.ShowActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
+            is ActiveMatchIntent.SubmitNotificationPermissionInfo -> {
+                _state.update {
+                    it.copy(
+                        showNotificationRationale = intent.showNotificationPermissionRationale
+                    )
+                }
+            }
+
+            ActiveMatchIntent.DismissRationaleDialog ->
+                _state.update { it.copy(showNotificationRationale = false) }
+
+
         }
     }
 
@@ -103,7 +119,8 @@ class ActiveMatchViewmodel(
                     _state.update {
                         it.copy(
                             insertMatchLoading = false,
-                            activeMatchDialogToShow = null
+                            activeMatchDialogToShow = null,
+                            isMatchFinished = true
                         )
                     }
                     sendEvent(ActiveMatchEvent.NavToHistoryScreen)
@@ -114,7 +131,7 @@ class ActiveMatchViewmodel(
                         it.copy(
                             insertMatchLoading = false,
                             activeMatchDialogToShow = ActiveMatchDialog.ERROR,
-                            error = insert.error.asUiText()
+                            error = insert.error.asUiText(),
                         )
                     }
                 }
@@ -125,7 +142,12 @@ class ActiveMatchViewmodel(
 
     private fun discardMatch() {
         ioLaunch { matchTracker.discardMatch() }
-        _state.update { it.copy(activeMatchDialogToShow = null) }
+        _state.update {
+            it.copy(
+                activeMatchDialogToShow = null,
+                isMatchFinished = true
+            )
+        }
         sendEvent(ActiveMatchEvent.NavToHistoryScreen)
     }
 }

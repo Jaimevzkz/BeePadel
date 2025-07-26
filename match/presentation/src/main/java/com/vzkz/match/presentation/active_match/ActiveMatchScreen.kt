@@ -1,5 +1,12 @@
 package com.vzkz.match.presentation.active_match
 
+import android.Manifest
+import android.content.Context
+import android.os.Build
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,14 +57,18 @@ import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedAction
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.presentation.R
+import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.formatted
+import com.vzkz.match.presentation.util.hasNotificationPermission
+import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
 import kotlin.time.Duration
 
 @Composable
 fun ActiveMatchScreenRot(
     viewModel: ActiveMatchViewmodel = koinViewModel(),
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onNavigateToMatchHistory: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -74,15 +86,65 @@ fun ActiveMatchScreenRot(
 
     ActiveMatchScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        onServiceToggle = onServiceToggle
     )
 }
 
 @Composable
 private fun ActiveMatchScreen(
     state: ActiveMatchState,
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onAction: (ActiveMatchIntent) -> Unit
 ) {
+
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { perms ->
+        val hasNotificationPermission = if (Build.VERSION.SDK_INT >= 33) {
+            perms[Manifest.permission.POST_NOTIFICATIONS] == true
+        } else true
+
+        val activity = context as ComponentActivity
+        val showNotificationRationale = activity.shouldShowNotificationPermissionRationale()
+
+        onAction(
+            ActiveMatchIntent.SubmitNotificationPermissionInfo(
+                acceptedNotificationPermission = hasNotificationPermission,
+                showNotificationPermissionRationale = showNotificationRationale
+            )
+        )
+    }
+
+    LaunchedEffect(Unit) {
+        val activity = context as ComponentActivity
+        val showNotificationRationale = activity.shouldShowNotificationPermissionRationale()
+
+        onAction(
+            ActiveMatchIntent.SubmitNotificationPermissionInfo(
+                acceptedNotificationPermission = context.hasNotificationPermission(),
+                showNotificationPermissionRationale = showNotificationRationale
+            )
+        )
+
+        if (!showNotificationRationale) {
+            permissionLauncher.requestBeepadelPermissions(context)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isMatchFinished) {
+        if (state.isMatchFinished) {
+            onServiceToggle(false)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isMatchStarted) {
+        if (!ActiveMatchService.isServiceActive) {
+            onServiceToggle(true)
+        }
+    }
+
     BeePadelScaffold(withGradient = false) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
@@ -145,7 +207,7 @@ private fun ActiveMatchScreen(
                         onClickIntent = ActiveMatchIntent.DiscardMatch
                         errorButtonColor = true
                         activeDialogDescription = null
-                        primaryButtonText = stringResource(R.string.confirm)
+                        primaryButtonText = stringResource(R.string.discard)
                     }
 
                     ActiveMatchDialog.FINISH_MATCH -> {
@@ -153,7 +215,7 @@ private fun ActiveMatchScreen(
                         onClickIntent = ActiveMatchIntent.FinishMatch
                         errorButtonColor = false
                         activeDialogDescription = null
-                        primaryButtonText = stringResource(R.string.confirm)
+                        primaryButtonText = stringResource(R.string.end)
                     }
 
                     ActiveMatchDialog.ERROR -> {
@@ -190,6 +252,27 @@ private fun ActiveMatchScreen(
                             onClick = {
                                 onAction(ActiveMatchIntent.CloseActiveDialog)
                             }
+                        )
+                    }
+                )
+            }
+            if (state.showNotificationRationale) {
+                BeePadelDialog(
+                    title = stringResource(id = R.string.permission_required),
+                    onDismiss = { /* no-op */ },
+                    description = when {
+
+                        else -> {
+                            stringResource(id = R.string.notification_rationale)
+                        }
+                    },
+                    primaryButton = {
+                        BeePadelOutlinedActionButton(
+                            text = stringResource(id = R.string.okay),
+                            onClick = {
+                                onAction(ActiveMatchIntent.DismissRationaleDialog)
+                                permissionLauncher.requestBeepadelPermissions(context)
+                            },
                         )
                     }
                 )
@@ -533,6 +616,20 @@ fun ServingDialog(
     )
 }
 
+private fun ActivityResultLauncher<Array<String>>.requestBeepadelPermissions(
+    context: Context
+) {
+    val hasNotificationPermission = context.hasNotificationPermission()
+
+    val notificationPermission = if (Build.VERSION.SDK_INT >= 33) {
+        arrayOf(Manifest.permission.POST_NOTIFICATIONS)
+    } else arrayOf()
+
+    when {
+        !hasNotificationPermission -> launch(notificationPermission)
+    }
+}
+
 @Preview
 @Composable
 private fun ActiveMatchScreenPreview() {
@@ -547,7 +644,8 @@ private fun ActiveMatchScreenPreview() {
 //                pointsPlayer2 = Points.Fifteen,
                 isTeam1Serving = true
             ),
-            onAction = {}
+            onAction = {},
+            onServiceToggle = {}
         )
     }
 }

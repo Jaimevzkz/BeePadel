@@ -18,4 +18,9 @@
     <string name="discard_match_question">Discard match?</string>
     <string name="error_occurred">An error occurred</string>
     <string name="discard">Discard</string>
+    <string name="end">End</string>
+    <string name="active_match">Active Match</string>
+    <string name="permission_required">Permission required</string>
+    <string name="notification_rationale">In order to display current time and score for the match as a notification, this app needs your permission. Please click on \"Okay\" to grant it.</string>
+    <string name="okay">Okay</string>
 </resources>

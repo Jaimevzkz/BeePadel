@@ -20,8 +20,10 @@ data class ActiveMatchState(
     val elapsedTime: Duration,
     val isMatchResumed: Boolean,
     val isMatchStarted: Boolean,
+    val isMatchFinished: Boolean,
     val activeMatchDialogToShow: ActiveMatchDialog?,
-    val insertMatchLoading: Boolean
+    val insertMatchLoading: Boolean,
+    val showNotificationRationale: Boolean,
     ) : State {
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
@@ -36,8 +38,10 @@ data class ActiveMatchState(
             elapsedTime = Duration.ZERO,
             isMatchResumed = false,
             isMatchStarted = false,
+            isMatchFinished = false,
             activeMatchDialogToShow = null,
             insertMatchLoading = false,
+            showNotificationRationale = false,
         )
     }
 }
@@ -52,6 +56,11 @@ sealed class ActiveMatchIntent : Intent {
     data object NavToHistoryScreen: ActiveMatchIntent()
     data object CloseActiveDialog: ActiveMatchIntent()
     data class ShowActiveDialog(val newActiveDialog: ActiveMatchDialog): ActiveMatchIntent()
+    data class SubmitNotificationPermissionInfo(
+        val acceptedNotificationPermission: Boolean,
+        val showNotificationPermissionRationale: Boolean
+    ): ActiveMatchIntent()
+    data object DismissRationaleDialog: ActiveMatchIntent()
 }
 
 sealed class ActiveMatchEvent : Event {
