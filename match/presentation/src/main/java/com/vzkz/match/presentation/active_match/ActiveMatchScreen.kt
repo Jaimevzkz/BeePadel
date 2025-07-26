@@ -46,6 +46,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import com.vzkz.core.domain.Timer
 import com.vzkz.core.presentation.designsystem.BallIcon
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
@@ -57,12 +59,19 @@ import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedAction
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.presentation.R
+import com.vzkz.match.presentation.active_match.components.ActiveMatchDialog
+import com.vzkz.match.presentation.active_match.components.ControlsSection
+import com.vzkz.match.presentation.active_match.components.CurrentGameScoreCard
+import com.vzkz.match.presentation.active_match.components.ServingDialog
+import com.vzkz.match.presentation.active_match.components.TopSection
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.formatted
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
+import kotlin.math.acos
 import kotlin.time.Duration
 
 @Composable
@@ -140,7 +149,7 @@ private fun ActiveMatchScreen(
     }
 
     LaunchedEffect(key1 = state.isMatchStarted) {
-        if (!ActiveMatchService.isServiceActive) {
+        if (state.isMatchStarted && !ActiveMatchService.isServiceActive) {
             onServiceToggle(true)
         }
     }
@@ -186,74 +195,21 @@ private fun ActiveMatchScreen(
                 )
                 Spacer(Modifier)
             }
-            if (!state.isMatchStarted) {
+            if (!state.isMatchStarted && state.showServingDialog) {
                 ServingDialog(
                     modifier = Modifier,
                     onStartMatch = { onAction(ActiveMatchIntent.StartMatch(it)) },
                     onCancel = {
-                        onAction(ActiveMatchIntent.NavToHistoryScreen)
+                        onAction(ActiveMatchIntent.DiscardMatch)
                     },
                 )
             }
             if (state.activeMatchDialogToShow != null) {
-                val activeDialogTitle: Int
-                val onClickIntent: ActiveMatchIntent
-                val errorButtonColor: Boolean
-                val activeDialogDescription: String?
-                val primaryButtonText: String
-                when (state.activeMatchDialogToShow) {
-                    ActiveMatchDialog.DISCARD_MATCH -> {
-                        activeDialogTitle = R.string.discard_match_question
-                        onClickIntent = ActiveMatchIntent.DiscardMatch
-                        errorButtonColor = true
-                        activeDialogDescription = null
-                        primaryButtonText = stringResource(R.string.discard)
-                    }
-
-                    ActiveMatchDialog.FINISH_MATCH -> {
-                        activeDialogTitle = R.string.end_match_question
-                        onClickIntent = ActiveMatchIntent.FinishMatch
-                        errorButtonColor = false
-                        activeDialogDescription = null
-                        primaryButtonText = stringResource(R.string.end)
-                    }
-
-                    ActiveMatchDialog.ERROR -> {
-                        activeDialogTitle = R.string.error_occurred
-                        onClickIntent = ActiveMatchIntent.DiscardMatch
-                        errorButtonColor = true
-                        activeDialogDescription = state.error?.asString()
-                        primaryButtonText = stringResource(R.string.discard)
-                    }
-                }
-
-                BeePadelDialog(
-                    modifier = Modifier,
-                    title = stringResource(activeDialogTitle),
-                    description = activeDialogDescription,
-                    onDismiss = {
-                        onAction(ActiveMatchIntent.CloseActiveDialog)
-                    },
-                    primaryButton = {
-                        BeePadelActionButton(
-                            modifier = Modifier.weight(1f),
-                            text = primaryButtonText,
-                            isLoading = state.insertMatchLoading,
-                            errorButtonColors = errorButtonColor,
-                            onClick = {
-                                onAction(onClickIntent)
-                            }
-                        )
-                    },
-                    secondaryButton = {
-                        BeePadelOutlinedActionButton(
-                            modifier = Modifier.weight(1f),
-                            text = stringResource(R.string.cancel),
-                            onClick = {
-                                onAction(ActiveMatchIntent.CloseActiveDialog)
-                            }
-                        )
-                    }
+                ActiveMatchDialog(
+                    activeMatchDialogToShow = state.activeMatchDialogToShow,
+                    insertMatchLoading = state.insertMatchLoading,
+                    error = state.error,
+                    onAction = onAction
                 )
             }
             if (state.showNotificationRationale) {
@@ -279,341 +235,6 @@ private fun ActiveMatchScreen(
             }
         }
     }
-}
-
-@Composable
-fun TopSection(
-    modifier: Modifier = Modifier,
-    onDiscardMatchClicked: () -> Unit,
-    onEndMatchClicked: () -> Unit,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Button(
-            onClick = { onDiscardMatchClicked() },
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors().copy(
-                containerColor = MaterialTheme.colorScheme.error,
-                contentColor = MaterialTheme.colorScheme.onError
-            )
-        ) {
-            Text(stringResource(R.string.discard_match))
-        }
-
-        Button(
-            onClick = { onEndMatchClicked() },
-            shape = RoundedCornerShape(12.dp),
-        ) {
-            Text(stringResource(R.string.end_match))
-        }
-
-    }
-}
-
-@Composable
-fun ControlsSection(
-    modifier: Modifier = Modifier,
-    ownSets: Int,
-    otherSets: Int,
-    onAddOwnPoint: () -> Unit,
-    onAddOtherPoint: () -> Unit,
-    onUndo: () -> Unit,
-) {
-    val setFontSize = 36.sp
-    val iconButtonPadding = 16.dp
-    val iconSize = 40.dp
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(32.dp, alignment = Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { onAddOwnPoint() }
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(iconButtonPadding)
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(iconSize),
-                    imageVector = PlusOneIcon,
-                    contentDescription = stringResource(R.string.add_own_point),
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .border(
-                        width = 3.dp,
-                        brush = Brush.linearGradient(
-                            listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.secondary
-                            )
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(12.dp)
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "$ownSets - $otherSets",
-                    fontSize = setFontSize,
-                    fontFamily = Exo2
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { onAddOtherPoint() }
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(iconButtonPadding)
-            ) {
-                Icon(
-                    modifier = Modifier.size(iconSize),
-                    imageVector = PlusOneIcon,
-                    contentDescription = stringResource(R.string.add_own_point),
-                    tint = MaterialTheme.colorScheme.onSecondary
-                )
-            }
-
-        }
-        IconButton(
-            modifier = Modifier
-                .clip(CircleShape)
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = CircleShape
-                )
-                .padding(iconButtonPadding),
-            onClick = { onUndo() }) {
-            Icon(
-                modifier = Modifier.size(iconSize),
-                imageVector = UndoIcon,
-                contentDescription = stringResource(R.string.undo),
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
-    }
-
-}
-
-@Composable
-fun CurrentGameScoreCard(
-    modifier: Modifier = Modifier,
-    ownPoints: Points,
-    otherPoints: Points,
-    currentOwnGames: Int,
-    currentOtherGames: Int,
-    isServing: Boolean?,
-    elapsedTime: Duration
-) {
-    val pointsFontSize = 60.sp
-    val gameFontSize = 30.sp
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(12.dp),
-            text = elapsedTime.formatted(),
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 30.sp
-        )
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .then(
-                    if (isServing == true)
-                        Modifier.border(
-                            2.dp, Brush.horizontalGradient(
-                                listOf(
-                                    MaterialTheme.colorScheme.onPrimary,
-                                    Color.Transparent
-                                )
-                            ), RoundedCornerShape(8.dp)
-                        )
-                    else Modifier
-                )
-                .background(
-                    brush = Brush.horizontalGradient(
-                        listOf(
-                            MaterialTheme.colorScheme.primary,
-                            Color.Transparent
-                        )
-                    )
-                )
-
-                .padding(32.dp),
-            verticalAlignment = Alignment.CenterVertically,
-
-            ) {
-            Text(
-                modifier = Modifier,
-                text = ownPoints.string,
-                fontSize = pointsFontSize,
-                fontFamily = Exo2,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(Modifier.size(24.dp))
-            Text(
-                modifier = Modifier,
-                text = currentOwnGames.toString(),
-                fontSize = gameFontSize,
-                fontFamily = Exo2,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            if (isServing == true) {
-                Spacer(Modifier.size(12.dp))
-                Icon(
-                    imageVector = BallIcon,
-                    contentDescription = stringResource(R.string.own_player_serving),
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .then(
-                    if (isServing == false)
-                        Modifier.border(
-                            2.dp, Brush.horizontalGradient(
-                                listOf(
-                                    Color.Transparent,
-                                    MaterialTheme.colorScheme.onSecondary
-                                )
-                            ), RoundedCornerShape(8.dp)
-                        )
-                    else Modifier
-                )
-                .background(
-                    brush = Brush.horizontalGradient(
-                        listOf(
-                            Color.Transparent,
-                            MaterialTheme.colorScheme.secondary,
-                        )
-                    )
-                )
-                .padding(32.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-
-        ) {
-            if (isServing == false) {
-                Icon(
-                    imageVector = BallIcon,
-                    contentDescription = stringResource(R.string.own_player_serving),
-                    tint = MaterialTheme.colorScheme.onSecondary
-                )
-                Spacer(Modifier.size(12.dp))
-            }
-            Text(
-                modifier = Modifier,
-                text = currentOtherGames.toString(),
-                fontSize = gameFontSize,
-                fontFamily = Exo2,
-                color = MaterialTheme.colorScheme.onSecondary
-            )
-            Spacer(Modifier.size(24.dp))
-            Text(
-                modifier = Modifier,
-                text = otherPoints.string,
-                fontSize = pointsFontSize,
-                fontFamily = Exo2,
-                color = MaterialTheme.colorScheme.onSecondary
-            )
-
-        }
-    }
-}
-
-@Composable
-fun ServingDialog(
-    modifier: Modifier = Modifier,
-    onStartMatch: (team1Serving: Boolean) -> Unit,
-    onCancel: () -> Unit
-) {
-    var team1Serving by remember { mutableStateOf(true) }
-    BeePadelDialog(
-        modifier = modifier,
-        title = stringResource(R.string.who_starts_serving),
-        onDismiss = {},
-        body = {
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    RadioButton(
-                        selected = team1Serving,
-                        onClick = { team1Serving = true },
-                    )
-                    Text(
-                        text = stringResource(R.string.team_1),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    RadioButton(
-                        selected = !team1Serving,
-                        onClick = { team1Serving = false },
-                    )
-                    Text(
-                        text = stringResource(R.string.team_2),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                }
-            }
-        },
-        primaryButton = {
-            BeePadelActionButton(
-                modifier = Modifier.weight(1f),
-                text = stringResource(R.string.start),
-                isLoading = false,
-                onClick = {
-                    onStartMatch(team1Serving)
-                }
-            )
-        },
-        secondaryButton = {
-            BeePadelOutlinedActionButton(
-                modifier = Modifier.weight(1f),
-                text = stringResource(R.string.cancel),
-                isLoading = false,
-                onClick = {
-                    onCancel()
-                }
-            )
-        }
-    )
 }
 
 private fun ActivityResultLauncher<Array<String>>.requestBeepadelPermissions(

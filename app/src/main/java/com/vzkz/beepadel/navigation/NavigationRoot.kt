@@ -6,9 +6,14 @@ import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -30,12 +35,15 @@ fun NavigationRoot(
 ) {
     val backStack = rememberNavBackStack(KeyMatchHistoryScreen)
 
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current
+
     val deepLinkHandler: DeepLinkHandler = { uri ->
 
         when {
             uri.toString().contains("active_match") -> {
                 KeyActiveMatchScreen
             }
+
             else -> null
         }
     }
@@ -80,14 +88,17 @@ fun NavigationRoot(
                         val context = LocalContext.current
                         ActiveMatchScreenRot(
                             onNavigateToMatchHistory = {
-                                backStack.add(KeyMatchHistoryScreen)
+                                backStack.removeLast()
+
                             },
                             onServiceToggle = { shouldServiceRun ->
-                                if (shouldServiceRun){
-                                    context.startService(ActiveMatchService.createStartIntent(
-                                        context = context,
-                                        activityClass = MainActivity::class.java
-                                    ))
+                                if (shouldServiceRun) {
+                                    context.startService(
+                                        ActiveMatchService.createStartIntent(
+                                            context = context,
+                                            activityClass = MainActivity::class.java
+                                        )
+                                    )
                                 } else {
                                     context.startService(
                                         ActiveMatchService.createStopIntent(context)

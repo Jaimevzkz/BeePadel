@@ -84,8 +84,9 @@ class ActiveMatchService : Service() {
         runningTracker
             .elapsedTime
             .combine(runningTracker.activeMatch) { elapsedTime, activeMatch ->
+                val gamesForSet = activeMatch.setList.last().getGamesForSet()
                 val currentGame = activeMatch.setList.last().gameList.last()
-                "${elapsedTime.formatted()} / ${currentGame.player1Points.string}-${currentGame.player2Points.string}"
+                "${elapsedTime.formatted()}\n${gamesForSet.first}-${gamesForSet.second} (${currentGame.player1Points.string}-${currentGame.player2Points.string})"
             }
             .onEach { formattedString ->
                 val notification = baseNotification
@@ -106,12 +107,15 @@ class ActiveMatchService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.active_match),
                 NotificationManager.IMPORTANCE_DEFAULT
-            )
+            ).apply {
+                enableVibration(false)
+                setSound(null, null)
+            }
             notificationManager.createNotificationChannel(channel)
         }
     }

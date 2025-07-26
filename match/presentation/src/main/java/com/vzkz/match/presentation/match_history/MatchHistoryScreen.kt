@@ -122,22 +122,21 @@ private fun MatchHistoryScreen(
 
         if (state.showDeleteDialog) {
             BeePadelDialog(
-                title = "Permanently delete?",
+                title = stringResource(R.string.permanently_delete),
                 onDismiss = {
                     onAction(MatchHistoryIntent.ToggleDeleteDialog(false))
                 },
-                description = "Once deleted, the match can't be recovered",
+                description = stringResource(R.string.once_deleted_the_match_can_t_be_recovered),
                 primaryButton = {
                     BeePadelActionButton(
                         modifier = Modifier.weight(1f),
-                        text = "Confirm",
+                        text = stringResource(R.string.confirm),
                         errorButtonColors = true,
                         isLoading = false,
                         onClick = { onAction(MatchHistoryIntent.DeleteMatch) }
                     )
-                },
-
-                )
+                }
+            )
         }
     }
 }

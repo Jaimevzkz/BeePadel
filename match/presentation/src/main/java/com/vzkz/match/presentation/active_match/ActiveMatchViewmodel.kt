@@ -8,6 +8,7 @@ import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -23,7 +24,6 @@ class ActiveMatchViewmodel(
     ) {
 
     init {
-//        _state.update { it.copy(isMatchFinished = false) } //todo don't know if this is necessary
         _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
 
         matchTracker
@@ -81,11 +81,11 @@ class ActiveMatchViewmodel(
 
     override fun reduce(intent: ActiveMatchIntent) {
         when (intent) {
-            ActiveMatchIntent.FinishMatch -> finishMatch()
             ActiveMatchIntent.AddPointToPlayer2 -> matchTracker.addPointToPlayer2()
             ActiveMatchIntent.AddPointToPlayer1 -> matchTracker.addPointToPlayer1()
-            ActiveMatchIntent.DiscardMatch -> discardMatch()
             ActiveMatchIntent.UndoPoint -> matchTracker.undoPoint()
+            ActiveMatchIntent.FinishMatch -> finishMatch()
+            ActiveMatchIntent.DiscardMatch -> discardMatch()
             ActiveMatchIntent.NavToHistoryScreen -> sendEvent(ActiveMatchEvent.NavToHistoryScreen)
             is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
             ActiveMatchIntent.CloseActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = null) }
@@ -145,9 +145,11 @@ class ActiveMatchViewmodel(
         _state.update {
             it.copy(
                 activeMatchDialogToShow = null,
+                showServingDialog = false,
                 isMatchFinished = true
             )
         }
         sendEvent(ActiveMatchEvent.NavToHistoryScreen)
     }
+
 }
