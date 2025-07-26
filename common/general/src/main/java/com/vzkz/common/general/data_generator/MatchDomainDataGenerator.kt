@@ -8,6 +8,7 @@ import com.vzkz.match.domain.model.Set
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -116,5 +117,13 @@ fun emptySet(): Set {
         setId = UUID.randomUUID(),
         gameList = listOf(emptyGame())
     )
+}
 
+fun emptyMatch(): Match {
+    return Match(
+        matchId = UUID.randomUUID(),
+        setList = listOf(emptySet()),
+        dateTimeUtc = ZonedDateTime.now(),
+        elapsedTime = Duration.ZERO,
+    )
 }
