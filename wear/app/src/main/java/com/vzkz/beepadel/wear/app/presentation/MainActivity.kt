@@ -15,7 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.vzkz.beepadel.wear.app.presentation.theme.BeePadelTheme
+import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchScreenRoot
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,11 +26,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BeePadelTheme {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Hello World!", color = Color.White)
-                }
+               WearActiveMatchScreenRoot()
             }
-
         }
     }
 }

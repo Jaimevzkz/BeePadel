@@ -71,7 +71,7 @@ class ActiveMatchService : Service() {
                 getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
             }
             val notification = baseNotification
-                .setContentText("00:00:00 / 00-00")
+                .setContentText("00:00:00 00-00 (00-00)")
                 .setContentIntent(pendingIntent)
                 .build()
 

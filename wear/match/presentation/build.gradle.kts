@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.core.presentation.designsystemWear)
     implementation(projects.core.presentation.ui)
     implementation(projects.wear.match.domain)
+    implementation(projects.match.domain)
     implementation(projects.core.domain)
 //    implementation(projects.core.connectivity.domain)
 //    implementation(projects.core.notification)
