@@ -2,26 +2,36 @@ package com.vzkz.match.presentation.util
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.vzkz.common.general.TestDispatchers
 import com.vzkz.common.general.data_generator.generateSet
 import com.vzkz.common.general.data_generator.match
 import com.vzkz.common.general.data_generator.set
+import com.vzkz.common.general.fake.FakeLocalStorageRepository
 import com.vzkz.match.presentation.match_history.model.MatchUi
+import io.mockk.every
+import io.mockk.junit5.MockKExtension
+import io.mockk.mockkStatic
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.time.ZonedDateTime
 import java.util.UUID
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 class MatchMappersTest {
+    private val match = match()
     private val matchUI = MatchUi(
         isMatchWon = true,
         formatedSetList = match().setList.map { it.getGamesForSet() },
         dateTimeUtc = "Jun 29, 2025 - 02:30PM",
         elapsedTime = "01:30:43",
-        matchId = UUID.randomUUID()
+        matchId = match.matchId
     )
+
 
     @Test
     fun `formatting a completed set works`() {
@@ -92,7 +102,7 @@ class MatchMappersTest {
     fun `from Match to MatchUi mapping`() {
         val expectedResult = matchUI
 
-        val result = match().toMatchUi()
+        val result = match.toMatchUi()
 
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -104,7 +114,7 @@ class MatchMappersTest {
             formatedSetList = List(6) { Pair(0, 6) }
         )
 
-        val result = match()
+        val result = match
             .copy(
                setList = List(6) { generateSet(0, 6) }
             )

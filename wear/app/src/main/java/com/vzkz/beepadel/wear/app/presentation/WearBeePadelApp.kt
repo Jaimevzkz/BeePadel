@@ -12,7 +12,6 @@ import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class WearBeePadelApp : Application() {
-    val applicationScope = CoroutineScope(SupervisorJob())
 
     override fun onCreate() {
         super.onCreate()

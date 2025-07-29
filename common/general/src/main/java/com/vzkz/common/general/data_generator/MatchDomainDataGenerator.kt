@@ -39,7 +39,7 @@ fun match(): Match {
         dateTimeUtc = ZonedDateTime.of(
             2025, 6, 29,
             14, 30, 0, 0,
-            ZoneId.of("UTC")
+            ZoneId.systemDefault()
         ),
         elapsedTime = 1.hours + 30.minutes + 43.seconds,
         matchId = UUID.randomUUID()

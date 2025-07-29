@@ -27,3 +27,7 @@ val PlusOneIcon: ImageVector
 val UndoIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.undo)
+
+val FinishIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.finish)

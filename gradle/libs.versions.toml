@@ -51,7 +51,7 @@ play-services-wearable = "19.0.0"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
-projectVersionName = "1.0"
+projectVersionName = "1.0.0"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
