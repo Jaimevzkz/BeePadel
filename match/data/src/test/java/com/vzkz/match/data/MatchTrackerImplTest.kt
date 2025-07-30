@@ -38,7 +38,7 @@ class MatchTrackerImplTest {
 
     private lateinit var fakeLocalStorageRepository: FakeLocalStorageRepository
 
-    private lateinit var fakeClockProvider: ZonedDateTimeProvider
+    private lateinit var fakeZonedDateTimeProvider: ZonedDateTimeProvider
 
     private lateinit var fakeUUIDProvider: UUIDProvider
 
@@ -52,13 +52,13 @@ class MatchTrackerImplTest {
     fun setUp() {
         testDispatchers = TestDispatchers(mainCoroutineExtension.testDispatcher)
         fakeLocalStorageRepository = FakeLocalStorageRepository()
-        fakeClockProvider = FakeZonedDateTimeProvider(fixedZonedDateTime())
+        fakeZonedDateTimeProvider = FakeZonedDateTimeProvider(fixedZonedDateTime())
         fakeUUIDProvider = FakeUUIDProvider(defaultUUID())
         matchTrackerImpl = MatchTrackerImpl(
             applicationScope = fakeApplicationScope,
             dispatchers = testDispatchers,
             localStorageRepository = fakeLocalStorageRepository,
-            clockProvider = fakeClockProvider,
+            zonedDateProvider = fakeZonedDateTimeProvider,
             uUIDProvider = fakeUUIDProvider
         )
     }
