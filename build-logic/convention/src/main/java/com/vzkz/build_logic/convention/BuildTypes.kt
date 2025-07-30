@@ -14,9 +14,16 @@ internal fun Project.configureBuildTypes(
     extensionType: ExtensionType
 ) {
     commonExtension.run {
+
         buildFeatures{
             buildConfig = true
         }
+
+//        afterEvaluate { // Disable test in release variant due to proguard not including necessary files
+//            tasks.named("testReleaseUnitTest").configure {
+//                enabled = false
+//            }
+//        }
 
         when (extensionType) {
             ExtensionType.APPLICATION -> {
@@ -50,11 +57,12 @@ internal fun Project.configureBuildTypes(
 
 
 private fun BuildType.configureReleaseBuildType(commonExtension: CommonExtension<*, *, *, *, *, *>) {
-    isMinifyEnabled = true
+    isMinifyEnabled = false
     proguardFiles(
         commonExtension.getDefaultProguardFile("proguard-android-optimize.txt"),
         "proguard-rules.pro"
     )
+
     // Here is where any build configuration for release would go (i.e. api_key, base_url)
 }
 

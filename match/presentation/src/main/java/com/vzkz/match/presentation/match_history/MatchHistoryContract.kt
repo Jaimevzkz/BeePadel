@@ -1,11 +1,9 @@
 package com.vzkz.match.presentation.match_history
 
-import com.vzkz.common.general.data_generator.match
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
 import com.vzkz.match.presentation.match_history.model.MatchUi
-import com.vzkz.match.presentation.util.toMatchUi
 import java.util.UUID
 
 

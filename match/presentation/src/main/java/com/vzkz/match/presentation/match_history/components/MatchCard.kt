@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vzkz.common.general.data_generator.match
+import com.vzkz.common.general.data_generator.dummyMatch
 import com.vzkz.core.presentation.designsystem.BeePadelGold
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.CalendarIcon
@@ -206,7 +206,7 @@ private fun MatchDateSection(
 private fun Preview() {
     BeePadelTheme {
         MatchCard(
-            match = match().toMatchUi(),
+            match = dummyMatch().toMatchUi(),
             modifier = Modifier,
             onDeleteMatch = {}
         )

@@ -26,4 +26,5 @@
     <string name="start">Start</string>
     <string name="once_deleted_the_match_can_t_be_recovered">Once deleted, the match can\'t be recovered</string>
     <string name="permanently_delete">Permanently delete?</string>
+    <string name="other_player_serving">Other player serving</string>
 </resources>

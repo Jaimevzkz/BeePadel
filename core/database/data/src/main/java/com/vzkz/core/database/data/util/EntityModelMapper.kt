@@ -25,7 +25,7 @@ fun SetEntity.toDomain(gameList: List<Game>): Set {
 fun MatchEntity.toDomain(setList: List<Set>): Match {
     return Match(
         setList = setList,
-        dateTimeUtc = dateTimeUtc,
+        dateTime = dateTimeUtc,
         elapsedTime = elapsedTime,
         matchId = matchId
     )

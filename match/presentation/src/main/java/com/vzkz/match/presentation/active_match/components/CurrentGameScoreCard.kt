@@ -144,7 +144,7 @@ fun CurrentGameScoreCard(
             if (isServing == false) {
                 Icon(
                     imageVector = BallIcon,
-                    contentDescription = stringResource(R.string.own_player_serving),
+                    contentDescription = stringResource(R.string.other_player_serving),
                     tint = MaterialTheme.colorScheme.onSecondary
                 )
                 Spacer(Modifier.size(12.dp))

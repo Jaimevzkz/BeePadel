@@ -1,48 +1,50 @@
 package com.vzkz.match.data
 
+import com.vzkz.common.general.data_generator.emptyGame
+import com.vzkz.common.general.data_generator.emptyMatch
+import com.vzkz.common.general.data_generator.emptySet
 import com.vzkz.core.database.domain.LocalStorageRepository
+import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.Timer
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
+import com.vzkz.core.domain.error.UUIDProvider
+import com.vzkz.core.domain.error.asEmptyDataResult
 import com.vzkz.match.domain.MatchTracker
-import com.vzkz.match.domain.model.Match
 import com.vzkz.match.domain.model.Points
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import java.time.ZonedDateTime
-import java.util.UUID
-import kotlin.time.Duration
-import com.vzkz.common.general.data_generator.emptySet
-import com.vzkz.common.general.data_generator.emptyGame
-import com.vzkz.core.domain.error.asEmptyDataResult
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
 
-@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class MatchTrackerImpl(
     private val applicationScope: CoroutineScope,
     private val dispatchers: DispatchersProvider,
-    private val localStorageRepository: LocalStorageRepository
+    private val localStorageRepository: LocalStorageRepository,
+    private val zonedDateProvider: ZonedDateTimeProvider,
+    private val uUIDProvider: UUIDProvider
 ) : MatchTracker {
     private val _elapsedTime = MutableStateFlow(Duration.ZERO)
     override val elapsedTime = _elapsedTime.asStateFlow()
 
-    private fun initialMatchState() = Match(
-        matchId = UUID.randomUUID(),
-        setList = listOf(
-            emptySet()
-        ),
-        dateTimeUtc = ZonedDateTime.now(),
-        elapsedTime = Duration.ZERO,
-    )
+    private fun initialMatchState() =
+        emptyMatch(
+            matchId = uUIDProvider.randomUUID(),
+            setId = uUIDProvider.randomUUID(),
+            gameId = uUIDProvider.randomUUID(),
+            zonedDateTime = zonedDateProvider.now()
+        )
 
     private val _activeMatch = MutableStateFlow(initialMatchState())
     override val activeMatch = _activeMatch.asStateFlow()
@@ -132,11 +134,16 @@ class MatchTrackerImpl(
         if (newGame.player1Points == Points.Won || newGame.player2Points == Points.Won) {
             if (newSetList.last().getWinner() != null) { // New set
                 newSetList.add(
-                    emptySet()
+                    emptySet(
+                        setId = uUIDProvider.randomUUID(),
+                        gameId = uUIDProvider.randomUUID()
+                    )
                 )
             } else { // new game
                 newGameList.add(
-                    emptyGame()
+                    emptyGame(
+                        uuid = uUIDProvider.randomUUID()
+                    )
                 )
             }
             setIsTeam1Serving(!_isTeam1Serving.value!!)

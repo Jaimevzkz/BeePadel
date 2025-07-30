@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
-import com.vzkz.common.general.data_generator.generateSet
-import com.vzkz.common.general.data_generator.match
+import com.vzkz.common.general.data_generator.generateDummySet
+import com.vzkz.common.general.data_generator.dummyMatch
 import com.vzkz.core.database.data.datasource.GameDataSource
 import com.vzkz.core.database.data.datasource.MatchDataSource
 import com.vzkz.core.database.data.datasource.SetDataSource
@@ -51,9 +51,9 @@ class SqlDelightRepositoryTest : DatabaseTest() {
 
     @Test
     fun `When inserting matches, the flow is updated correctly`() = runTest {
-        val firstMatchToInsert = match()
+        val firstMatchToInsert = dummyMatch(randomizeUUIDs = true)
         val secondMatchToInsert =
-            match().copy(setList = listOf(generateSet(2, 6), generateSet(5, 7)))
+            dummyMatch().copy(setList = listOf(generateDummySet(randomizeUUIDs = true, 2, 6), generateDummySet(randomizeUUIDs = true,5, 7)))
 
         val matchFlow = sqlDelightRepository.getMatchHistory()
 
@@ -73,9 +73,9 @@ class SqlDelightRepositoryTest : DatabaseTest() {
 
     @Test
     fun `When deleting matches, the flow is updated correctly`() = runTest {
-        val firstMatchToInsert = match()
+        val firstMatchToInsert = dummyMatch(randomizeUUIDs = true)
         val secondMatchToInsert =
-            match().copy(setList = listOf(generateSet(2, 6), generateSet(5, 7)))
+            dummyMatch().copy(setList = listOf(generateDummySet(randomizeUUIDs = true,2, 6), generateDummySet(randomizeUUIDs = true,5, 7)))
 
         val matchFlow = sqlDelightRepository.getMatchHistory()
 
@@ -101,7 +101,7 @@ class SqlDelightRepositoryTest : DatabaseTest() {
 
     @Test
     fun `Deleting a match that doesn't exist results in error`() = runTest {
-        val firstMatchToInsert = match()
+        val firstMatchToInsert = dummyMatch()
 
         val matchFlow = sqlDelightRepository.getMatchHistory()
 

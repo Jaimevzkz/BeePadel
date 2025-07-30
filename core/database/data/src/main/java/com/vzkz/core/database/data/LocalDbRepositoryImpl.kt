@@ -46,7 +46,7 @@ class SqlDelightRepository(
                 localDB.transaction {
                     val insertMatch = matchDataSource.insertOrReplaceMatch(
                         matchId = match.matchId,
-                        dateTimeUtc = match.dateTimeUtc,
+                        dateTimeUtc = match.dateTime,
                         elapsedTime = match.elapsedTime
                     )
                     if (insertMatch is Result.Error) {

@@ -1,6 +1,6 @@
 package com.vzkz.common.general.fake.match
 
-import com.vzkz.common.general.data_generator.matchList
+import com.vzkz.common.general.data_generator.dummyMatchList
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.EmptyResult
 import com.vzkz.core.domain.error.Result
@@ -13,7 +13,7 @@ import java.util.UUID
 class FakeMatchHistoryRepository : MatchHistoryRepository {
 
     private val matchList: MutableStateFlow<List<Match>> =
-        MutableStateFlow(matchList())
+        MutableStateFlow(dummyMatchList())
 
     override fun getMatchHistory(): Flow<List<Match>> {
         return matchList

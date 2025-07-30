@@ -4,34 +4,29 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.vzkz.common.general.TestDispatchers
+import com.vzkz.common.general.data_generator.defaultUUID
+import com.vzkz.common.general.data_generator.emptyMatch
+import com.vzkz.common.general.data_generator.fixedZonedDateTime
+import com.vzkz.common.general.fake.FakeZonedDateTimeProvider
 import com.vzkz.common.general.fake.FakeLocalStorageRepository
+import com.vzkz.common.general.fake.FakeUUIDProvider
 import com.vzkz.common.test.util.MainCoroutineExtension
+import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
+import com.vzkz.core.domain.error.UUIDProvider
 import com.vzkz.match.data.util.addGame
 import com.vzkz.match.data.util.addSet
 import com.vzkz.match.domain.model.Game
-import com.vzkz.match.domain.model.Match
 import com.vzkz.match.domain.model.Points
-import com.vzkz.match.domain.model.Set
-import io.kotlintest.matchers.types.shouldNotBeInstanceOf
-import io.mockk.every
-import io.mockk.junit5.MockKExtension
-import io.mockk.mockkStatic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
-import java.time.ZonedDateTime
-import java.util.UUID
-import kotlin.math.exp
-import kotlin.time.Duration
 
-@ExtendWith(MockKExtension::class)
 class MatchTrackerImplTest {
 
     private lateinit var testDispatchers: TestDispatchers
@@ -43,8 +38,9 @@ class MatchTrackerImplTest {
 
     private lateinit var fakeLocalStorageRepository: FakeLocalStorageRepository
 
-    private val randomUUID = UUID.randomUUID()
-    private val zonedDateTime = ZonedDateTime.now()
+    private lateinit var fakeZonedDateTimeProvider: ZonedDateTimeProvider
+
+    private lateinit var fakeUUIDProvider: UUIDProvider
 
     companion object {
         @JvmField
@@ -54,17 +50,16 @@ class MatchTrackerImplTest {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(UUID::class)
-        mockkStatic(ZonedDateTime::class)
-        every { UUID.randomUUID() } returns randomUUID
-        every { ZonedDateTime.now() } returns zonedDateTime
-
         testDispatchers = TestDispatchers(mainCoroutineExtension.testDispatcher)
         fakeLocalStorageRepository = FakeLocalStorageRepository()
+        fakeZonedDateTimeProvider = FakeZonedDateTimeProvider(fixedZonedDateTime())
+        fakeUUIDProvider = FakeUUIDProvider(defaultUUID())
         matchTrackerImpl = MatchTrackerImpl(
             applicationScope = fakeApplicationScope,
             dispatchers = testDispatchers,
-            localStorageRepository = fakeLocalStorageRepository
+            localStorageRepository = fakeLocalStorageRepository,
+            zonedDateProvider = fakeZonedDateTimeProvider,
+            uUIDProvider = fakeUUIDProvider
         )
     }
 
@@ -73,30 +68,18 @@ class MatchTrackerImplTest {
         matchTrackerImpl.setIsTeam1Serving(true)
         matchTrackerImpl.activeMatch.test {
             val firstEmission = awaitItem()
-            assertThat(firstEmission).isEqualTo(
-                Match(
-                    matchId = UUID.randomUUID(),
-                    setList = listOf(
-                        Set(
-                            UUID.randomUUID(), listOf(
-                                Game(
-                                    gameId = UUID.randomUUID(),
-                                    player1Points = Points.Zero,
-                                    player2Points = Points.Zero
-                                )
-                            )
-                        )
-                    ),
-                    dateTimeUtc = ZonedDateTime.now(),
-                    elapsedTime = Duration.ZERO,
-                )
-            )
+            assertThat(firstEmission).isEqualTo(emptyMatch(
+                matchId = defaultUUID(),
+                setId = defaultUUID(),
+                gameId = defaultUUID(),
+                zonedDateTime = fixedZonedDateTime()
+            ))
             matchTrackerImpl.addPointToPlayer1()
             awaitItem()
             matchTrackerImpl.addPointToPlayer1()
             awaitItem()
             matchTrackerImpl.addPointToPlayer1()
-            var expectedGame = Game(randomUUID, Points.Forty, Points.Zero)
+            var expectedGame = Game(defaultUUID(), Points.Forty, Points.Zero)
             val secondEmission = awaitItem()
             assertThat(secondEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
 
@@ -106,12 +89,12 @@ class MatchTrackerImplTest {
             awaitItem()
 
             matchTrackerImpl.addPointToPlayer2()
-            expectedGame = Game(randomUUID, Points.Forty, Points.Forty)
+            expectedGame = Game(defaultUUID(), Points.Forty, Points.Forty)
             val thirdEmission = awaitItem()
             assertThat(thirdEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
 
             matchTrackerImpl.addPointToPlayer2()
-            expectedGame = Game(randomUUID, Points.Forty, Points.Advantage)
+            expectedGame = Game(defaultUUID(), Points.Forty, Points.Advantage)
             val fourthEmission = awaitItem()
             assertThat(fourthEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
         }
@@ -140,8 +123,8 @@ class MatchTrackerImplTest {
             awaitItem()
             matchTrackerImpl.addPointToPlayer2() // 40-Won
             val emission = awaitItem()
-            val expectedGame = Game(randomUUID, Points.Zero, Points.Zero)
-            val expectedPreviousGame = Game(randomUUID, Points.Forty, Points.Won)
+            val expectedGame = Game(defaultUUID(), Points.Zero, Points.Zero)
+            val expectedPreviousGame = Game(defaultUUID(), Points.Forty, Points.Won)
             assertThat(emission.setList.first().gameList[1]).isEqualTo(expectedGame)
             assertThat(emission.setList.first().gameList.first()).isEqualTo(
                 expectedPreviousGame
@@ -180,7 +163,7 @@ class MatchTrackerImplTest {
     }
 
     @Test
-    fun `Playing 3 sets and an extra game is cleaned up correctly`() = runTest{
+    fun `Playing 3 sets and an extra game is cleaned up correctly`() = runTest {
         val expectedSet1Result = (6 to 3)
         val expectedSet2Result = (5 to 7)
         val expectedSet3Result = (6 to 2)
@@ -208,7 +191,7 @@ class MatchTrackerImplTest {
             emission = addGame(
                 matchTrackerImpl = matchTrackerImpl,
                 team1 = false,
-                onAwait = {awaitItem()}
+                onAwait = { awaitItem() }
             )
 
             val set1 = emission.setList[0].getGamesForSet()
@@ -237,7 +220,7 @@ class MatchTrackerImplTest {
     }
 
     @Test
-    fun `Trying to end a match without completing a set returns error`() = runTest{
+    fun `Trying to end a match without completing a set returns error`() = runTest {
         val expectedError = DataError.Logic.EMPTY_SET_LIST
 
         matchTrackerImpl.setIsTeam1Serving(true)
@@ -247,7 +230,7 @@ class MatchTrackerImplTest {
             addGame(
                 matchTrackerImpl = matchTrackerImpl,
                 team1 = false,
-                onAwait = {awaitItem()}
+                onAwait = { awaitItem() }
             )
         }
         val result = matchTrackerImpl.finishMatch()
