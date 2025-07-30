@@ -36,7 +36,7 @@ fun dummyMatch(randomizeUUIDs: Boolean = false): Match {
             generateDummySet(randomizeUUIDs, 2, 6),
             generateDummySet(randomizeUUIDs, 7, 5),
         ),
-        dateTimeUtc = fixedZonedDateTime(),
+        dateTime = fixedZonedDateTime(),
         elapsedTime = 1.hours + 30.minutes + 43.seconds,
         matchId = defaultUUID(randomizeUUIDs)
     )
@@ -101,7 +101,7 @@ fun emptyMatch(matchId: UUID, setId: UUID, gameId: UUID, zonedDateTime: ZonedDat
     return Match(
         matchId = matchId,
         setList = listOf(emptySet(setId, gameId)),
-        dateTimeUtc = zonedDateTime,
+        dateTime = zonedDateTime,
         elapsedTime = Duration.ZERO,
     )
 }

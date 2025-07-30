@@ -9,6 +9,7 @@ import com.vzkz.match.presentation.match_history.model.MatchUi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.time.ZoneId
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -18,7 +19,7 @@ class MatchMappersTest {
     private val matchUI = MatchUi(
         isMatchWon = true,
         formatedSetList = dummyMatch().setList.map { it.getGamesForSet() },
-        dateTimeUtc = "Jun 29, 2025 - 04:30PM",
+        dateTimeUtc = "Jun 29, 2025 - 02:30PM",
         elapsedTime = "01:30:43",
         matchId = match.matchId
     )
@@ -93,7 +94,7 @@ class MatchMappersTest {
     fun `from Match to MatchUi mapping`() {
         val expectedResult = matchUI
 
-        val result = match.toMatchUi()
+        val result = match.toMatchUi(ZoneId.of("UTC"))
 
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -115,7 +116,7 @@ class MatchMappersTest {
                     )
                 }
             )
-            .toMatchUi()
+            .toMatchUi(ZoneId.of("UTC"))
 
         assertThat(result).isEqualTo(expectedResult)
     }

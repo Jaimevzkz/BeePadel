@@ -7,7 +7,7 @@ import kotlin.time.Duration
 data class Match(
     val matchId: UUID,
     val setList: List<Set>,
-    val dateTimeUtc: ZonedDateTime,
+    val dateTime: ZonedDateTime,
     val elapsedTime: Duration
 ){
 

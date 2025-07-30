@@ -17,9 +17,9 @@ fun Duration.formatted(): String {
 }
 
 
-fun Match.toMatchUi(): MatchUi {
-    val dateTimeInLocalTime = dateTimeUtc
-        .withZoneSameInstant(ZoneId.systemDefault())
+fun Match.toMatchUi(zoneId: ZoneId = ZoneId.systemDefault()): MatchUi {
+    val dateTimeInLocalTime = dateTime
+        .withZoneSameInstant(zoneId)
 
     val formattedDateTime = DateTimeFormatter
         .ofPattern("MMM dd, yyyy - hh:mma")

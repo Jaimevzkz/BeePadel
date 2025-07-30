@@ -32,7 +32,7 @@ class MatchTrackerImpl(
     private val applicationScope: CoroutineScope,
     private val dispatchers: DispatchersProvider,
     private val localStorageRepository: LocalStorageRepository,
-    private val clockProvider: ZonedDateTimeProvider,
+    private val zonedDateProvider: ZonedDateTimeProvider,
     private val uUIDProvider: UUIDProvider
 ) : MatchTracker {
     private val _elapsedTime = MutableStateFlow(Duration.ZERO)
@@ -43,7 +43,7 @@ class MatchTrackerImpl(
             matchId = uUIDProvider.randomUUID(),
             setId = uUIDProvider.randomUUID(),
             gameId = uUIDProvider.randomUUID(),
-            zonedDateTime = clockProvider.now()
+            zonedDateTime = zonedDateProvider.now()
         )
 
     private val _activeMatch = MutableStateFlow(initialMatchState())
