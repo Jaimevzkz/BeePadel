@@ -14,6 +14,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 junitJupiterApi = "5.13.4"
+
 kotlintestRunnerJunit5 = "3.4.2"
 coroutinesTestVersion = "1.10.2"
 mockk = "1.14.5"

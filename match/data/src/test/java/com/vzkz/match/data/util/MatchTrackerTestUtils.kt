@@ -1,6 +1,8 @@
 package com.vzkz.match.data.util
 
+import com.vzkz.common.general.data_generator.defaultUUID
 import com.vzkz.common.general.data_generator.emptyMatch
+import com.vzkz.common.general.data_generator.fixedZonedDateTime
 import com.vzkz.match.data.MatchTrackerImpl
 import com.vzkz.match.domain.model.Match
 import kotlin.math.max
@@ -31,7 +33,12 @@ internal suspend fun addSet( // Default to 6-0
     onAwait: suspend () -> Match,
     desiredScore: Pair<Int, Int> = (6 to 0)
 ): Match {
-    var emission = emptyMatch()
+    var emission = emptyMatch(
+        matchId = defaultUUID(),
+        setId = defaultUUID(),
+        gameId = defaultUUID(),
+        zonedDateTime = fixedZonedDateTime()
+    )
 
     val lowerScore = min(desiredScore.first, desiredScore.second)
     val higherScore = max(desiredScore.first, desiredScore.second)

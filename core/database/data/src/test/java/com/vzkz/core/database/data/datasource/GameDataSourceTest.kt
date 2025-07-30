@@ -3,6 +3,8 @@ package com.vzkz.core.database.data.datasource
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
+import com.vzkz.common.general.data_generator.defaultUUID
+import com.vzkz.common.general.data_generator.fixedZonedDateTime
 import com.vzkz.core.database.data.util.DatabaseTest
 import com.vzkz.core.database.data.util.gameEntity
 import com.vzkz.core.domain.error.Result
@@ -71,7 +73,7 @@ class GameDataSourceTest : DatabaseTest() {
 
         (0..<expectedGameListSize).forEach { _ ->
             gameDataSource.insertOrReplaceGameForSet(
-                gameId = UUID.randomUUID(),
+                gameId = defaultUUID(true),
                 setId = game.setId,
                 serverPoints = game.serverPoints,
                 receiverPoints = game.receiverPoints
@@ -93,12 +95,14 @@ class GameDataSourceTest : DatabaseTest() {
         val game = gameEntity()
         val listSize = 5
         val gameList = List(listSize) {
-            game.copy(gameId = UUID.randomUUID())
+            game.copy(
+                gameId = defaultUUID(true),
+            )
         }
 
-        val differentSetId = UUID.randomUUID()
+        val differentSetId = defaultUUID(randomize = true)
         val gameListNotToBeRetrieved = List(listSize) {
-            game.copy(setId = differentSetId, gameId = UUID.randomUUID())
+            game.copy(setId = differentSetId, gameId = defaultUUID(randomize = true))
         }
 
         gameList.forEach { gameInList ->

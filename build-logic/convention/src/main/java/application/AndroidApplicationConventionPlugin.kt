@@ -26,6 +26,13 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
                     versionCode =  libs.findVersion("projectVersionCode").get().toString().toInt()
                     versionName =  libs.findVersion("projectVersionName").get().toString()
                 }
+
+                buildTypes{
+                    release {
+                        isMinifyEnabled = true
+                    }
+                }
+
                 configureKotlinAndroid(this)
 
                 configureBuildTypes(commonExtension = this, extensionType = ExtensionType.APPLICATION)

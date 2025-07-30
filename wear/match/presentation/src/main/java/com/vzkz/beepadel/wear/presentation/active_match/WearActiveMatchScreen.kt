@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,6 +31,8 @@ import androidx.wear.compose.material3.OutlinedIconButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
+import com.vzkz.beepadel.wear.presentation.R
+import com.vzkz.core.presentation.designsystem.BallIcon
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.designsystem.FinishIcon
 import com.vzkz.core.presentation.designsystem.PlusOneIcon
@@ -86,11 +89,13 @@ private fun WearActiveMatchScreen(
             pointsTeam1 = state.pointsTeam1,
             gamesTeam1 = state.gamesTeam1,
             pointsTeam2 = state.pointsTeam2,
-            gamesTeam2 = state.gamesTeam2
+            gamesTeam2 = state.gamesTeam2,
+            isTeam1Serving = state.isTeam1Serving
         )
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 4.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp)
         ) {
             val roundedCorner = 8.dp
             val width = 14.dp
@@ -136,20 +141,34 @@ private fun WearScoreCard(
     gamesTeam1: Int,
     pointsTeam2: Points,
     gamesTeam2: Int,
+    isTeam1Serving: Boolean?
 ) {
     val fontSize = 28.sp
+    val servingIconPlaceholder = 16.dp
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(
-            text = pointsTeam1.string,
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = fontSize,
-            style = MaterialTheme.typography.bodyLarge,
-            fontFamily = Exo2,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = pointsTeam1.string,
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = fontSize,
+                style = MaterialTheme.typography.bodyLarge,
+                fontFamily = Exo2,
+            )
+
+            if (isTeam1Serving == true)
+                Icon(
+                    modifier = Modifier.size(16.dp).padding(start = 4.dp),
+                    imageVector = BallIcon,
+                    contentDescription = stringResource(com.vzkz.match.presentation.R.string.own_player_serving),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            else
+                Spacer(Modifier.width(servingIconPlaceholder))
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             val smallFontSize = 18.sp
             Text(
@@ -168,43 +187,30 @@ private fun WearScoreCard(
                 fontFamily = Exo2,
             )
         }
-        Text(
-            text = pointsTeam2.string,
-            color = MaterialTheme.colorScheme.secondary,
-            fontSize = fontSize,
-            fontFamily = Exo2,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (isTeam1Serving == false)
+                Icon(
+                    modifier = Modifier.size(16.dp).padding(end = 4.dp),
+                    imageVector = BallIcon,
+                    contentDescription = stringResource(com.vzkz.match.presentation.R.string.other_player_serving),
+                    tint = MaterialTheme.colorScheme.onSecondary
+                )
+            else
+                Spacer(Modifier.width(servingIconPlaceholder))
+            Text(
+                text = pointsTeam2.string,
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = fontSize,
+                fontFamily = Exo2,
+            )
+
+
+        }
+
 
     }
 }
 
-@Composable
-fun AddScoreButtonsSection(
-    modifier: Modifier = Modifier,
-) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-        OutlinedIconButton(
-            onClick = {},
-            modifier = modifier
-        ) {
-            Icon(
-                imageVector = PlusOneIcon,
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
-        OutlinedIconButton(
-            onClick = {},
-            modifier = modifier
-        ) {
-            Icon(
-                imageVector = PlusOneIcon,
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
-    }
-}
 
 @Composable
 fun UndoButton(
@@ -231,7 +237,8 @@ private fun WearActiveMatchScreenPreview() {
         WearActiveMatchScreen(
             state = WearActiveMatchState.initial.copy(
                 setsTeam1 = 3,
-                setsTeam2 = 2
+                setsTeam2 = 2,
+                isTeam1Serving = true
             ),
             onAction = {}
         )

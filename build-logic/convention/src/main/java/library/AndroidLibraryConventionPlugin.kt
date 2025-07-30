@@ -33,7 +33,7 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
                }
            }
            dependencies{
-               "testImplementation"(kotlin("test"))
+//               "testImplementation"(kotlin("test"))
                "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
                "implementation"(libs.findBundle("koin").get())
                "testImplementation"(libs.findBundle("test").get())

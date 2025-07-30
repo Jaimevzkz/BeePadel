@@ -13,117 +13,104 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-fun matchList(): List<Match> {
+fun dummyMatchList(randomizeUUIDs: Boolean = false): List<Match> {
     return List(10) { index ->
         if (index % 2 == 0)
-            match().copy(
+            dummyMatch(randomizeUUIDs).copy(
                 setList = listOf(
-                    generateSet(3, 6),
-                    generateSet(6, 2),
-                    generateSet(6, 7),
+                    generateDummySet(randomizeUUIDs, 3, 6),
+                    generateDummySet(randomizeUUIDs, 6, 2),
+                    generateDummySet(randomizeUUIDs, 6, 7),
                 )
             )
         else
-            match()
+            dummyMatch(randomizeUUIDs)
     }
 }
 
-fun match(): Match {
+fun dummyMatch(randomizeUUIDs: Boolean = false): Match {
     return Match(
         setList = listOf(
-            generateSet(6, 4),
-            generateSet(6, 2),
-            generateSet(2, 6),
-            generateSet(7, 5),
+            generateDummySet(randomizeUUIDs, 6, 4),
+            generateDummySet(randomizeUUIDs, 6, 2),
+            generateDummySet(randomizeUUIDs, 2, 6),
+            generateDummySet(randomizeUUIDs, 7, 5),
         ),
-        dateTimeUtc = ZonedDateTime.of(
-            2025, 6, 29,
-            14, 30, 0, 0,
-            ZoneId.systemDefault()
-        ),
+        dateTimeUtc = fixedZonedDateTime(),
         elapsedTime = 1.hours + 30.minutes + 43.seconds,
-        matchId = UUID.randomUUID()
+        matchId = defaultUUID(randomizeUUIDs)
     )
 }
 
-fun secondMatch(): Match {
-    return Match(
-        setList = listOf(
-            generateSet(4, 6),
-            generateSet(3, 6),
-            generateSet(6, 4),
-            generateSet(6, 7),
-        ),
-        dateTimeUtc = ZonedDateTime.of(
-            2025, 6, 29,
-            14, 30, 0, 0,
-            ZoneId.of("UTC")
-        ),
-        elapsedTime = 1.hours + 30.minutes + 43.seconds,
-        matchId = UUID.randomUUID()
-    )
-}
-
-fun generateSet(games1: Int, games2: Int): Set {
+fun generateDummySet(randomizeUUIDs: Boolean, games1: Int, games2: Int): Set {
     val gameList = mutableListOf<Game>()
     repeat((1..games1).count()) {
-        gameList.add(game(Won, Zero))
+        gameList.add(dummyGame(randomizeUUIDs, Won, Zero))
     }
     repeat((1..games2).count()) {
-        gameList.add(game(Fifteen, Won))
+        gameList.add(dummyGame(randomizeUUIDs, Fifteen, Won))
     }
     return Set(
-        setId = UUID.randomUUID(),
+        setId = defaultUUID(randomizeUUIDs),
         gameList = gameList
     )
 }
 
-fun set(): Set {
+fun dummySet(randomizeUUIDs: Boolean = false): Set {
     return Set(
-        setId = UUID.randomUUID(),
+        setId = defaultUUID(),
         gameList = listOf(
-            game(Zero, Won),
-            game(Won, Thirty),
-            game(Won, Forty),
-            game(Zero, Won),
-            game(Won, Thirty),
-            game(Zero, Won),
-            game(Won, Fifteen),
-            game(Fifteen, Won),
-            game(Won, Thirty),
-            game(Won, Forty),
+            dummyGame(randomizeUUIDs, Zero, Won),
+            dummyGame(randomizeUUIDs, Won, Thirty),
+            dummyGame(randomizeUUIDs, Won, Forty),
+            dummyGame(randomizeUUIDs, Zero, Won),
+            dummyGame(randomizeUUIDs, Won, Thirty),
+            dummyGame(randomizeUUIDs, Zero, Won),
+            dummyGame(randomizeUUIDs, Won, Fifteen),
+            dummyGame(randomizeUUIDs, Fifteen, Won),
+            dummyGame(randomizeUUIDs, Won, Thirty),
+            dummyGame(randomizeUUIDs, Won, Forty),
         ),
     )
 }
 
-fun game(serverPoints: Points, receiverPoints: Points): Game {
+fun dummyGame(randomizeUUIDs: Boolean = false, serverPoints: Points, receiverPoints: Points): Game {
     return Game(
-        gameId = UUID.randomUUID(),
+        gameId = defaultUUID(randomizeUUIDs),
         player1Points = serverPoints,
         player2Points = receiverPoints,
     )
 }
 
-fun emptyGame(): Game {
+fun emptyGame(uuid: UUID): Game {
     return Game(
-        gameId = UUID.randomUUID(),
+        gameId = uuid,
         player1Points = Zero,
         player2Points = Zero
     )
 }
 
-fun emptySet(): Set {
+fun emptySet(setId: UUID, gameId: UUID): Set {
     return Set(
-        setId = UUID.randomUUID(),
-        gameList = listOf(emptyGame())
+        setId = setId,
+        gameList = listOf(emptyGame(gameId))
     )
 }
 
-fun emptyMatch(): Match {
+fun emptyMatch(matchId: UUID, setId: UUID, gameId: UUID, zonedDateTime: ZonedDateTime): Match {
     return Match(
-        matchId = UUID.randomUUID(),
-        setList = listOf(emptySet()),
-        dateTimeUtc = ZonedDateTime.now(),
+        matchId = matchId,
+        setList = listOf(emptySet(setId, gameId)),
+        dateTimeUtc = zonedDateTime,
         elapsedTime = Duration.ZERO,
     )
 }
+
+fun fixedZonedDateTime(): ZonedDateTime = ZonedDateTime.of(
+    2025, 6, 29,
+    14, 30, 0, 0,
+    ZoneId.of("UTC")
+)
+
+fun defaultUUID(randomize: Boolean = false): UUID =
+    if (randomize) UUID.randomUUID() else UUID.fromString("123e4567-e89b-12d3-a456-426614174000")

@@ -2,32 +2,23 @@ package com.vzkz.match.presentation.util
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.vzkz.common.general.TestDispatchers
-import com.vzkz.common.general.data_generator.generateSet
-import com.vzkz.common.general.data_generator.match
-import com.vzkz.common.general.data_generator.set
-import com.vzkz.common.general.fake.FakeLocalStorageRepository
+import com.vzkz.common.general.data_generator.generateDummySet
+import com.vzkz.common.general.data_generator.dummyMatch
+import com.vzkz.common.general.data_generator.dummySet
 import com.vzkz.match.presentation.match_history.model.MatchUi
-import io.mockk.every
-import io.mockk.junit5.MockKExtension
-import io.mockk.mockkStatic
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.time.ZonedDateTime
-import java.util.UUID
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 class MatchMappersTest {
-    private val match = match()
+    private val match = dummyMatch()
     private val matchUI = MatchUi(
         isMatchWon = true,
-        formatedSetList = match().setList.map { it.getGamesForSet() },
-        dateTimeUtc = "Jun 29, 2025 - 02:30PM",
+        formatedSetList = dummyMatch().setList.map { it.getGamesForSet() },
+        dateTimeUtc = "Jun 29, 2025 - 04:30PM",
         elapsedTime = "01:30:43",
         matchId = match.matchId
     )
@@ -36,7 +27,7 @@ class MatchMappersTest {
     @Test
     fun `formatting a completed set works`() {
         val expectedResult = Pair(6, 4)
-        val set = set()
+        val set = dummySet()
 
         val result = set.getGamesForSet()
 
@@ -46,7 +37,7 @@ class MatchMappersTest {
     @Test
     fun `formatting an incomplete set works`() {
         val expectedResult = Pair(5, 4)
-        val set = set().copy(gameList = set().gameList.dropLast(1))
+        val set = dummySet().copy(gameList = dummySet().gameList.dropLast(1))
 
         val result = set.getGamesForSet()
 
@@ -54,24 +45,24 @@ class MatchMappersTest {
     }
 
     @Test
-    fun `formatting a complete match works`(){
-        val expectedResult = Pair(3,1)
+    fun `formatting a complete match works`() {
+        val expectedResult = Pair(3, 1)
 
-        val result = match().getSetsForMatch()
+        val result = dummyMatch().getSetsForMatch()
 
         assertThat(result).isEqualTo(expectedResult)
     }
 
     @Test
-    fun `formatting a match with incomplete sets ignores them`(){
-        val expectedResult = Pair(2,1)
-        val modifiedMatch = match().copy(
+    fun `formatting a match with incomplete sets ignores them`() {
+        val expectedResult = Pair(2, 1)
+        val modifiedMatch = dummyMatch().copy(
             setList = listOf(
-                generateSet(5,3),
-                generateSet(6,3),
-                generateSet(2,6),
-                generateSet(6,4),
-                generateSet(6,5),
+                generateDummySet(randomizeUUIDs = true, games1 = 5, games2 = 3),
+                generateDummySet(randomizeUUIDs = true, games1 = 6, games2 = 3),
+                generateDummySet(randomizeUUIDs = true, games1 = 2, games2 = 6),
+                generateDummySet(randomizeUUIDs = true, games1 = 6, games2 = 4),
+                generateDummySet(randomizeUUIDs = true, games1 = 6, games2 = 5),
             )
         )
 
@@ -91,7 +82,7 @@ class MatchMappersTest {
         seconds: Int,
         expectedFormat: String
     ) {
-        val match = match().copy(elapsedTime = hours.hours + minutes.minutes + seconds.seconds)
+        val match = dummyMatch().copy(elapsedTime = hours.hours + minutes.minutes + seconds.seconds)
 
         val result = match.elapsedTime.formatted()
 
@@ -116,7 +107,13 @@ class MatchMappersTest {
 
         val result = match
             .copy(
-               setList = List(6) { generateSet(0, 6) }
+                setList = List(6) {
+                    generateDummySet(
+                        randomizeUUIDs = true,
+                        games1 = 0,
+                        games2 = 6
+                    )
+                }
             )
             .toMatchUi()
 
