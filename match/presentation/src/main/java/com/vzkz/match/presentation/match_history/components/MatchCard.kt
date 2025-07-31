@@ -71,7 +71,7 @@ fun MatchCard(
         )
 
         MatchDateSection(
-            dateTime = match.dateTimeUtc
+            dateTime = match.dateTimeFormatted
         )
     }
 }

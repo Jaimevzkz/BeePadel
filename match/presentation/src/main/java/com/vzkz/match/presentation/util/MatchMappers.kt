@@ -36,7 +36,7 @@ fun Match.toMatchUi(zoneId: ZoneId = ZoneId.systemDefault()): MatchUi {
         matchId = matchId,
         isMatchWon = setDifference > 0,
         formatedSetList = formattedSetList,
-        dateTimeUtc = formattedDateTime,
+        dateTimeFormatted = formattedDateTime,
         elapsedTime = elapsedTime.formatted(),
     )
 

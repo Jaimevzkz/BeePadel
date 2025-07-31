@@ -10,7 +10,8 @@ CREATE TABLE matchEntity (
 
 getAllMatches:
 SELECT *
-FROM matchEntity;
+FROM matchEntity
+ORDER BY dateTimeUtc DESC;
 
 insertOrReplaceMatch:
 INSERT OR REPLACE INTO matchEntity(matchId, dateTimeUtc, elapsedTime)

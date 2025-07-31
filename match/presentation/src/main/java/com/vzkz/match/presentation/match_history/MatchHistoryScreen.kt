@@ -97,7 +97,7 @@ private fun MatchHistoryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(
-                state.matchHistory.sortedByDescending { it.dateTimeUtc }
+                state.matchHistory
             ) { matchUi ->
                 MatchCard(
                     modifier = Modifier.padding(horizontal = 12.dp),
