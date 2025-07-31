@@ -19,7 +19,7 @@ class MatchMappersTest {
     private val matchUI = MatchUi(
         isMatchWon = true,
         formatedSetList = dummyMatch().setList.map { it.getGamesForSet() },
-        dateTimeUtc = "Jun 29, 2025 - 02:30PM",
+        dateTimeFormatted = "Jun 29, 2025 - 02:30PM",
         elapsedTime = "01:30:43",
         matchId = match.matchId
     )
