@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="beepadel">BeePadel</string>
+    <string name="start_match">Empezar partido</string>
+    <string name="match_options">opciones</string>
+    <string name="delete_match">Eliminar partido</string>
+    <string name="own_player_serving">Saca equipo 1</string>
+    <string name="add_own_point">Aµadir punto propio</string>
+    <string name="undo">Deshacer</string>
+    <string name="discard_match">Descartar partido</string>
+    <string name="end_match">Finalizar</string>
+    <string name="who_starts_serving">¿Quién saca?</string>
+    <string name="team_1">Equipo 1</string>
+    <string name="team_2">Equipo 2</string>
+    <string name="cancel">Cancelar</string>
+    <string name="end_match_question">¿Finalizar partido?</string>
+    <string name="confirm">Confirmar</string>
+    <string name="discard_match_question">¿Descartar partido?</string>
+    <string name="error_occurred">Error</string>
+    <string name="discard">Descartar</string>
+    <string name="end">Finalizar</string>
+    <string name="active_match">Partido Actual</string>
+    <string name="permission_required">Se requiere permiso</string>
+    <string name="notification_rationale">Para mostrar el tiempo y marcador del partido como notificación, esta aplicación necesita tu permiso. Por favor, haz clic en \"Aceptar\" para otorgarlo.</string>
+    <string name="start">Empezar</string>
+    <string name="once_deleted_the_match_can_t_be_recovered">Una vez eliminado, no podrás recuperar el partido</string>
+    <string name="permanently_delete">¿Eliminar permanentemente?</string>
+    <string name="other_player_serving">Saca equipo 2</string>
+    <string name="create_you_first_match">¡Crea tu primer partido!</string>
+    <string name="match_won">Partido ganado</string>
+    <string name="match_duration">Duración</string>
+</resources>

@@ -90,7 +90,7 @@ private fun MatchDurationSection(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Match duration",
+                text = stringResource(R.string.match_duration),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
@@ -100,7 +100,7 @@ private fun MatchDurationSection(
         }
         Spacer(Modifier.weight(1f))
         if (isMatchWon) {
-            Icon(imageVector = TrophyIcon, contentDescription = "Match won", tint = BeePadelGold)
+            Icon(imageVector = TrophyIcon, contentDescription = stringResource(R.string.match_won), tint = BeePadelGold)
         }
         Box() {
             DropdownMenu(

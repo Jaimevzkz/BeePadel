@@ -169,7 +169,7 @@ class MatchTrackerImpl(
     }
 
     private suspend fun resetMatchTrackerState() {
-        delay(1000L)
+        delay(100L)
         _activeMatch.update { initialMatchState() }
         setPlayingMatch(false)
         setIsMatchStarted(false)

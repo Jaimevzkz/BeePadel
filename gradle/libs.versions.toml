@@ -52,11 +52,11 @@ play-services-wearable = "19.0.0"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
-projectVersionName = "1.0.1"
+projectVersionName = "1.0.2"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionCode = "2"
+projectVersionCode = "3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
