@@ -35,8 +35,6 @@ fun NavigationRoot(
 ) {
     val backStack = rememberNavBackStack(KeyMatchHistoryScreen)
 
-    val viewModelStoreOwner = LocalViewModelStoreOwner.current
-
     val deepLinkHandler: DeepLinkHandler = { uri ->
 
         when {
@@ -54,7 +52,6 @@ fun NavigationRoot(
         val uri = intent?.data
         uri?.let {
             deepLinkHandler(it)?.let { key ->
-                Timber.tag("IN-APP").i("Adding screen to backstack, key: $key")
                 backStack.add(key)
             }
         }
@@ -89,7 +86,6 @@ fun NavigationRoot(
                         ActiveMatchScreenRot(
                             onNavigateToMatchHistory = {
                                 backStack.removeLast()
-
                             },
                             onServiceToggle = { shouldServiceRun ->
                                 if (shouldServiceRun) {

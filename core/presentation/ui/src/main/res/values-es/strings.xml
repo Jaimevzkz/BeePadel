@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_unknown">Ha ocurrido un error</string>
+    <string name="error_insert_match">Ha ocurrido un error guardando el partido</string>
+    <string name="error_insert_set">Ha ocurrido un error guardando el partido (set)</string>
+    <string name="error_insert_game">Ha ocurrido un error guardando el partido (juego)</string>
+    <string name="error_delete_match">Ha ocurrido un error eliminando el partido</string>
+    <string name="error_delete_set">Ha ocurrido un error eliminando el partido (set)</string>
+    <string name="error_delete_game">Ha ocurrido un error eliminando el partido (juego)</string>
+    <string name="error_empty_set_list">Para poder terminar el partido debes haber finalizado al menos 1 set</string>
+</resources>

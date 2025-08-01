@@ -3,6 +3,7 @@
 package com.vzkz.match.presentation.match_history
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalGraphicsContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,49 +90,58 @@ private fun MatchHistoryScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .clip(RoundedCornerShape(12.dp)),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            items(
-                state.matchHistory
-            ) { matchUi ->
-                MatchCard(
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    match = matchUi,
-                    onDeleteMatch = {
-                        onAction(
-                            MatchHistoryIntent.ToggleDeleteDialog(
-                                true,
-                                matchUi.matchId
+        Box() {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(12.dp)),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(
+                    items = state.matchHistory
+                ) { matchUi ->
+                    MatchCard(
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        match = matchUi,
+                        onDeleteMatch = {
+                            onAction(
+                                MatchHistoryIntent.ToggleDeleteDialog(
+                                    true,
+                                    matchUi.matchId
+                                )
                             )
+                        }
+                    )
+                }
+            }
+            if (state.matchHistory.isEmpty()) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = stringResource(R.string.create_you_first_match),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            if (state.showDeleteDialog) {
+                BeePadelDialog(
+                    title = stringResource(R.string.permanently_delete),
+                    onDismiss = {
+                        onAction(MatchHistoryIntent.ToggleDeleteDialog(false))
+                    },
+                    description = stringResource(R.string.once_deleted_the_match_can_t_be_recovered),
+                    primaryButton = {
+                        BeePadelActionButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.confirm),
+                            errorButtonColors = true,
+                            isLoading = false,
+                            onClick = { onAction(MatchHistoryIntent.DeleteMatch) }
                         )
                     }
                 )
             }
-        }
-
-        if (state.showDeleteDialog) {
-            BeePadelDialog(
-                title = stringResource(R.string.permanently_delete),
-                onDismiss = {
-                    onAction(MatchHistoryIntent.ToggleDeleteDialog(false))
-                },
-                description = stringResource(R.string.once_deleted_the_match_can_t_be_recovered),
-                primaryButton = {
-                    BeePadelActionButton(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(R.string.confirm),
-                        errorButtonColors = true,
-                        isLoading = false,
-                        onClick = { onAction(MatchHistoryIntent.DeleteMatch) }
-                    )
-                }
-            )
         }
     }
 }
