@@ -1,0 +1,1 @@
+- Fix bug where if closing the app while a matcht was active, Match history screen was shown when opening.

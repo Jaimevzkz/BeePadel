@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discard">Descartar</string>
+    <string name="finish">Terminar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="connect_your_phone">Debes tener BeePadle instalada y activa en tu telefono para poder usarla desde el reloj</string>
+</resources>

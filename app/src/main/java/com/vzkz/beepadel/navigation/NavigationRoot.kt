@@ -21,10 +21,13 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.vzkz.beepadel.MainActivity
+import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.presentation.active_match.ActiveMatchScreenRot
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.match_history.MatchHistoryScreenRot
+import kotlinx.coroutines.flow.first
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -56,6 +59,13 @@ fun NavigationRoot(
             }
         }
     }
+
+    val matchTracker = getKoin().get<MatchTracker>()
+    LaunchedEffect(Unit) {
+        if (matchTracker.isMatchStarted.first() && backStack.last() == KeyMatchHistoryScreen)
+            backStack.add(KeyActiveMatchScreen)
+    }
+
     NavDisplay(
         modifier = modifier,
         backStack = backStack,

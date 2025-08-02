@@ -31,3 +31,7 @@ val UndoIcon: ImageVector
 val FinishIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.finish)
+
+val ExclamationMarkIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.danger)

@@ -8,4 +8,10 @@
     <string name="error_delete_set">Oops, an error occurred while deleting the match (set)</string>
     <string name="error_delete_game">Oops, an error occurred while deleting the match (game)</string>
     <string name="error_empty_set_list">In order to save a match you must finish at least 1 set</string>
+    <string name="error_heart_rate_tracking_not_supported">Heart rate tracking is not supported</string>
+    <string name="error_ongoing_own_exercise">There is already an ongoing own exercise (health services)</string>
+    <string name="error_ongoing_other_exercise">There is already an ongoing other exercise (health services)</string>
+    <string name="error_exercise_already_ended">Exercise already ended (health services)</string>
+    <string name="error_connection_interrupted">Phone-Watch connection interrupted</string>
+    <string name="error_disconnected">Phone-Watch connection disconnected</string>
 </resources>

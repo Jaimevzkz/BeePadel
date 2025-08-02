@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discard">Discard Match</string>
+    <string name="finish">Finish Match</string>
+    <string name="cancel">Cancel</string>
+    <string name="connect_your_phone">BeePadel phone app has to be installed and connected.</string>
+</resources>

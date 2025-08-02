@@ -8,4 +8,9 @@
     <string name="error_delete_set">Ha ocurrido un error eliminando el partido (set)</string>
     <string name="error_delete_game">Ha ocurrido un error eliminando el partido (juego)</string>
     <string name="error_empty_set_list">Para poder terminar el partido debes haber finalizado al menos 1 set</string>
+    <string name="error_heart_rate_tracking_not_supported">El seguimiento de la frecuencia cardíaca no es compatible</string>
+    <string name="error_ongoing_own_exercise">Ya hay un ejercicio propio en curso (servicios de salud)</string>
+    <string name="error_ongoing_other_exercise">Ya hay otro ejercicio en curso (servicios de salud)</string>
+    <string name="error_exercise_already_ended">El ejercicio ya ha finalizado (servicios de salud)</string>
+
 </resources>

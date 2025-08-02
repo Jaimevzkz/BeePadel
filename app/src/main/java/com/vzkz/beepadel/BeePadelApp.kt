@@ -2,6 +2,7 @@ package com.vzkz.beepadel
 
 import android.app.Application
 import com.vzkz.beepadel.di.appModule
+import com.vzkz.connectivity.core.data.di.coreConnectivityDataModule
 import com.vzkz.core.data.di.coreDataModule
 import com.vzkz.core.database.data.di.databaseModule
 import com.vzkz.match.data.di.matchDataModule
@@ -13,7 +14,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
-class BeePadelApp: Application() {
+class BeePadelApp : Application() {
     val applicationScope = CoroutineScope(SupervisorJob())
 
     override fun onCreate() {
@@ -23,7 +24,7 @@ class BeePadelApp: Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        startKoin{
+        startKoin {
             androidLogger()
             androidContext(this@BeePadelApp)
             modules(
@@ -31,7 +32,8 @@ class BeePadelApp: Application() {
                 coreDataModule,
                 matchViewmodelModule,
                 matchDataModule,
-                databaseModule
+                databaseModule,
+                coreConnectivityDataModule,
             )
         }
     }

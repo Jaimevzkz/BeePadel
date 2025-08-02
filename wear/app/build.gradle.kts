@@ -27,6 +27,6 @@ dependencies {
     implementation(projects.wear.match.domain)
 
     implementation(projects.core.data)
-//    implementation(projects.core.connectivity.domain)
-//    implementation(projects.core.connectivity.data)
+    implementation(projects.core.connectivity.domain)
+    implementation(projects.core.connectivity.data)
 }

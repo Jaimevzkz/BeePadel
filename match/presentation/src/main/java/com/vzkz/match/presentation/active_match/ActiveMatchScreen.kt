@@ -154,8 +154,8 @@ private fun ActiveMatchScreen(
                         .align(Alignment.CenterHorizontally),
                     ownSets = state.setsPlayer1,
                     otherSets = state.setsPlayer2,
-                    onAddOwnPoint = { onAction(ActiveMatchIntent.AddPointToPlayer1) },
-                    onAddOtherPoint = { onAction(ActiveMatchIntent.AddPointToPlayer2) },
+                    onAddOwnPoint = { onAction(ActiveMatchIntent.AddPointToTeam1) },
+                    onAddOtherPoint = { onAction(ActiveMatchIntent.AddPointToTeam2) },
                     onUndo = { onAction(ActiveMatchIntent.UndoPoint) },
                 )
                 Spacer(Modifier)
