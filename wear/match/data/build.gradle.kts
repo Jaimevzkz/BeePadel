@@ -17,6 +17,5 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(projects.wear.match.domain)
     implementation(projects.core.domain)
-//    implementation(projects.core.connectivity.domain)
-
+    implementation(projects.core.connectivity.domain)
 }

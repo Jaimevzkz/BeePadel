@@ -13,4 +13,7 @@ dependencies {
     implementation(projects.core.presentation.designsystem)
     testImplementation(testFixtures(projects.common.sharedTest))
 
+
+    implementation(projects.core.connectivity.domain)
+
 }

@@ -6,17 +6,20 @@ import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.ui.BaseViewModel
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
+import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 
 class ActiveMatchViewmodel(
     private val dispatchers: DispatchersProvider,
-    private val matchTracker: MatchTracker
+    private val matchTracker: MatchTracker,
+    private val watchConnector: WatchConnector
 ) :
     BaseViewModel<ActiveMatchState, ActiveMatchIntent, ActiveMatchEvent>(
         ActiveMatchState.initial,
@@ -24,6 +27,15 @@ class ActiveMatchViewmodel(
     ) {
 
     init {
+
+        //debug
+        watchConnector
+            .connectedDevice
+            .filterNotNull()
+            .onEach { Timber.d("New device detected: ${it.displayName}") }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
+
         _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
 
         matchTracker
@@ -81,8 +93,8 @@ class ActiveMatchViewmodel(
 
     override fun reduce(intent: ActiveMatchIntent) {
         when (intent) {
-            ActiveMatchIntent.AddPointToPlayer2 -> matchTracker.addPointToPlayer2()
-            ActiveMatchIntent.AddPointToPlayer1 -> matchTracker.addPointToPlayer1()
+            ActiveMatchIntent.AddPointToTeam2 -> matchTracker.addPointToPlayer2()
+            ActiveMatchIntent.AddPointToTeam1 -> matchTracker.addPointToPlayer1()
             ActiveMatchIntent.UndoPoint -> matchTracker.undoPoint()
             ActiveMatchIntent.FinishMatch -> finishMatch()
             ActiveMatchIntent.DiscardMatch -> discardMatch()
