@@ -1,7 +1,10 @@
+@file:OptIn(InternalSerializationApi::class)
+
 package com.vzkz.connectivity.core.data.messaging
 
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.HeartRateUpdate
+import kotlinx.serialization.InternalSerializationApi
 
 fun MessagingAction.toMessagingActionDto(): MessagingActionDto {
     return when (this) {
