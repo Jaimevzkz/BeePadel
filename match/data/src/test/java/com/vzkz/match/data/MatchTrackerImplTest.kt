@@ -97,6 +97,23 @@ class MatchTrackerImplTest {
             expectedGame = Game(defaultUUID(), Points.Forty, Points.Advantage)
             val fourthEmission = awaitItem()
             assertThat(fourthEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
+
+            matchTrackerImpl.addPointToPlayer1()
+            expectedGame = Game(defaultUUID(), Points.Forty, Points.Forty)
+            val fifthEmission = awaitItem()
+            assertThat(fifthEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
+
+
+            matchTrackerImpl.addPointToPlayer1()
+            expectedGame = Game(defaultUUID(), Points.Advantage, Points.Forty)
+            val sixthEmission = awaitItem()
+            assertThat(sixthEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
+
+
+            matchTrackerImpl.addPointToPlayer1()
+            expectedGame = Game(defaultUUID(), Points.Won, Points.Forty)
+            val seventhEmission = awaitItem()
+            assertThat(seventhEmission.setList.first().gameList.first()).isEqualTo(expectedGame)
         }
     }
 

@@ -20,7 +20,7 @@ data class Game(
                     Points.Advantage
                 } else {
                     otherPoints = Points.Forty
-                    Points.Advantage
+                    Points.Forty
                 }
             }
 
