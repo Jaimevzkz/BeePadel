@@ -52,11 +52,11 @@ play-services-wearable = "19.0.0"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
-projectVersionName = "1.0.2"
+projectVersionName = "1.0.3"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionCode = "3"
+projectVersionCode = "4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -107,6 +107,7 @@ androidx-wear-compose-material = { group = "androidx.wear.compose", name = "comp
 androidx-wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "composeWearOs" }
 androidx-wear-compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "composeWearOs" }
 androidx-health-services-client = { group = "androidx.health", name = "health-services-client", version.ref = "health" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 androidx-wear = { group = "androidx.wear", name = "wear", version.ref = "wear" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "play-services-wearable" }

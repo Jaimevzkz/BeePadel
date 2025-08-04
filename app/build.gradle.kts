@@ -21,11 +21,12 @@ dependencies {
     implementation(projects.core.presentation.ui)
     implementation(projects.core.presentation.designsystem)
 
-
     implementation(projects.match.data)
     implementation(projects.match.domain)
     implementation(projects.match.presentation)
 
+    implementation(projects.core.connectivity.domain)
+    implementation(projects.core.connectivity.data)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

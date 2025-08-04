@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.database.domain)
     implementation(projects.common.general)
+    implementation(projects.core.connectivity.domain)
 
     testImplementation(testFixtures(projects.common.sharedTest))
 }

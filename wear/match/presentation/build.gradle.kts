@@ -31,7 +31,6 @@ dependencies {
     implementation(projects.match.domain)
     implementation(projects.match.presentation)
     implementation(projects.core.domain)
-//    implementation(projects.core.connectivity.domain)
-//    implementation(projects.core.notification)
+    implementation(projects.core.connectivity.domain)
 
 }

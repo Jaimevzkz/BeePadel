@@ -1,0 +1,2 @@
+- Fix bug where if closing the app while a matcht was active, Match history screen was shown when opening.
+- Fix bug where from Ad-40, the next point went to 40-Ad instead of 40-40

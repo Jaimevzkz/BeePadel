@@ -1,5 +1,6 @@
 package com.vzkz.beepadel.wear.presentation.active_match
 
+import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
@@ -21,7 +22,14 @@ data class WearActiveMatchState(
     val isMatchResumed: Boolean,
     val isMatchStarted: Boolean,
     val isMatchFinished: Boolean,
-    val showServingDialog: Boolean
+    val dialogToShow: WearDialogs,
+    val heartRate: Int,
+    //
+    val hasMatchStarted: Boolean,
+    val isConnectedPhoneNearBy: Boolean,
+    val canTrackHeartRate: Boolean,
+    val isAmbientMode: Boolean,
+    val burnInProtectionRequired: Boolean
 ) : State {
     companion object {
         val initial: WearActiveMatchState = WearActiveMatchState(
@@ -37,12 +45,26 @@ data class WearActiveMatchState(
             isMatchResumed = false,
             isMatchStarted = false,
             isMatchFinished = false,
-            showServingDialog = true,
+            hasMatchStarted = false,
+            isConnectedPhoneNearBy = false,
+            canTrackHeartRate = false,
+            isAmbientMode = false,
+            burnInProtectionRequired = false,
+            dialogToShow = WearDialogs.NONE,
+            heartRate = 0,
+//            dialogToShow = WearDialogs.PHONE_NOT_CONNECTED,
         )
     }
 }
 
 sealed class WearActiveMatchIntent : Intent {
+    data object FinishMatch : WearActiveMatchIntent()
+    data object DiscardMatch : WearActiveMatchIntent()
+    data object AddPointToTeam1 : WearActiveMatchIntent()
+    data object AddPointToTeam2 : WearActiveMatchIntent()
+    data object UndoPoint : WearActiveMatchIntent()
+    data class ToggleDialog(val newVal: WearDialogs) : WearActiveMatchIntent()
+    data class OnBodySensorPermissionResult(val isGranted: Boolean) : WearActiveMatchIntent()
 
 }
 

@@ -1,44 +1,39 @@
 package com.vzkz.beepadel.wear.presentation.active_match
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material3.FilledTonalIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
-import androidx.wear.compose.material3.OutlinedIconButton
-import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
-import com.vzkz.beepadel.wear.presentation.R
-import com.vzkz.core.presentation.designsystem.BallIcon
-import com.vzkz.core.presentation.designsystem.Exo2
+import com.vzkz.beepadel.wear.presentation.active_match.components.ClickableArea
+import com.vzkz.beepadel.wear.presentation.active_match.components.FinishMatchDialog
+import com.vzkz.beepadel.wear.presentation.active_match.components.UndoButton
+import com.vzkz.beepadel.wear.presentation.active_match.components.WarningScreen
+import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
+import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.presentation.designsystem.FinishIcon
-import com.vzkz.core.presentation.designsystem.PlusOneIcon
-import com.vzkz.core.presentation.designsystem.UndoIcon
-import com.vzkz.match.domain.model.Points
-import com.vzkz.match.presentation.util.formatted
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -66,169 +61,108 @@ private fun WearActiveMatchScreen(
     state: WearActiveMatchState,
     onAction: (WearActiveMatchIntent) -> Unit
 ) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        FilledTonalIconButton(
-            onClick = {},
-            colors = IconButtonDefaults.filledTonalIconButtonColors(
-                contentColor = MaterialTheme.colorScheme.onBackground
-            )
-        ) {
-            Icon(
-                imageVector = FinishIcon,
-                contentDescription = ""
-            )
-        }
 
-        WearScoreCard(
-            pointsTeam1 = state.pointsTeam1,
-            gamesTeam1 = state.gamesTeam1,
-            pointsTeam2 = state.pointsTeam2,
-            gamesTeam2 = state.gamesTeam2,
-            isTeam1Serving = state.isTeam1Serving
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        ) {
-            val roundedCorner = 8.dp
-            val width = 14.dp
-            val height = 6.dp
-            val horizontalSpacing = 2.dp
-            (0..<state.setsTeam1).forEach { _ ->
-                Box(
-                    Modifier
-                        .clip(RoundedCornerShape(roundedCorner))
-                        .size(width = width, height = height)
-                        .background(MaterialTheme.colorScheme.primary)
-                )
-                Spacer(Modifier.width(horizontalSpacing))
-            }
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+    ) { perms ->
+        val hasBodySensorPermission = perms[Manifest.permission.BODY_SENSORS] == true
+        onAction(WearActiveMatchIntent.OnBodySensorPermissionResult(hasBodySensorPermission))
+    }
+    LaunchedEffect(Unit) {
+        val hasBodySensorPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.BODY_SENSORS
+        ) == PackageManager.PERMISSION_GRANTED
+        val hasNotificationPermission = if (Build.VERSION.SDK_INT >= 33) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else true
 
-            Spacer(Modifier.weight(1f))
-            (0..<state.setsTeam2).forEach { _ ->
-                Box(
-                    Modifier
-                        .clip(RoundedCornerShape(roundedCorner))
-                        .size(width = width, height = height)
-                        .background(MaterialTheme.colorScheme.secondary)
-                )
-                Spacer(Modifier.width(horizontalSpacing))
-            }
+        onAction(WearActiveMatchIntent.OnBodySensorPermissionResult(hasBodySensorPermission))
+
+        val permissions = mutableListOf<String>()
+        if (!hasBodySensorPermission) {
+            permissions.add(Manifest.permission.BODY_SENSORS)
         }
-        Box(
+        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= 33) {
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        permissionLauncher.launch(permissions.toTypedArray())
+    }
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
             Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceContainerLow),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.spacedBy(
+                4.dp,
+                alignment = Alignment.CenterVertically
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = state.elapsedTime.formatted(), color = MaterialTheme.colorScheme.onSurface)
-        }
-
-        UndoButton()
-    }
-}
-
-@Composable
-private fun WearScoreCard(
-    pointsTeam1: Points,
-    gamesTeam1: Int,
-    pointsTeam2: Points,
-    gamesTeam2: Int,
-    isTeam1Serving: Boolean?
-) {
-    val fontSize = 28.sp
-    val servingIconPlaceholder = 16.dp
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = pointsTeam1.string,
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = fontSize,
-                style = MaterialTheme.typography.bodyLarge,
-                fontFamily = Exo2,
-            )
-
-            if (isTeam1Serving == true)
-                Icon(
-                    modifier = Modifier.size(16.dp).padding(start = 4.dp),
-                    imageVector = BallIcon,
-                    contentDescription = stringResource(com.vzkz.match.presentation.R.string.own_player_serving),
-                    tint = MaterialTheme.colorScheme.onPrimary
+            FilledTonalIconButton(
+                onClick = { onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.FINISH)) },
+                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onBackground
                 )
-            else
-                Spacer(Modifier.width(servingIconPlaceholder))
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val smallFontSize = 18.sp
-            Text(
-                text = gamesTeam1.toString(),
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = smallFontSize,
-                fontFamily = Exo2,
-            )
-
-            Spacer(Modifier.size(8.dp))
-
-            Text(
-                text = gamesTeam2.toString(),
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = smallFontSize,
-                fontFamily = Exo2,
-            )
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (isTeam1Serving == false)
+            ) {
                 Icon(
-                    modifier = Modifier.size(16.dp).padding(end = 4.dp),
-                    imageVector = BallIcon,
-                    contentDescription = stringResource(com.vzkz.match.presentation.R.string.other_player_serving),
-                    tint = MaterialTheme.colorScheme.onSecondary
+                    imageVector = FinishIcon,
+                    contentDescription = ""
                 )
-            else
-                Spacer(Modifier.width(servingIconPlaceholder))
-            Text(
-                text = pointsTeam2.string,
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = fontSize,
-                fontFamily = Exo2,
+            }
+
+            WearScoreCard(
+                pointsTeam1 = state.pointsTeam1,
+                gamesTeam1 = state.gamesTeam1,
+                pointsTeam2 = state.pointsTeam2,
+                gamesTeam2 = state.gamesTeam2,
+                isTeam1Serving = state.isTeam1Serving,
+                setsTeam1 = state.setsTeam1,
+                setsTeam2 = state.setsTeam2,
+                elapsedTime = state.elapsedTime
             )
 
-
+            UndoButton(onUndoPoint = { onAction(WearActiveMatchIntent.UndoPoint) })
         }
 
-
-    }
-}
-
-
-@Composable
-fun UndoButton(
-    modifier: Modifier = Modifier,
-) {
-    OutlinedIconButton(
-        modifier = modifier,
-        onClick = {},
-    ) {
-        Icon(
-            modifier = Modifier.size(16.dp),
-            imageVector = UndoIcon,
-            contentDescription = "",
-            tint = MaterialTheme.colorScheme.onBackground
+        ClickableArea(
+            modifier = Modifier,
+            onAddPointToTeam1 = {
+                onAction(WearActiveMatchIntent.AddPointToTeam1)
+            },
+            onAddPointToTeam2 = {
+                onAction(WearActiveMatchIntent.AddPointToTeam1)
+            }
         )
+
+
+        when (state.dialogToShow) {
+            WearDialogs.NONE -> {/*No-Op*/
+            }
+
+            WearDialogs.SERVING -> {/*todo*/
+            }
+
+            WearDialogs.FINISH -> {
+                FinishMatchDialog(
+                    modifier = Modifier,
+                    onFinishMatch = { onAction(WearActiveMatchIntent.FinishMatch) },
+                    onDiscardMatch = { onAction(WearActiveMatchIntent.DiscardMatch) },
+                    onCancel = { onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.NONE)) }
+                )
+            }
+
+            WearDialogs.PHONE_NOT_CONNECTED -> {
+                WarningScreen(textToDisplay = stringResource(com.vzkz.beepadel.wear.presentation.R.string.connect_your_phone))
+            }
+        }
     }
 }
-
 
 @WearPreviewDevices
 @Composable
@@ -238,7 +172,8 @@ private fun WearActiveMatchScreenPreview() {
             state = WearActiveMatchState.initial.copy(
                 setsTeam1 = 3,
                 setsTeam2 = 2,
-                isTeam1Serving = true
+                isTeam1Serving = true,
+                dialogToShow = WearDialogs.PHONE_NOT_CONNECTED
             ),
             onAction = {}
         )
