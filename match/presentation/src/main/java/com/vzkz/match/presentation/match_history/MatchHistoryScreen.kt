@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalGraphicsContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,7 +39,7 @@ import com.vzkz.match.presentation.util.toMatchUi
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MatchHistoryScreenRot(
+fun MatchHistoryScreen(
     viewModel: MatchHistoryViewModel = koinViewModel(),
     onNavigateToActiveMatch: () -> Unit
 ) {
@@ -57,14 +56,14 @@ fun MatchHistoryScreenRot(
         }
     }
 
-    MatchHistoryScreen(
+    MatchHistoryScreenRoot(
         state = state,
         onAction = viewModel::onAction
     )
 }
 
 @Composable
-private fun MatchHistoryScreen(
+private fun MatchHistoryScreenRoot(
     state: MatchHistoryState,
     onAction: (MatchHistoryIntent) -> Unit
 ) {
@@ -150,7 +149,7 @@ private fun MatchHistoryScreen(
 @Composable
 private fun MatchHistoryScreenPreview() {
     BeePadelTheme {
-        MatchHistoryScreen(
+        MatchHistoryScreenRoot(
             state = MatchHistoryState.initial.copy(
                 matchHistory = dummyMatchList().map { it.toMatchUi() },
                 showDeleteDialog = true

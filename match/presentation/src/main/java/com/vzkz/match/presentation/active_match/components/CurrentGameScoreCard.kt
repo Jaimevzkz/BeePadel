@@ -19,7 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.core.presentation.designsystem.BallIcon
@@ -41,6 +44,7 @@ fun CurrentGameScoreCard(
 ) {
     val pointsFontSize = 60.sp
     val gameFontSize = 30.sp
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -48,6 +52,9 @@ fun CurrentGameScoreCard(
     ) {
         Text(
             modifier = Modifier
+                .semantics {
+                    contentDescription = context.getString(R.string.elapsed_time)
+                }
                 .align(Alignment.CenterHorizontally)
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.surface)

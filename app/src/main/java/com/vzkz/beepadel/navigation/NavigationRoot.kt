@@ -1,19 +1,12 @@
 package com.vzkz.beepadel.navigation
 
-import android.app.Activity
 import android.os.Build
-import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -22,14 +15,11 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.vzkz.beepadel.MainActivity
 import com.vzkz.match.domain.MatchTracker
-import com.vzkz.match.presentation.active_match.ActiveMatchScreenRot
+import com.vzkz.match.presentation.active_match.ActiveMatchScreen
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
-import com.vzkz.match.presentation.match_history.MatchHistoryScreenRot
+import com.vzkz.match.presentation.match_history.MatchHistoryScreen
 import kotlinx.coroutines.flow.first
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
-import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
@@ -80,7 +70,7 @@ fun NavigationRoot(
                     NavEntry(
                         key = key,
                     ) {
-                        MatchHistoryScreenRot(
+                        MatchHistoryScreen(
                             onNavigateToActiveMatch = {
                                 backStack.add(KeyActiveMatchScreen)
                             }
@@ -93,7 +83,7 @@ fun NavigationRoot(
                         key = key
                     ) {
                         val context = LocalContext.current
-                        ActiveMatchScreenRot(
+                        ActiveMatchScreen(
                             onNavigateToMatchHistory = {
                                 backStack.removeLast()
                             },

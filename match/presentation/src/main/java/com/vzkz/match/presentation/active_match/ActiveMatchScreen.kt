@@ -40,7 +40,7 @@ import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRational
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ActiveMatchScreenRot(
+fun ActiveMatchScreen(
     viewModel: ActiveMatchViewmodel = koinViewModel(),
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onNavigateToMatchHistory: () -> Unit
@@ -58,7 +58,7 @@ fun ActiveMatchScreenRot(
         }
     }
 
-    ActiveMatchScreen(
+    ActiveMatchScreenRoot(
         state = state,
         onAction = viewModel::onAction,
         onServiceToggle = onServiceToggle
@@ -66,7 +66,7 @@ fun ActiveMatchScreenRot(
 }
 
 @Composable
-private fun ActiveMatchScreen(
+fun ActiveMatchScreenRoot(
     state: ActiveMatchState,
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onAction: (ActiveMatchIntent) -> Unit
@@ -220,7 +220,7 @@ private fun ActivityResultLauncher<Array<String>>.requestBeepadelPermissions(
 @Composable
 private fun ActiveMatchScreenPreview() {
     BeePadelTheme {
-        ActiveMatchScreen(
+        ActiveMatchScreenRoot(
             state = ActiveMatchState.initial.copy(
 //                setsPlayer1 = 1,
 //                gamesPlayer1 = 5,
