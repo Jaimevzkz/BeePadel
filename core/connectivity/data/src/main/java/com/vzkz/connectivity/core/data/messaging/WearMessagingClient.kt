@@ -35,7 +35,7 @@ class WearMessagingClient(
             }
             val onMessageReceivedListener = MessageClient.OnMessageReceivedListener { listener }
 
-                client.addListener(onMessageReceivedListener)
+            client.addListener(onMessageReceivedListener)
 
             messageQueue.forEach {
                 sendOrQueueAction(it)
