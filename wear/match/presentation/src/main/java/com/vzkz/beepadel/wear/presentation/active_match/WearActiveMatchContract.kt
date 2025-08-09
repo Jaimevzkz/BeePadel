@@ -50,7 +50,7 @@ data class WearActiveMatchState(
             canTrackHeartRate = false,
             isAmbientMode = false,
             burnInProtectionRequired = false,
-            dialogToShow = WearDialogs.NONE,
+            dialogToShow = WearDialogs.SERVING,
             heartRate = 0,
 //            dialogToShow = WearDialogs.PHONE_NOT_CONNECTED,
         )
@@ -65,6 +65,7 @@ sealed class WearActiveMatchIntent : Intent {
     data object UndoPoint : WearActiveMatchIntent()
     data class ToggleDialog(val newVal: WearDialogs) : WearActiveMatchIntent()
     data class OnBodySensorPermissionResult(val isGranted: Boolean) : WearActiveMatchIntent()
+    data class StartMatch(val isTeam1Serving: Boolean): WearActiveMatchIntent()
 
 }
 

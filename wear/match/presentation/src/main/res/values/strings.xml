@@ -4,4 +4,5 @@
     <string name="finish">Finish Match</string>
     <string name="cancel">Cancel</string>
     <string name="connect_your_phone">BeePadel phone app has to be installed and connected.</string>
+    <string name="who_starts_serving">Who starts serving?</string>
 </resources>

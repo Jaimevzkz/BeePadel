@@ -8,17 +8,12 @@ data class Match(
     val matchId: UUID,
     val setList: List<Set>,
     val dateTime: ZonedDateTime,
-    val elapsedTime: Duration
+    val elapsedTime: Duration,
+    val avgHeartRate: Int?,
+    val maxHeartRate: Int?
 ){
 
     fun getSetsForMatch(): Pair<Int, Int> {
-        var setsPlayer1 = 0
-        var setsPlayer2 = 0
-        setList.forEach { set ->
-            if (set.getWinner() == true) setsPlayer1++
-            else if (set.getWinner() == false) setsPlayer2++
-        }
-
-        return Pair(setsPlayer1, setsPlayer2)
+       return setList.getSetCount()
     }
 }

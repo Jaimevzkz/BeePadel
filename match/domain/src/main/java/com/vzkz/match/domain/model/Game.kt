@@ -33,3 +33,14 @@ data class Game(
         )
     }
 }
+
+fun List<Game>.getGameCount(): Pair<Int, Int>{
+    var gamesPlayer1 = 0
+    var gamesPlayer2 = 0
+    this.forEach { game ->
+        if (game.player1Points == Points.Won) gamesPlayer1++
+        else if (game.player2Points == Points.Won) gamesPlayer2++
+    }
+
+    return Pair(gamesPlayer1, gamesPlayer2)
+}

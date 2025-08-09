@@ -21,7 +21,9 @@ class MatchMappersTest {
         formatedSetList = dummyMatch().setList.map { it.getGamesForSet() },
         dateTimeFormatted = "Jun 29, 2025 - 02:30PM",
         elapsedTime = "01:30:43",
-        matchId = match.matchId
+        matchId = match.matchId,
+        avgHeartRate = 100,
+        maxHeartRate = 100,
     )
 
 

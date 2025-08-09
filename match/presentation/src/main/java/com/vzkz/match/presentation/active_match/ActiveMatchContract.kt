@@ -24,7 +24,8 @@ data class ActiveMatchState(
     val activeMatchDialogToShow: ActiveMatchDialog?,
     val insertMatchLoading: Boolean,
     val showNotificationRationale: Boolean,
-    val showServingDialog: Boolean
+    val showServingDialog: Boolean,
+    val currentHeartRate: Int?
     ) : State {
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
@@ -44,6 +45,7 @@ data class ActiveMatchState(
             insertMatchLoading = false,
             showNotificationRationale = false,
             showServingDialog = true,
+            currentHeartRate = null,
         )
     }
 }

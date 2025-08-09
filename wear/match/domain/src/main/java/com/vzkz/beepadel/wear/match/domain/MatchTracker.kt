@@ -28,8 +28,6 @@ class MatchTracker(
     private val _hasMatchStarted = MutableStateFlow(false)
     val hasMatchStarted = _hasMatchStarted.asStateFlow()
 
-    //todo implement getting scores (and setting them)
-
     val elapsedTime = watchToPhoneConnector
         .messagingActions
         .filterIsInstance<MessagingAction.TimeUpdate>()
@@ -52,18 +50,11 @@ class MatchTracker(
             }
             .onEach { hearRate ->
                 watchToPhoneConnector.sendActionToPhone(MessagingAction.HeartRateUpdate(hearRate))
-                //todo should the local heart rate value be updated here?
+                _heartRate.value = hearRate
             }
             .launchIn(applicationScope)
     }
-    /*
-    * How it works:
-    *   Watch to phone:
-    *       create messaging actions for adding point (a parameter is its team 1 or 2) and undoing
-    *   Phone to watch:
-    *       receive heart rate update from watch
-    *       send a point / game / set update every time there is a point
-    * */
+
 
     fun setHasMatchStarted(isTracking: Boolean) {
         _hasMatchStarted.value = isTracking

@@ -12,6 +12,7 @@ interface MatchTracker {
     val isTeam1Serving: Flow<Boolean?>
     val isMatchStarted: Flow<Boolean>
     val isMatchResumed: Flow<Boolean>
+    val currentHeartRate: Flow<Int?>
 
     fun addPointToPlayer1()
     fun addPointToPlayer2()

@@ -1,6 +1,9 @@
 package com.vzkz.match.presentation.active_match
 
+import androidx.compose.material3.MediumTopAppBar
 import androidx.lifecycle.viewModelScope
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.*
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.ui.BaseViewModel
@@ -9,11 +12,11 @@ import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ActiveMatchViewmodel(
@@ -27,15 +30,6 @@ class ActiveMatchViewmodel(
     ) {
 
     init {
-
-        //debug
-        watchConnector
-            .connectedDevice
-            .filterNotNull()
-            .onEach { Timber.d("New device detected: ${it.displayName}") }
-            .flowOn(dispatchers.default)
-            .launchIn(viewModelScope)
-
         _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
 
         matchTracker
@@ -89,9 +83,21 @@ class ActiveMatchViewmodel(
             }
             .flowOn(dispatchers.default)
             .launchIn(viewModelScope)
+
+        matchTracker
+            .currentHeartRate
+            .onEach { heartRate ->
+                _state.update { it.copy(currentHeartRate = heartRate) }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
+
+
+        listenToWatchActions()
     }
 
     override fun reduce(intent: ActiveMatchIntent) {
+        sendActionToWatch(intent)
         when (intent) {
             ActiveMatchIntent.AddPointToTeam2 -> matchTracker.addPointToPlayer2()
             ActiveMatchIntent.AddPointToTeam1 -> matchTracker.addPointToPlayer1()
@@ -115,6 +121,43 @@ class ActiveMatchViewmodel(
 
 
         }
+    }
+
+    private fun sendActionToWatch(intent: ActiveMatchIntent) {
+        viewModelScope.launch {
+            val messagingAction = when (intent) {
+                ActiveMatchIntent.DiscardMatch -> MessagingAction.Discard
+                ActiveMatchIntent.FinishMatch -> MessagingAction.Finish
+                is ActiveMatchIntent.StartMatch -> MessagingAction.Start(intent.isTeam1Serving)
+                else -> null
+            }
+            messagingAction?.let {
+                val result = watchConnector.sendActionToWatch(it)
+                if (result is Result.Error) {
+                    Timber.e("Tracker error: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun listenToWatchActions() {
+        watchConnector
+            .messagingActions
+            .onEach { action ->
+                when (action) {
+                    ConnectionRequest -> {
+                        if (state.value.isMatchStarted) {
+                            watchConnector.sendActionToWatch(Start(state.value.isTeam1Serving!!))
+                        }
+                    }
+
+                    Discard -> discardMatch()
+                    Finish -> finishMatch()
+                    else -> Unit
+                }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
     }
 
     private fun startMatch(isTeam1Serving: Boolean) {

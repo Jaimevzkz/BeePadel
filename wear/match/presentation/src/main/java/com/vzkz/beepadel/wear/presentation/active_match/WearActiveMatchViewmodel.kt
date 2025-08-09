@@ -4,17 +4,17 @@ package com.vzkz.beepadel.wear.presentation.active_match
 
 
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.graphics.Paint
 import androidx.lifecycle.viewModelScope
 import com.vzkz.beepadel.wear.match.domain.ExerciseTracker
 import com.vzkz.beepadel.wear.match.domain.MatchTracker
 import com.vzkz.beepadel.wear.match.domain.PhoneConnector
+import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.*
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.presentation.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 import com.vzkz.core.domain.error.Result
+import com.vzkz.match.domain.model.Points
+import com.vzkz.match.domain.model.toPoints
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import timber.log.Timber
@@ -42,10 +44,6 @@ class WearActiveMatchViewmodel(
 
     private val hasBodySensorPermission = MutableStateFlow(false)
 
-    private val phoneNearbyFlow = snapshotFlow {
-        state.value.isConnectedPhoneNearBy
-    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
-
     val isAmbientMode = snapshotFlow { state.value.isAmbientMode }
 
     init {
@@ -62,31 +60,6 @@ class WearActiveMatchViewmodel(
             val isHeartRateTrackingSupported = exerciseTracker.isHeartRateTrackingSupported()
             _state.update { it.copy(canTrackHeartRate = isHeartRateTrackingSupported) }
         }
-
-//        phoneNearbyFlow // todo not sure this will work as expected --> PROBABLY does not work as expected
-//            .onEach { isPhoneNerby ->
-//                val result = when {
-////                    isPhoneNerby && !state.value.hasMatchStarted -> { //todo WHERE to start the exercise???
-////                        exerciseTracker.startExercise()
-////                    }
-//
-//                    isPhoneNerby && !state.value.isMatchResumed -> {
-//                        exerciseTracker.resumeExercise()
-//                    }
-//
-//                    !isPhoneNerby && state.value.isMatchResumed -> {
-//                        exerciseTracker.pauseExercise()
-//                    }
-//
-//                    else -> Result.Success(Unit)
-//                }
-//                if (result is Result.Error) {
-//                    //todo send error (however i want to handle it)
-//                }
-//
-////                matchTracker.setIsTracking(isTracking)
-//            }
-//            .launchIn(viewModelScope)
 
         isAmbientMode
             .flatMapLatest { isAmbientModeActive ->
@@ -114,20 +87,14 @@ class WearActiveMatchViewmodel(
             }
             .launchIn(viewModelScope)
 
-        // todo receive values form tracker
 
-        //todo listenToPhoneActions()
+        listenToPhoneActions()
     }
 
     override fun reduce(intent: WearActiveMatchIntent) {
-        // todo how to avoid circular dependency -> add triggeredOnPhone on this method but how to not alter other viewmodel?
+        sendActionToPhone(intent)
         when (intent) {
-            WearActiveMatchIntent.AddPointToTeam1 -> TODO()
-            WearActiveMatchIntent.AddPointToTeam2 -> TODO()
-            WearActiveMatchIntent.DiscardMatch -> TODO()
-            WearActiveMatchIntent.FinishMatch -> TODO()
-            WearActiveMatchIntent.UndoPoint -> TODO()
-            is WearActiveMatchIntent.ToggleDialog -> TODO()
+            is WearActiveMatchIntent.ToggleDialog -> _state.update { it.copy(dialogToShow = intent.newVal) }
             is WearActiveMatchIntent.OnBodySensorPermissionResult -> {
                 hasBodySensorPermission.value = intent.isGranted
                 if (intent.isGranted) {
@@ -138,23 +105,118 @@ class WearActiveMatchViewmodel(
                     }
                 }
             }
+
+            else -> Unit
         }
     }
 
 
-    private fun sendActionToPhone(action: WearActiveMatchIntent) {
+    private fun sendActionToPhone(intent: WearActiveMatchIntent) {
         viewModelScope.launch {
-            val messagingAction = when (action) {
-                is WearActiveMatchIntent.AddPointToTeam1 -> MessagingAction.PointsUpdate(0 to 0) //todo
+            val messagingAction = when (intent) {
+                is WearActiveMatchIntent.AddPointToTeam1 -> AddPointTo(true)
+                WearActiveMatchIntent.AddPointToTeam2 -> AddPointTo(true)
+                WearActiveMatchIntent.UndoPoint -> UndoPoint
+                is WearActiveMatchIntent.StartMatch -> {
+                    Timber.i("Sending start message to phone")
+                    Start(intent.isTeam1Serving)
+                }
+                WearActiveMatchIntent.FinishMatch -> Finish
+                WearActiveMatchIntent.DiscardMatch -> Discard
                 else -> null
-
             }
             messagingAction?.let {
+                Timber.i("Message action: $messagingAction")
                 val result = phoneConnector.sendActionToPhone(it)
                 if (result is Result.Error) {
                     Timber.e("Tracker error: ${result.error}")
                 }
             }
         }
+    }
+
+    private fun listenToPhoneActions() {
+        phoneConnector
+            .messagingActions
+            .onEach { action ->
+                when (action) {
+                    is Start -> {
+                        Timber.i("Receiving start message on watch")
+                        exerciseTracker.startExercise()
+                        matchTracker.setHasMatchStarted(true)
+                        _state.update {
+                            it.copy(
+                                isTeam1Serving = action.isTeam1Serving,
+                                dialogToShow = WearDialogs.NONE
+                            )
+                        }
+                    }
+
+                    Discard -> {
+                        matchTracker.setHasMatchStarted(false)
+                        exerciseTracker.stopExercise()
+                        _state.update { WearActiveMatchState.initial }
+                    }
+
+                    Finish -> {
+                        matchTracker.setHasMatchStarted(false)
+                        exerciseTracker.stopExercise()
+                        _state.update { WearActiveMatchState.initial }
+                    }
+
+                    is PointsUpdate -> {
+                        _state.update {
+                            it.copy(
+                                pointsTeam1 = action.points.first.toPoints(),
+                                pointsTeam2 = action.points.second.toPoints(),
+                            )
+                        }
+                    }
+
+                    is GamesUpdate -> {
+                        _state.update {
+                            it.copy(
+                                pointsTeam1 = Points.Zero,
+                                pointsTeam2 = Points.Zero,
+                                gamesTeam1 = action.games.first,
+                                gamesTeam2 = action.games.second,
+                            )
+                        }
+                    }
+
+                    is UpdateAfterUndo -> {
+                        _state.update {
+                            it.copy(
+                                pointsTeam1 = action.points.first.toPoints(),
+                                pointsTeam2 = action.points.second.toPoints(),
+                                gamesTeam1 = action.games.first,
+                                gamesTeam2 = action.games.second,
+                                setsTeam1 = action.sets.first,
+                                setsTeam2 = action.sets.second
+                            )
+                        }
+                    }
+
+                    is SetsUpdate -> {
+                        _state.update {
+                            it.copy(
+                                pointsTeam1 = Points.Zero,
+                                pointsTeam2 = Points.Zero,
+                                gamesTeam1 = 0,
+                                gamesTeam2 = 0,
+                                setsTeam1 = action.sets.first,
+                                setsTeam2 = action.sets.second
+                            )
+                        }
+                    }
+
+                    is ServingUpdate -> _state.update { it.copy(isTeam1Serving = action.isTeam1Serving) }
+
+                    is TimeUpdate -> _state.update { it.copy(elapsedTime = action.elapsedDuration) }
+                    else -> Unit
+                }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
     }
 }

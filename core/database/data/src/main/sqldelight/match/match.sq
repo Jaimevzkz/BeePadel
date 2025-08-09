@@ -5,7 +5,9 @@ import kotlin.time.Duration;
 CREATE TABLE matchEntity (
   matchId TEXT AS UUID NOT NULL PRIMARY KEY,
   dateTimeUtc TEXT AS ZonedDateTime NOT NULL,
-  elapsedTime TEXT AS Duration NOT NULL
+  elapsedTime TEXT AS Duration NOT NULL,
+  avgHeartRate INTEGER,
+  maxHeartRate INTEGER
 );
 
 getAllMatches:
@@ -14,8 +16,8 @@ FROM matchEntity
 ORDER BY dateTimeUtc DESC;
 
 insertOrReplaceMatch:
-INSERT OR REPLACE INTO matchEntity(matchId, dateTimeUtc, elapsedTime)
-VALUES (?, ?, ?);
+INSERT OR REPLACE INTO matchEntity(matchId, dateTimeUtc, elapsedTime, avgHeartRate, maxHeartRate)
+VALUES (?, ?, ?,?,?);
 
 deleteMatchById:
 DELETE FROM matchEntity

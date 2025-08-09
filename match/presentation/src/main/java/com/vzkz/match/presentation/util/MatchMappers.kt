@@ -5,6 +5,7 @@ import com.vzkz.match.presentation.match_history.model.MatchUi
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.max
 import kotlin.time.Duration
 
 fun Duration.formatted(): String {
@@ -38,6 +39,8 @@ fun Match.toMatchUi(zoneId: ZoneId = ZoneId.systemDefault()): MatchUi {
         formatedSetList = formattedSetList,
         dateTimeFormatted = formattedDateTime,
         elapsedTime = elapsedTime.formatted(),
+        avgHeartRate = avgHeartRate,
+        maxHeartRate = maxHeartRate,
     )
 
 }

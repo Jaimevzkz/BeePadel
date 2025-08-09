@@ -38,11 +38,11 @@ class WearNodeDiscovery(
             val listener: (CapabilityInfo) -> Unit = {
                 trySend(it.nodes.map { node -> node.toDeviceNode() }.toSet())
             }
-            val onCapabilityChangedListener = CapabilityClient.OnCapabilityChangedListener {listener}
+//            val onCapabilityChangedListener = CapabilityClient.OnCapabilityChangedListener {listener}
 
-            capabilityClient.addListener(onCapabilityChangedListener, remoteCapability)
+            capabilityClient.addListener(listener, remoteCapability)
             awaitClose {
-                capabilityClient.removeListener(onCapabilityChangedListener)
+                capabilityClient.removeListener(listener)
             }
         }
     }
