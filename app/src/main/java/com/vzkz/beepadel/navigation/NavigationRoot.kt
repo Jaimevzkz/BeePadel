@@ -14,6 +14,7 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.vzkz.beepadel.MainActivity
+import com.vzkz.beepadel.settings.presentation.SettingsScreen
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.presentation.active_match.ActiveMatchScreen
 import com.vzkz.match.presentation.active_match.service.ActiveMatchService
@@ -73,6 +74,9 @@ fun NavigationRoot(
                         MatchHistoryScreen(
                             onNavigateToActiveMatch = {
                                 backStack.add(KeyActiveMatchScreen)
+                            },
+                            onNavigateToSettings = {
+                                backStack.add(KeySettingsScreen)
                             }
                         )
                     }
@@ -103,6 +107,14 @@ fun NavigationRoot(
 
                             }
                         )
+                    }
+                }
+
+                is KeySettingsScreen -> {
+                    NavEntry(
+                        key = key
+                    ) {
+                        SettingsScreen()
                     }
                 }
 

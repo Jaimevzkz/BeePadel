@@ -2,6 +2,7 @@ package com.vzkz.beepadel
 
 import android.app.Application
 import com.vzkz.beepadel.di.appModule
+import com.vzkz.beepadel.settings.presentation.di.settingsViewmodelModule
 import com.vzkz.connectivity.core.data.di.coreConnectivityDataModule
 import com.vzkz.core.data.di.coreDataModule
 import com.vzkz.core.database.data.di.databaseModule
@@ -34,6 +35,7 @@ class BeePadelApp : Application() {
                 matchDataModule,
                 databaseModule,
                 coreConnectivityDataModule,
+                settingsViewmodelModule
             )
         }
     }

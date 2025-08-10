@@ -24,6 +24,7 @@ class MatchHistoryViewModel(
     override fun reduce(intent: MatchHistoryIntent) {
         when (intent) {
             is MatchHistoryIntent.NavigateToActiveMatch -> sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
+            MatchHistoryIntent.NavigateToSettings -> sendEvent(MatchHistoryEvent.NavigateToSettings)
             is MatchHistoryIntent.DeleteMatch -> deleteMatch()
             is MatchHistoryIntent.ToggleDeleteDialog -> {
                 uuidOfMatchToDelete = intent.matchId

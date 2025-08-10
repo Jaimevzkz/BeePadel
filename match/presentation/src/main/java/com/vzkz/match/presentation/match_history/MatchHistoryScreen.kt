@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,16 +45,17 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun MatchHistoryScreen(
     viewModel: MatchHistoryViewModel = koinViewModel(),
-    onNavigateToActiveMatch: () -> Unit
+    onNavigateToActiveMatch: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
 
     LaunchedEffect(events) {
         when (events) {
-            is MatchHistoryEvent.NavigateToActiveMatch -> {
-                onNavigateToActiveMatch()
-            }
+            is MatchHistoryEvent.NavigateToActiveMatch -> onNavigateToActiveMatch()
+
+            MatchHistoryEvent.NavigateToSettings -> onNavigateToSettings()
 
             null -> {}
         }
@@ -78,7 +83,16 @@ private fun MatchHistoryScreenRoot(
                 },
                 colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = Color.Transparent
-                )
+                ),
+                actions = {
+                    IconButton(onClick = {onAction(MatchHistoryIntent.NavigateToSettings)}) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            contentDescription = stringResource(R.string.settings_screen)
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {

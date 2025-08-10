@@ -31,4 +31,5 @@
     <string name="match_won">Match won</string>
     <string name="match_duration">Match duration</string>
     <string name="elapsed_time">Elapsed time</string>
+    <string name="settings_screen">Settings screen</string>
 </resources>

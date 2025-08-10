@@ -8,3 +8,5 @@ data object KeyMatchHistoryScreen : NavKey
 
 @Serializable
 data object KeyActiveMatchScreen : NavKey
+@Serializable
+data object KeySettingsScreen : NavKey
