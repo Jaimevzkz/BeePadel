@@ -114,7 +114,9 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        SettingsScreen()
+                        SettingsScreen(
+                            onNavigateBack = { backStack.removeLast() }
+                        )
                     }
                 }
 

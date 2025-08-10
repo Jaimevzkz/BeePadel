@@ -1,6 +1,7 @@
 package com.vzkz.beepadel
 
 import android.app.Application
+import com.vzkz.beepadel.core.preferences.data.di.preferencesModule
 import com.vzkz.beepadel.di.appModule
 import com.vzkz.beepadel.settings.presentation.di.settingsViewmodelModule
 import com.vzkz.connectivity.core.data.di.coreConnectivityDataModule
@@ -25,6 +26,7 @@ class BeePadelApp : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
+
         startKoin {
             androidLogger()
             androidContext(this@BeePadelApp)
@@ -35,7 +37,8 @@ class BeePadelApp : Application() {
                 matchDataModule,
                 databaseModule,
                 coreConnectivityDataModule,
-                settingsViewmodelModule
+                settingsViewmodelModule,
+                preferencesModule
             )
         }
     }

@@ -7,8 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.vzkz.beepadel.navigation.NavigationRoot
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
@@ -24,6 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                 )
+                BuildConfig.VERSION_NAME
             }
         }
     }
