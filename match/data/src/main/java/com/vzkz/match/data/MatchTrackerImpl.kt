@@ -149,11 +149,13 @@ class MatchTrackerImpl(
 
         if (finalSetList.isEmpty()) return Result.Error(DataError.Logic.EMPTY_SET_LIST)
 
+        val isHeartRateListEmpty = heartRateList.value.isEmpty()
         val finalMatch = activeMatch.value.copy(
             elapsedTime = elapsedTime.value,
             setList = finalSetList,
-            avgHeartRate = heartRateList.value.average().toInt(),
-            maxHeartRate = heartRateList.value.max(),
+            avgHeartRate = if (!isHeartRateListEmpty)
+                heartRateList.value.average().toInt() else null,
+            maxHeartRate = if (!isHeartRateListEmpty) heartRateList.value.max() else null,
         )
 
         return when (val insert = localStorageRepository.insertOrReplaceMatch(finalMatch)) {
@@ -185,7 +187,8 @@ class MatchTrackerImpl(
         applicationScope.launch(dispatchers.default) {
             val setList = previousMatchStateList.last().setList
             val gameList = setList.last().gameList
-            val points = gameList.last().player1Points.ordinal to gameList.last().player2Points.ordinal
+            val points =
+                gameList.last().player1Points.ordinal to gameList.last().player2Points.ordinal
             watchConnector.sendActionToWatch(
                 MessagingAction.UpdateAfterUndo(
                     points = points,
