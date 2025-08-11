@@ -16,14 +16,18 @@ data class Set(
 
 
     fun getGamesForSet(): Pair<Int, Int> {
-        var gamesPlayer1 = 0
-        var gamesPlayer2 = 0
-        gameList.forEach { game ->
-            if (game.player1Points == Points.Won) gamesPlayer1++
-            else if (game.player2Points == Points.Won) gamesPlayer2++
-        }
-
-        return Pair(gamesPlayer1, gamesPlayer2)
+        return gameList.getGameCount()
     }
 
+}
+
+fun List<Set>.getSetCount(): Pair<Int, Int>{
+    var setsPlayer1 = 0
+    var setsPlayer2 = 0
+    this.forEach { set ->
+        if (set.getWinner() == true) setsPlayer1++
+        else if (set.getWinner() == false) setsPlayer2++
+    }
+
+    return Pair(setsPlayer1, setsPlayer2)
 }

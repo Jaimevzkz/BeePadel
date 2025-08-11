@@ -8,6 +8,8 @@ sealed interface DataError: RootError {
         DELETE_MATCH_FAILED,
         DELETE_SET_FAILED,
         DELETE_GAME_FAILED,
+        // Datastore
+        DISK_FULL,
     }
 
     enum class Logic: DataError{

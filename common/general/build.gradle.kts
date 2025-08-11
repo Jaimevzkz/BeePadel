@@ -10,4 +10,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.match.domain)
     implementation(projects.core.database.domain)
+    implementation(projects.core.connectivity.domain)
+    implementation(projects.core.preferences.domain)
+
 }

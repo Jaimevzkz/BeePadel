@@ -14,4 +14,5 @@
     <string name="error_exercise_already_ended">Exercise already ended (health services)</string>
     <string name="error_connection_interrupted">Phone-Watch connection interrupted</string>
     <string name="error_disconnected">Phone-Watch connection disconnected</string>
+    <string name="error_disk_full">There is not enough storage in the device to store preferences</string>
 </resources>

@@ -40,7 +40,7 @@ import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRational
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ActiveMatchScreenRot(
+fun ActiveMatchScreen(
     viewModel: ActiveMatchViewmodel = koinViewModel(),
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onNavigateToMatchHistory: () -> Unit
@@ -58,7 +58,7 @@ fun ActiveMatchScreenRot(
         }
     }
 
-    ActiveMatchScreen(
+    ActiveMatchScreenRoot(
         state = state,
         onAction = viewModel::onAction,
         onServiceToggle = onServiceToggle
@@ -66,7 +66,7 @@ fun ActiveMatchScreenRot(
 }
 
 @Composable
-private fun ActiveMatchScreen(
+fun ActiveMatchScreenRoot(
     state: ActiveMatchState,
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onAction: (ActiveMatchIntent) -> Unit
@@ -146,7 +146,8 @@ private fun ActiveMatchScreen(
                     currentOwnGames = state.gamesPlayer1,
                     currentOtherGames = state.gamesPlayer2,
                     isServing = state.isTeam1Serving,
-                    elapsedTime = state.elapsedTime
+                    elapsedTime = state.elapsedTime,
+                    goldenPoint = state.goldenPoint
                 )
                 Spacer(Modifier)
                 ControlsSection(
@@ -220,7 +221,7 @@ private fun ActivityResultLauncher<Array<String>>.requestBeepadelPermissions(
 @Composable
 private fun ActiveMatchScreenPreview() {
     BeePadelTheme {
-        ActiveMatchScreen(
+        ActiveMatchScreenRoot(
             state = ActiveMatchState.initial.copy(
 //                setsPlayer1 = 1,
 //                gamesPlayer1 = 5,
@@ -228,7 +229,9 @@ private fun ActiveMatchScreenPreview() {
 //                setsPlayer2 = 1,
 //                gamesPlayer2 = 3,
 //                pointsPlayer2 = Points.Fifteen,
-                isTeam1Serving = true
+                isTeam1Serving = true,
+//                goldenPoint = true,
+                goldenPoint = false
             ),
             onAction = {},
             onServiceToggle = {}

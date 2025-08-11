@@ -7,5 +7,7 @@ data class MatchUi(
     val isMatchWon: Boolean,
     val formatedSetList: List<Pair<Int,Int>>,
     val dateTimeFormatted: String,
-    val elapsedTime: String
+    val elapsedTime: String,
+    val avgHeartRate: Int?,
+    val maxHeartRate: Int?,
 )

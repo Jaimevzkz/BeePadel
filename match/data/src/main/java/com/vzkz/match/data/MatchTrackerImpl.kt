@@ -1,28 +1,41 @@
 package com.vzkz.match.data
 
+import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
+import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.common.general.data_generator.emptyGame
 import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.emptySet
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
 import com.vzkz.core.database.domain.LocalStorageRepository
-import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.Timer
+import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.UUIDProvider
 import com.vzkz.core.domain.error.asEmptyDataResult
 import com.vzkz.match.domain.MatchTracker
+import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.domain.model.Points
+import com.vzkz.match.domain.model.getGameCount
+import com.vzkz.match.domain.model.getSetCount
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.runningFold
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
@@ -33,7 +46,9 @@ class MatchTrackerImpl(
     private val dispatchers: DispatchersProvider,
     private val localStorageRepository: LocalStorageRepository,
     private val zonedDateProvider: ZonedDateTimeProvider,
-    private val uUIDProvider: UUIDProvider
+    private val uUIDProvider: UUIDProvider,
+    private val watchConnector: WatchConnector,
+    private val preferencesRepository: PreferencesRepository
 ) : MatchTracker {
     private val _elapsedTime = MutableStateFlow(Duration.ZERO)
     override val elapsedTime = _elapsedTime.asStateFlow()
@@ -54,14 +69,38 @@ class MatchTrackerImpl(
     private val _isTeam1Serving: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     override val isTeam1Serving = _isTeam1Serving.asStateFlow()
 
-    private val _isMatchResumed = MutableStateFlow(false)
-    override val isMatchResumed = _isMatchResumed.asStateFlow()
-
     private val _isMatchStarted = MutableStateFlow(false)
-    override val isMatchStarted: Flow<Boolean> = _isMatchStarted.asStateFlow()
+    override val isMatchStarted = _isMatchStarted.asStateFlow()
+
+    private val _goldenPoint = MutableStateFlow(GOLDEN_POINT.DEFAULT_VAL)
+    override val goldenPoint = _goldenPoint.asStateFlow()
+
+    private val heartRateList = isMatchStarted
+        .flatMapLatest { hasStarted ->
+            if (hasStarted) {
+                watchConnector.messagingActions
+            } else flowOf()
+        }.filterIsInstance<MessagingAction.HeartRateUpdate>()
+        .map { it.heartRate }
+        .runningFold(initial = emptyList<Int>()) { currentHeartRates, newHeartRate ->
+            currentHeartRates + newHeartRate
+        }.stateIn(
+            applicationScope,
+            SharingStarted.Lazily,
+            emptyList()
+        )
+
+    override val currentHeartRate: Flow<Int?>
+        get() = heartRateList
+            .flatMapLatest { hearRateList ->
+                if (hearRateList.isNotEmpty())
+                    flowOf(hearRateList.last())
+                else flowOf(null)
+            }
+
 
     init {
-        isMatchResumed
+        isMatchStarted
             .flatMapLatest { isMatchPlaying ->
                 if (isMatchPlaying) {
                     Timer.timeAndEmit()
@@ -70,6 +109,35 @@ class MatchTrackerImpl(
             .onEach {
                 _elapsedTime.value += it
             }
+            .launchIn(applicationScope)
+
+        elapsedTime
+            .onEach {
+                watchConnector.sendActionToWatch(MessagingAction.TimeUpdate(it))
+            }
+            .launchIn(applicationScope)
+
+        watchConnector
+            .messagingActions
+            .onEach { action ->
+                when (action) {
+                    is Start -> {
+                        setIsTeam1Serving(action.isTeam1Serving)
+//                        setIsMatchStarted(true)
+                        setIsMatchStarted(true)
+                        applicationScope.launch(dispatchers.default) {
+                            watchConnector.sendActionToWatch(Start(action.isTeam1Serving))
+                        }
+                    }
+
+                    is MessagingAction.AddPointTo -> addPointTo(action.addToTeam1)
+
+                    is MessagingAction.UndoPoint -> undoPoint()
+
+                    else -> Unit
+                }
+            }
+            .flowOn(dispatchers.default)
             .launchIn(applicationScope)
     }
 
@@ -80,13 +148,19 @@ class MatchTrackerImpl(
 
         if (finalSetList.isEmpty()) return Result.Error(DataError.Logic.EMPTY_SET_LIST)
 
+        val isHeartRateListEmpty = heartRateList.value.isEmpty()
         val finalMatch = activeMatch.value.copy(
             elapsedTime = elapsedTime.value,
-            setList = finalSetList
+            setList = finalSetList,
+            avgHeartRate = if (!isHeartRateListEmpty)
+                heartRateList.value.average().toInt() else null,
+            maxHeartRate = if (!isHeartRateListEmpty) heartRateList.value.max() else null,
         )
+
         return when (val insert = localStorageRepository.insertOrReplaceMatch(finalMatch)) {
             is Result.Success -> {
                 applicationScope.launch {
+                    watchConnector.sendActionToWatch(MessagingAction.Finish)
                     resetMatchTrackerState()
                 }
 
@@ -109,6 +183,19 @@ class MatchTrackerImpl(
 
     override fun undoPoint() {
         _activeMatch.update { previousMatchStateList.last() }
+        applicationScope.launch(dispatchers.default) {
+            val setList = previousMatchStateList.last().setList
+            val gameList = setList.last().gameList
+            val points =
+                gameList.last().player1Points.ordinal to gameList.last().player2Points.ordinal
+            watchConnector.sendActionToWatch(
+                MessagingAction.UpdateAfterUndo(
+                    points = points,
+                    games = gameList.getGameCount(),
+                    sets = setList.getSetCount()
+                )
+            )
+        }
 
         if (previousMatchStateList.size > 1)
             previousMatchStateList.removeAt(previousMatchStateList.size - 1)
@@ -121,12 +208,14 @@ class MatchTrackerImpl(
     private fun addPointTo(isPlayer1: Boolean) {
         val gameToChange = activeMatch.value.setList.last().gameList.last()
 
-        val newGame = gameToChange.addPointTo(isPlayer1)
+        val newGame = gameToChange.addPointTo(isPlayer1, goldenPoint.value)
 
         val newSetList = activeMatch.value.setList.toMutableList()
         val newGameList = activeMatch.value.setList.last().gameList.toMutableList()
 
         newGameList[newGameList.size - 1] = newGame
+        var messageToWatch: MessagingAction =
+            MessagingAction.PointsUpdate(newGame.player1Points.ordinal to newGame.player2Points.ordinal)
 
         newSetList[newSetList.size - 1] =
             newSetList[newSetList.size - 1].copy(gameList = newGameList)
@@ -139,12 +228,14 @@ class MatchTrackerImpl(
                         gameId = uUIDProvider.randomUUID()
                     )
                 )
+                messageToWatch = MessagingAction.SetsUpdate(newSetList.getSetCount())
             } else { // new game
                 newGameList.add(
                     emptyGame(
                         uuid = uUIDProvider.randomUUID()
                     )
                 )
+                messageToWatch = MessagingAction.GamesUpdate(newGameList.getGameCount())
             }
             setIsTeam1Serving(!_isTeam1Serving.value!!)
         }
@@ -154,26 +245,33 @@ class MatchTrackerImpl(
                 setList = newSetList
             )
         }
+        applicationScope.launch(dispatchers.default) {
+            watchConnector.sendActionToWatch(messageToWatch)
+        }
     }
 
-    override fun setPlayingMatch(isPlayingMatch: Boolean) {
-        this._isMatchResumed.value = isPlayingMatch
-    }
-
-    override fun setIsMatchStarted(isMatchStarted: Boolean) {
-        _isMatchStarted.value = isMatchStarted
+    override fun setIsMatchStarted(isPlayingMatch: Boolean) {
+        applicationScope.launch(dispatchers.default) {
+            _goldenPoint.value = preferencesRepository.getBooleanPreference(
+                GOLDEN_POINT.KEY
+            ) ?: GOLDEN_POINT.DEFAULT_VAL
+        }
+        this._isMatchStarted.value = isPlayingMatch
     }
 
     override fun setIsTeam1Serving(isTeam1Serving: Boolean?) {
         _isTeam1Serving.value = isTeam1Serving
+        applicationScope.launch(dispatchers.default) {
+            watchConnector.sendActionToWatch(MessagingAction.ServingUpdate(isTeam1Serving))
+        }
     }
 
     private suspend fun resetMatchTrackerState() {
         delay(100L)
         _activeMatch.update { initialMatchState() }
-        setPlayingMatch(false)
         setIsMatchStarted(false)
         setIsTeam1Serving(null)
+        watchConnector.sendActionToWatch(MessagingAction.Discard)
         previousMatchStateList = mutableListOf(activeMatch.value)
         _elapsedTime.value = Duration.ZERO
     }

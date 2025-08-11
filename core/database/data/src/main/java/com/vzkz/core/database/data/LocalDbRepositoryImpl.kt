@@ -47,7 +47,9 @@ class SqlDelightRepository(
                     val insertMatch = matchDataSource.insertOrReplaceMatch(
                         matchId = match.matchId,
                         dateTimeUtc = match.dateTime,
-                        elapsedTime = match.elapsedTime
+                        elapsedTime = match.elapsedTime,
+                        avgHeartRate = match.avgHeartRate,
+                        maxHeartRate = match.maxHeartRate
                     )
                     if (insertMatch is Result.Error) {
                         result = insertMatch.asEmptyDataResult()

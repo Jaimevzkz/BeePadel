@@ -27,6 +27,8 @@ fun MatchEntity.toDomain(setList: List<Set>): Match {
         setList = setList,
         dateTime = dateTimeUtc,
         elapsedTime = elapsedTime,
-        matchId = matchId
+        matchId = matchId,
+        avgHeartRate = avgHeartRate?.toInt(),
+        maxHeartRate = maxHeartRate?.toInt()
     )
 }

@@ -14,16 +14,9 @@ internal fun Project.configureBuildTypes(
     extensionType: ExtensionType
 ) {
     commonExtension.run {
-
         buildFeatures{
             buildConfig = true
         }
-
-//        afterEvaluate { // Disable test in release variant due to proguard not including necessary files
-//            tasks.named("testReleaseUnitTest").configure {
-//                enabled = false
-//            }
-//        }
 
         when (extensionType) {
             ExtensionType.APPLICATION -> {
@@ -41,6 +34,13 @@ internal fun Project.configureBuildTypes(
 
             ExtensionType.LIBRARY -> {
                 extensions.configure<LibraryExtension> {
+                    defaultConfig{
+                        buildConfigField(
+                            "String",
+                            "APP_VERSION_NAME",
+                            "\"${libs.findVersion("projectVersionName").get()}\""
+                        )
+                    }
                     buildTypes {
                         debug {
                             configureDebugBuildType()

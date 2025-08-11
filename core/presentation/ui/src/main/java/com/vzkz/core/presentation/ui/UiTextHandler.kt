@@ -28,6 +28,7 @@ private fun DataError.Local.asUiText(): UiText {
         DataError.Local.DELETE_MATCH_FAILED -> StringResource(R.string.error_delete_match)
         DataError.Local.DELETE_SET_FAILED -> StringResource(R.string.error_delete_set)
         DataError.Local.DELETE_GAME_FAILED -> StringResource(R.string.error_delete_game)
+        DataError.Local.DISK_FULL -> StringResource(R.string.error_disk_full)
     }
 }
 

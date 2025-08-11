@@ -21,11 +21,13 @@ data class MatchHistoryState(
 
 sealed class MatchHistoryIntent : Intent {
     data object NavigateToActiveMatch : MatchHistoryIntent()
+    data object NavigateToSettings : MatchHistoryIntent()
     data object DeleteMatch : MatchHistoryIntent()
     data class ToggleDeleteDialog(val showDialog: Boolean, val matchId: UUID? = null) : MatchHistoryIntent()
 }
 
 sealed class MatchHistoryEvent : Event {
     data object NavigateToActiveMatch : MatchHistoryEvent()
+    data object NavigateToSettings : MatchHistoryEvent()
 
 }

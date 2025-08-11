@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import match.MatchEntity
 import java.time.ZonedDateTime
 import java.util.UUID
+import kotlin.math.max
 import kotlin.time.Duration
 
 class MatchDataSource(
@@ -28,12 +29,16 @@ class MatchDataSource(
     fun insertOrReplaceMatch(
         matchId: UUID,
         dateTimeUtc: ZonedDateTime,
-        elapsedTime: Duration
+        elapsedTime: Duration,
+        avgHeartRate: Int?,
+        maxHeartRate: Int?
     ): Result<Unit, DataError.Local> {
         val insert = queries.insertOrReplaceMatch(
             matchId = matchId,
             dateTimeUtc = dateTimeUtc,
-            elapsedTime = elapsedTime
+            elapsedTime = elapsedTime,
+            avgHeartRate = avgHeartRate?.toLong(),
+            maxHeartRate = maxHeartRate?.toLong()
         )
 
         return if (insert.value.toInt() != 1) Result.Error(DataError.Local.INSERT_MATCH_FAILED)

@@ -4,4 +4,5 @@
     <string name="finish">Terminar</string>
     <string name="cancel">Cancelar</string>
     <string name="connect_your_phone">Debes tener BeePadle instalada y activa en tu telefono para poder usarla desde el reloj</string>
+    <string name="who_starts_serving">¿Quién saca?</string>
 </resources>

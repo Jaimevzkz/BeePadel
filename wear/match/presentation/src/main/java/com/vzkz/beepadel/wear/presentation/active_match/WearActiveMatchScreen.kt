@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +30,10 @@ import androidx.wear.compose.material3.FilledTonalIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.OutlinedIconButton
+import androidx.wear.compose.material3.RadioButton
+import androidx.wear.compose.material3.RadioButtonDefaults
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
 import com.vzkz.beepadel.wear.presentation.active_match.components.ClickableArea
@@ -34,6 +43,7 @@ import com.vzkz.beepadel.wear.presentation.active_match.components.WarningScreen
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.presentation.designsystem.FinishIcon
+import com.vzkz.core.presentation.designsystem.StartIcon
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -94,6 +104,16 @@ private fun WearActiveMatchScreen(
     }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        ClickableArea(
+            modifier = Modifier,
+            onAddPointToTeam1 = {
+                onAction(WearActiveMatchIntent.AddPointToTeam1)
+            },
+            onAddPointToTeam2 = {
+                onAction(WearActiveMatchIntent.AddPointToTeam1)
+            }
+        )
+
         Column(
             Modifier
                 .fillMaxSize()
@@ -130,22 +150,15 @@ private fun WearActiveMatchScreen(
             UndoButton(onUndoPoint = { onAction(WearActiveMatchIntent.UndoPoint) })
         }
 
-        ClickableArea(
-            modifier = Modifier,
-            onAddPointToTeam1 = {
-                onAction(WearActiveMatchIntent.AddPointToTeam1)
-            },
-            onAddPointToTeam2 = {
-                onAction(WearActiveMatchIntent.AddPointToTeam1)
-            }
-        )
-
-
         when (state.dialogToShow) {
             WearDialogs.NONE -> {/*No-Op*/
             }
 
-            WearDialogs.SERVING -> {/*todo*/
+            WearDialogs.SERVING -> {
+                ServingDialog(
+                    modifier = Modifier,
+                    onStartMatch ={onAction(WearActiveMatchIntent.StartMatch(it))}
+                )
             }
 
             WearDialogs.FINISH -> {
@@ -164,6 +177,61 @@ private fun WearActiveMatchScreen(
     }
 }
 
+@Composable
+fun ServingDialog(
+    modifier: Modifier = Modifier,
+    onStartMatch: (isTeam1Serving: Boolean) -> Unit
+) {
+    var servingTeam1 by remember { mutableStateOf(true) }
+    val radioButtonColors = RadioButtonDefaults.radioButtonColors(
+        selectedControlColor = MaterialTheme.colorScheme.onPrimary,
+        selectedContentColor = MaterialTheme.colorScheme.onPrimary,
+        selectedContainerColor = MaterialTheme.colorScheme.primary,
+        unselectedContentColor = MaterialTheme.colorScheme.onSurface,
+        unselectedContainerColor = MaterialTheme.colorScheme.surfaceContainer
+    )
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterVertically)
+    ) {
+        Text(modifier = Modifier.padding(top = 28.dp), text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.who_starts_serving), color = MaterialTheme.colorScheme.onBackground)
+        RadioButton(
+            modifier = Modifier.height(34.dp),
+            selected = servingTeam1,
+            onSelect = { servingTeam1 = true },
+            label = { Text(stringResource(com.vzkz.match.presentation.R.string.team_1)) },
+            colors = radioButtonColors
+        )
+
+        RadioButton(
+            modifier = Modifier.height(34.dp),
+            selected = !servingTeam1,
+            onSelect = { servingTeam1 = false },
+            label = { Text(stringResource(com.vzkz.match.presentation.R.string.team_2)) },
+           colors = radioButtonColors.copy(
+               selectedControlColor = MaterialTheme.colorScheme.onSecondary,
+               selectedContentColor = MaterialTheme.colorScheme.onSecondary,
+               selectedContainerColor = MaterialTheme.colorScheme.secondary,
+           )
+        )
+
+        OutlinedIconButton(
+            onClick = {onStartMatch(servingTeam1)},
+            modifier = Modifier
+        ) {
+            Icon(
+                imageVector = StartIcon,
+                contentDescription = stringResource(id = com.vzkz.match.presentation.R.string.start_match),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        }
+    }
+}
+
 @WearPreviewDevices
 @Composable
 private fun WearActiveMatchScreenPreview() {
@@ -173,7 +241,8 @@ private fun WearActiveMatchScreenPreview() {
                 setsTeam1 = 3,
                 setsTeam2 = 2,
                 isTeam1Serving = true,
-                dialogToShow = WearDialogs.PHONE_NOT_CONNECTED
+//                dialogToShow = WearDialogs.SERVING,
+                dialogToShow = WearDialogs.NONE,
             ),
             onAction = {}
         )

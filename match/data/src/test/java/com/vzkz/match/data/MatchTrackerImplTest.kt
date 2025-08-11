@@ -10,13 +10,17 @@ import com.vzkz.common.general.data_generator.fixedZonedDateTime
 import com.vzkz.common.general.fake.FakeZonedDateTimeProvider
 import com.vzkz.common.general.fake.FakeLocalStorageRepository
 import com.vzkz.common.general.fake.FakeUUIDProvider
+import com.vzkz.common.general.fake.FakeWatchConnector
+import com.vzkz.common.general.fake.match.FakePreferencesRepository
 import com.vzkz.common.test.util.MainCoroutineExtension
 import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.UUIDProvider
+import com.vzkz.match.data.connectivity.PhoneToWatchConnector
 import com.vzkz.match.data.util.addGame
 import com.vzkz.match.data.util.addSet
+import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.domain.model.Game
 import com.vzkz.match.domain.model.Points
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +46,10 @@ class MatchTrackerImplTest {
 
     private lateinit var fakeUUIDProvider: UUIDProvider
 
+    private lateinit var fakeWatchConnector: FakeWatchConnector
+
+    private lateinit var fakePreferencesRepository: FakePreferencesRepository
+
     companion object {
         @JvmField
         @RegisterExtension
@@ -54,12 +62,16 @@ class MatchTrackerImplTest {
         fakeLocalStorageRepository = FakeLocalStorageRepository()
         fakeZonedDateTimeProvider = FakeZonedDateTimeProvider(fixedZonedDateTime())
         fakeUUIDProvider = FakeUUIDProvider(defaultUUID())
+        fakeWatchConnector = FakeWatchConnector()
+        fakePreferencesRepository = FakePreferencesRepository()
         matchTrackerImpl = MatchTrackerImpl(
             applicationScope = fakeApplicationScope,
             dispatchers = testDispatchers,
             localStorageRepository = fakeLocalStorageRepository,
             zonedDateProvider = fakeZonedDateTimeProvider,
-            uUIDProvider = fakeUUIDProvider
+            uUIDProvider = fakeUUIDProvider,
+            watchConnector = fakeWatchConnector,
+            preferencesRepository = fakePreferencesRepository
         )
     }
 

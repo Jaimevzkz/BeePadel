@@ -29,4 +29,7 @@
     <string name="create_you_first_match">¡Crea tu primer partido!</string>
     <string name="match_won">Partido ganado</string>
     <string name="match_duration">Duración</string>
+    <string name="elapsed_time">Tiempo transcurrido</string>
+    <string name="settings_screen">Ajustes</string>
+    <string name="golden_point">Punto de Oro</string>
 </resources>

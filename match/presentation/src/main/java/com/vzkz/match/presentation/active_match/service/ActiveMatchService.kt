@@ -36,7 +36,7 @@ class ActiveMatchService : Service() {
             .setContentTitle(getString(R.string.active_match))
     }
 
-    private val runningTracker by inject<MatchTracker>()
+    private val matchTracker by inject<MatchTracker>()
 
     private var serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
@@ -81,9 +81,9 @@ class ActiveMatchService : Service() {
     }
 
     private fun updateNotification() {
-        runningTracker
+        matchTracker
             .elapsedTime
-            .combine(runningTracker.activeMatch) { elapsedTime, activeMatch ->
+            .combine(matchTracker.activeMatch) { elapsedTime, activeMatch ->
                 val gamesForSet = activeMatch.setList.last().getGamesForSet()
                 val currentGame = activeMatch.setList.last().gameList.last()
                 "${elapsedTime.formatted()}\n${gamesForSet.first}-${gamesForSet.second} (${currentGame.player1Points.string}-${currentGame.player2Points.string})"

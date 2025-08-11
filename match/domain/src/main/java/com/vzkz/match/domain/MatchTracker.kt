@@ -10,8 +10,9 @@ interface MatchTracker {
     val activeMatch: Flow<Match>
     val elapsedTime: Flow<Duration>
     val isTeam1Serving: Flow<Boolean?>
+    val goldenPoint: Flow<Boolean>
     val isMatchStarted: Flow<Boolean>
-    val isMatchResumed: Flow<Boolean>
+    val currentHeartRate: Flow<Int?>
 
     fun addPointToPlayer1()
     fun addPointToPlayer2()
@@ -20,6 +21,5 @@ interface MatchTracker {
     suspend fun finishMatch(): Result<Unit, DataError>
 
     fun setIsTeam1Serving(isTeam1Serving: Boolean?)
-    fun setPlayingMatch(isPlayingMatch: Boolean)
-    fun setIsMatchStarted(isMatchStarted: Boolean)
+    fun setIsMatchStarted(isPlayingMatch: Boolean)
 }

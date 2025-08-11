@@ -11,8 +11,8 @@ appcompat = "1.7.1"
 material = "1.12.0"
 #Test
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
 junitJupiterApi = "5.13.4"
 
 kotlintestRunnerJunit5 = "3.4.2"
@@ -25,7 +25,7 @@ junitPluginVersion="1.13.1.0"
 sqlDelight ="2.1.0"
 
 #Gradle
-androidTools = "31.11.1"
+androidTools = "31.12.0"
 desugar_jdk_libs = "2.1.5"
 coroutines = "1.10.2"
 uiAndroid = "1.8.3"
@@ -33,8 +33,8 @@ uiTooling = "1.8.3"
 #Koin
 koin = "4.1.0"
 # Navigation 3
-nav3Core = "1.0.0-alpha05"
-nav3Lifecycle = "1.0.0-alpha03"
+nav3Core = "1.0.0-alpha06"
+nav3Lifecycle = "1.0.0-alpha04"
 kotlinSerialization = "2.2.0"
 kotlinxSerializationCore = "1.9.0"
 # Timber
@@ -43,20 +43,22 @@ timber = "5.0.1"
 coreSplashscreen = "1.0.1"
 composeFoundation = "1.2.1"
 wearToolingPreview = "1.0.0"
-
 composeWearOs = "1.4.1"
 composeMaterialWearOs = "1.0.0-alpha37"
 health = "1.0.0"
 wear = "1.3.0"
 play-services-wearable = "19.0.0"
-
+# Datastore
+datastore = "1.1.7"
+# Icons extended
+materialIconsExtended = "1.7.8"
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
-projectVersionName = "1.0.3"
+projectVersionName = "1.0.4"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionCode = "4"
+projectVersionCode = "5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -127,7 +129,11 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 sqlDelight-androidDriver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-sqliteDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
-
+# Datastore
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastore" }
+# Icons extended
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -159,7 +165,8 @@ compose = [
     "androidx-material3",
     "androidx-ui-tooling-preview",
     "androidx-ui-graphics",
-    "androidx-ui"
+    "androidx-ui",
+    "androidx-material-icons-extended"
 ]
 compose-debug = [
     "androidx-ui-tooling",

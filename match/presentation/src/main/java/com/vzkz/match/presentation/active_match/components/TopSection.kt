@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.vzkz.match.presentation.R
 
@@ -27,6 +29,8 @@ fun TopSection(
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        val discardMatchText = stringResource(R.string.discard_match)
+        val endMatchText = stringResource(R.string.end_match)
         Button(
             onClick = { onDiscardMatchClicked() },
             shape = RoundedCornerShape(12.dp),
@@ -35,14 +39,26 @@ fun TopSection(
                 contentColor = MaterialTheme.colorScheme.onError
             )
         ) {
-            Text(stringResource(R.string.discard_match))
+            Text(
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = discardMatchText
+                    },
+                text = discardMatchText
+            )
         }
 
         Button(
             onClick = { onEndMatchClicked() },
             shape = RoundedCornerShape(12.dp),
         ) {
-            Text(stringResource(R.string.end_match))
+            Text(
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = endMatchText
+                    },
+                text = endMatchText
+            )
         }
 
     }

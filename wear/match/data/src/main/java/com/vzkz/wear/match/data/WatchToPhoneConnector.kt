@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.shareIn
+import timber.log.Timber
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class WatchToPhoneConnector(
@@ -44,6 +45,7 @@ class WatchToPhoneConnector(
         )
 
     override suspend fun sendActionToPhone(action: MessagingAction): EmptyResult<MessagingError> {
+        Timber.i("action received in watch to phone connector: $action")
         return messagingClient.sendOrQueueAction(action)
     }
 }

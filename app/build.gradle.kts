@@ -28,6 +28,13 @@ dependencies {
     implementation(projects.core.connectivity.domain)
     implementation(projects.core.connectivity.data)
 
+    implementation(projects.settings.data)
+    implementation(projects.settings.domain)
+    implementation(projects.settings.presentation)
+
+    implementation(projects.core.preferences.data)
+    implementation(projects.core.preferences.domain)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

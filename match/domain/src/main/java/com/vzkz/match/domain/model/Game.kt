@@ -7,7 +7,7 @@ data class Game(
     val player1Points: Points,
     val player2Points: Points
 ){
-    fun addPointTo(player1: Boolean): Game {
+    fun addPointTo(player1: Boolean, goldenPoint: Boolean): Game {
         var pointsToChange = if (player1) player1Points else player2Points
         var otherPoints = if (!player1) player1Points else player2Points
         pointsToChange = when (pointsToChange) {
@@ -15,7 +15,7 @@ data class Game(
             Points.Fifteen -> Points.Thirty
             Points.Thirty -> Points.Forty
             Points.Forty -> {
-                if (otherPoints.ordinal < Points.Forty.ordinal) Points.Won
+                if (goldenPoint || otherPoints.ordinal < Points.Forty.ordinal) Points.Won
                 else if (otherPoints == Points.Forty) {
                     Points.Advantage
                 } else {
@@ -32,4 +32,15 @@ data class Game(
             player2Points = if (!player1) pointsToChange else otherPoints
         )
     }
+}
+
+fun List<Game>.getGameCount(): Pair<Int, Int>{
+    var gamesPlayer1 = 0
+    var gamesPlayer2 = 0
+    this.forEach { game ->
+        if (game.player1Points == Points.Won) gamesPlayer1++
+        else if (game.player2Points == Points.Won) gamesPlayer2++
+    }
+
+    return Pair(gamesPlayer1, gamesPlayer2)
 }
