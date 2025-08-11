@@ -1,14 +1,16 @@
 package com.vzkz.match.data
 
+import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
+import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.common.general.data_generator.emptyGame
 import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.emptySet
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
 import com.vzkz.core.database.domain.LocalStorageRepository
-import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.Timer
+import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.UUIDProvider
@@ -36,7 +38,6 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -46,7 +47,8 @@ class MatchTrackerImpl(
     private val localStorageRepository: LocalStorageRepository,
     private val zonedDateProvider: ZonedDateTimeProvider,
     private val uUIDProvider: UUIDProvider,
-    private val watchConnector: WatchConnector
+    private val watchConnector: WatchConnector,
+    private val preferencesRepository: PreferencesRepository
 ) : MatchTracker {
     private val _elapsedTime = MutableStateFlow(Duration.ZERO)
     override val elapsedTime = _elapsedTime.asStateFlow()
@@ -67,12 +69,11 @@ class MatchTrackerImpl(
     private val _isTeam1Serving: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     override val isTeam1Serving = _isTeam1Serving.asStateFlow()
 
-    private val _isMatchResumed = MutableStateFlow(false)
-    override val isMatchResumed = _isMatchResumed.asStateFlow()
-
     private val _isMatchStarted = MutableStateFlow(false)
-    override val isMatchStarted: Flow<Boolean> = _isMatchStarted.asStateFlow()
+    override val isMatchStarted = _isMatchStarted.asStateFlow()
 
+    private val _goldenPoint = MutableStateFlow(GOLDEN_POINT.DEFAULT_VAL)
+    override val goldenPoint = _goldenPoint.asStateFlow()
 
     private val heartRateList = isMatchStarted
         .flatMapLatest { hasStarted ->
@@ -99,7 +100,7 @@ class MatchTrackerImpl(
 
 
     init {
-        isMatchResumed
+        isMatchStarted
             .flatMapLatest { isMatchPlaying ->
                 if (isMatchPlaying) {
                     Timer.timeAndEmit()
@@ -121,12 +122,10 @@ class MatchTrackerImpl(
             .onEach { action ->
                 when (action) {
                     is Start -> {
-                        Timber.i("Receiving start message from watch")
                         setIsTeam1Serving(action.isTeam1Serving)
+//                        setIsMatchStarted(true)
                         setIsMatchStarted(true)
-                        setPlayingMatch(true)
                         applicationScope.launch(dispatchers.default) {
-                            Timber.i("Sending start message to watch")
                             watchConnector.sendActionToWatch(Start(action.isTeam1Serving))
                         }
                     }
@@ -209,7 +208,7 @@ class MatchTrackerImpl(
     private fun addPointTo(isPlayer1: Boolean) {
         val gameToChange = activeMatch.value.setList.last().gameList.last()
 
-        val newGame = gameToChange.addPointTo(isPlayer1)
+        val newGame = gameToChange.addPointTo(isPlayer1, goldenPoint.value)
 
         val newSetList = activeMatch.value.setList.toMutableList()
         val newGameList = activeMatch.value.setList.last().gameList.toMutableList()
@@ -251,12 +250,13 @@ class MatchTrackerImpl(
         }
     }
 
-    override fun setPlayingMatch(isPlayingMatch: Boolean) {
-        this._isMatchResumed.value = isPlayingMatch
-    }
-
-    override fun setIsMatchStarted(isMatchStarted: Boolean) {
-        _isMatchStarted.value = isMatchStarted
+    override fun setIsMatchStarted(isPlayingMatch: Boolean) {
+        applicationScope.launch(dispatchers.default) {
+            _goldenPoint.value = preferencesRepository.getBooleanPreference(
+                GOLDEN_POINT.KEY
+            ) ?: GOLDEN_POINT.DEFAULT_VAL
+        }
+        this._isMatchStarted.value = isPlayingMatch
     }
 
     override fun setIsTeam1Serving(isTeam1Serving: Boolean?) {
@@ -269,7 +269,6 @@ class MatchTrackerImpl(
     private suspend fun resetMatchTrackerState() {
         delay(100L)
         _activeMatch.update { initialMatchState() }
-        setPlayingMatch(false)
         setIsMatchStarted(false)
         setIsTeam1Serving(null)
         watchConnector.sendActionToWatch(MessagingAction.Discard)

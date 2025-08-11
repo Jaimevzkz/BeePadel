@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                 )
-                BuildConfig.VERSION_NAME
             }
         }
     }

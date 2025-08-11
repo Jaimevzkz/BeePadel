@@ -3,17 +3,23 @@ package com.vzkz.match.presentation.active_match.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimeInput
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,13 +29,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.core.presentation.designsystem.BallIcon
+import com.vzkz.core.presentation.designsystem.BeePadelGold
+import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.util.formatted
+import timber.log.Timber
 import kotlin.time.Duration
 
 @Composable
@@ -40,15 +50,17 @@ fun CurrentGameScoreCard(
     currentOwnGames: Int,
     currentOtherGames: Int,
     isServing: Boolean?,
-    elapsedTime: Duration
+    elapsedTime: Duration,
+    goldenPoint: Boolean
 ) {
     val pointsFontSize = 60.sp
     val gameFontSize = 30.sp
     val context = LocalContext.current
+    val shouldShowGoldenPoint =  (goldenPoint && ownPoints == Points.Forty && otherPoints == Points.Forty)
+
     Column(
         modifier = modifier
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             modifier = Modifier
@@ -69,11 +81,11 @@ fun CurrentGameScoreCard(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
                 .then(
-                    if (isServing == true)
+                    if (isServing == true || shouldShowGoldenPoint)
                         Modifier.border(
                             2.dp, Brush.horizontalGradient(
                                 listOf(
-                                    MaterialTheme.colorScheme.onPrimary,
+                                    if (shouldShowGoldenPoint) BeePadelGold else MaterialTheme.colorScheme.onPrimary,
                                     Color.Transparent
                                 )
                             ), RoundedCornerShape(8.dp)
@@ -124,12 +136,12 @@ fun CurrentGameScoreCard(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
                 .then(
-                    if (isServing == false)
+                    if (isServing == false || shouldShowGoldenPoint)
                         Modifier.border(
                             2.dp, Brush.horizontalGradient(
                                 listOf(
                                     Color.Transparent,
-                                    MaterialTheme.colorScheme.onSecondary
+                                    if (shouldShowGoldenPoint) BeePadelGold else MaterialTheme.colorScheme.onSecondary
                                 )
                             ), RoundedCornerShape(8.dp)
                         )
@@ -173,5 +185,23 @@ fun CurrentGameScoreCard(
             )
 
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ScoreCardPreview() {
+    BeePadelTheme {
+        CurrentGameScoreCard(
+            modifier = Modifier,
+            ownPoints = Points.Forty,
+            otherPoints = Points.Forty,
+            currentOwnGames = 0,
+            currentOtherGames = 0,
+            isServing = true,
+            elapsedTime = Duration.ZERO,
+            goldenPoint = true,
+//            goldenPoint = false,
+        )
     }
 }

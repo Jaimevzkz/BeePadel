@@ -11,6 +11,7 @@ import com.vzkz.common.general.fake.FakeZonedDateTimeProvider
 import com.vzkz.common.general.fake.FakeLocalStorageRepository
 import com.vzkz.common.general.fake.FakeUUIDProvider
 import com.vzkz.common.general.fake.FakeWatchConnector
+import com.vzkz.common.general.fake.match.FakePreferencesRepository
 import com.vzkz.common.test.util.MainCoroutineExtension
 import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
@@ -47,6 +48,8 @@ class MatchTrackerImplTest {
 
     private lateinit var fakeWatchConnector: FakeWatchConnector
 
+    private lateinit var fakePreferencesRepository: FakePreferencesRepository
+
     companion object {
         @JvmField
         @RegisterExtension
@@ -60,13 +63,15 @@ class MatchTrackerImplTest {
         fakeZonedDateTimeProvider = FakeZonedDateTimeProvider(fixedZonedDateTime())
         fakeUUIDProvider = FakeUUIDProvider(defaultUUID())
         fakeWatchConnector = FakeWatchConnector()
+        fakePreferencesRepository = FakePreferencesRepository()
         matchTrackerImpl = MatchTrackerImpl(
             applicationScope = fakeApplicationScope,
             dispatchers = testDispatchers,
             localStorageRepository = fakeLocalStorageRepository,
             zonedDateProvider = fakeZonedDateTimeProvider,
             uUIDProvider = fakeUUIDProvider,
-            watchConnector = fakeWatchConnector
+            watchConnector = fakeWatchConnector,
+            preferencesRepository = fakePreferencesRepository
         )
     }
 

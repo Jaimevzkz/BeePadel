@@ -146,7 +146,8 @@ fun ActiveMatchScreenRoot(
                     currentOwnGames = state.gamesPlayer1,
                     currentOtherGames = state.gamesPlayer2,
                     isServing = state.isTeam1Serving,
-                    elapsedTime = state.elapsedTime
+                    elapsedTime = state.elapsedTime,
+                    goldenPoint = state.goldenPoint
                 )
                 Spacer(Modifier)
                 ControlsSection(
@@ -228,7 +229,9 @@ private fun ActiveMatchScreenPreview() {
 //                setsPlayer2 = 1,
 //                gamesPlayer2 = 3,
 //                pointsPlayer2 = Points.Fifteen,
-                isTeam1Serving = true
+                isTeam1Serving = true,
+//                goldenPoint = true,
+                goldenPoint = false
             ),
             onAction = {},
             onServiceToggle = {}

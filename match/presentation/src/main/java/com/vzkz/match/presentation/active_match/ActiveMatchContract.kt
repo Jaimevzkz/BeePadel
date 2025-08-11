@@ -1,5 +1,7 @@
 package com.vzkz.match.presentation.active_match
 
+import android.R
+import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
@@ -18,14 +20,15 @@ data class ActiveMatchState(
     val pointsPlayer2: Points,
     val isTeam1Serving: Boolean?,
     val elapsedTime: Duration,
-    val isMatchResumed: Boolean,
+//    val isMatchResumed: Boolean,
     val isMatchStarted: Boolean,
     val isMatchFinished: Boolean,
     val activeMatchDialogToShow: ActiveMatchDialog?,
     val insertMatchLoading: Boolean,
     val showNotificationRationale: Boolean,
     val showServingDialog: Boolean,
-    val currentHeartRate: Int?
+    val currentHeartRate: Int? ,
+    val goldenPoint: Boolean,
     ) : State {
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
@@ -38,7 +41,6 @@ data class ActiveMatchState(
             pointsPlayer2 = Points.Zero,
             isTeam1Serving = null,
             elapsedTime = Duration.ZERO,
-            isMatchResumed = false,
             isMatchStarted = false,
             isMatchFinished = false,
             activeMatchDialogToShow = null,
@@ -46,6 +48,7 @@ data class ActiveMatchState(
             showNotificationRationale = false,
             showServingDialog = true,
             currentHeartRate = null,
+            goldenPoint = GOLDEN_POINT.DEFAULT_VAL
         )
     }
 }

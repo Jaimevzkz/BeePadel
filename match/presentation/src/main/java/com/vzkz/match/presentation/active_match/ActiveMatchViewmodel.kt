@@ -1,6 +1,5 @@
 package com.vzkz.match.presentation.active_match
 
-import androidx.compose.material3.MediumTopAppBar
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.*
@@ -41,9 +40,9 @@ class ActiveMatchViewmodel(
             .launchIn(viewModelScope)
 
         matchTracker
-            .isMatchResumed
-            .onEach { isMatchPlaying ->
-                _state.update { it.copy(isMatchResumed = isMatchPlaying) }
+            .goldenPoint
+            .onEach { goldenPoint ->
+                _state.update { it.copy(goldenPoint = goldenPoint) }
             }
             .flowOn(dispatchers.default)
             .launchIn(viewModelScope)
@@ -162,8 +161,8 @@ class ActiveMatchViewmodel(
 
     private fun startMatch(isTeam1Serving: Boolean) {
         matchTracker.setIsTeam1Serving(isTeam1Serving)
+//        matchTracker.setIsMatchStarted(true)
         matchTracker.setIsMatchStarted(true)
-        matchTracker.setPlayingMatch(true)
     }
 
     private fun finishMatch() {
