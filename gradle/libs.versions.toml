@@ -54,11 +54,11 @@ datastore = "1.1.7"
 materialIconsExtended = "1.7.8"
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
-projectVersionName = "1.0.3"
+projectVersionName = "1.0.4"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionCode = "4"
+projectVersionCode = "5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
