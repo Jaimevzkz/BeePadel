@@ -6,8 +6,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
@@ -75,7 +77,23 @@ class ActiveMatchService : Service() {
                 .setContentIntent(pendingIntent)
                 .build()
 
-            startForeground(NOTIFICATION_ID, notification)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(
+                    /* id = */ NOTIFICATION_ID,
+                    /* notification = */ notification,
+                    /* foregroundServiceType = */
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+                    else
+                        0
+
+                )
+            } else {
+                startForeground(
+                    /* id = */ NOTIFICATION_ID,
+                    /* notification = */ notification,
+                )
+            }
             updateNotification()
         }
     }
