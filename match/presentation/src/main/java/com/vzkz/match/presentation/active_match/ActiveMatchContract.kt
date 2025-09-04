@@ -26,7 +26,7 @@ data class ActiveMatchState(
     val activeMatchDialogToShow: ActiveMatchDialog?,
     val insertMatchLoading: Boolean,
     val showNotificationRationale: Boolean,
-    val showServingDialog: Boolean,
+//    val showServingDialog: Boolean,
     val currentHeartRate: Int? ,
     val goldenPoint: Boolean,
     ) : State {
@@ -46,7 +46,6 @@ data class ActiveMatchState(
             activeMatchDialogToShow = null,
             insertMatchLoading = false,
             showNotificationRationale = false,
-            showServingDialog = true,
             currentHeartRate = null,
             goldenPoint = GOLDEN_POINT.DEFAULT_VAL
         )

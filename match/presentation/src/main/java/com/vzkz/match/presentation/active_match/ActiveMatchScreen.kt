@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,7 @@ import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun ActiveMatchScreen(
@@ -114,6 +116,7 @@ fun ActiveMatchScreenRoot(
     }
 
     LaunchedEffect(key1 = state.isMatchStarted) {
+        Timber.i("is match started value in SCREEN: ${state.isMatchStarted}")
         if (state.isMatchStarted && !ActiveMatchService.isServiceActive) {
             onServiceToggle(true)
         }
@@ -161,7 +164,8 @@ fun ActiveMatchScreenRoot(
                 )
                 Spacer(Modifier)
             }
-            if (!state.isMatchStarted && state.showServingDialog) {
+
+            if (!state.isMatchStarted) {
                 ServingDialog(
                     modifier = Modifier,
                     onStartMatch = { onAction(ActiveMatchIntent.StartMatch(it)) },

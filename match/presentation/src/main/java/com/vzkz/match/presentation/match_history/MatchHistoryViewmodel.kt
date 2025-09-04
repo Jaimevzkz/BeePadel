@@ -3,6 +3,7 @@ package com.vzkz.match.presentation.match_history
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.presentation.ui.BaseViewModel
+import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.match_history.MatchHistoryRepository
 import com.vzkz.match.presentation.util.toMatchUi
 import kotlinx.coroutines.flow.flowOn
@@ -13,7 +14,8 @@ import java.util.UUID
 
 class MatchHistoryViewModel(
     private val dispatchers: DispatchersProvider,
-    private val matchHistoryRepository: MatchHistoryRepository
+    private val matchHistoryRepository: MatchHistoryRepository,
+    private val matchTracker: MatchTracker,
 ) : BaseViewModel<MatchHistoryState, MatchHistoryIntent, MatchHistoryEvent>(
     MatchHistoryState.initial,
     dispatchers
@@ -34,6 +36,15 @@ class MatchHistoryViewModel(
     }
 
     init {
+        matchTracker
+            .isMatchStarted
+            .onEach {isMatchStarted ->
+                if (isMatchStarted)
+                    sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
+
         matchHistoryRepository.getMatchHistory()
             .onEach { matchList ->
                 val matchUiList = matchList.map { it.toMatchUi() }

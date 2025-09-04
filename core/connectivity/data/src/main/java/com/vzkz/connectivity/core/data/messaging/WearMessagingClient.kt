@@ -56,7 +56,6 @@ class WearMessagingClient(
         return connectedNodeId?.let { id ->
             try {
                 val json = Json.encodeToString(action.toMessagingActionDto())
-                Timber.i("Sending json to phone: $json")
                 client.sendMessage(id, BASE_PATH_MESSAGING_ACTION, json.encodeToByteArray()).await()
 
                 Result.Success(Unit)

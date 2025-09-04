@@ -2,7 +2,10 @@ package com.vzkz.match.presentation.active_match
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction.*
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.ConnectionRequest
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Discard
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Finish
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.ui.BaseViewModel
@@ -51,6 +54,7 @@ class ActiveMatchViewmodel(
             .isMatchStarted
             .onEach { isMatchStarted ->
                 _state.update { it.copy(isMatchStarted = isMatchStarted) }
+                Timber.i("is match started: ${_state.value.isMatchStarted}")
             }
             .flowOn(dispatchers.default)
             .launchIn(viewModelScope)
@@ -161,7 +165,6 @@ class ActiveMatchViewmodel(
 
     private fun startMatch(isTeam1Serving: Boolean) {
         matchTracker.setIsTeam1Serving(isTeam1Serving)
-//        matchTracker.setIsMatchStarted(true)
         matchTracker.setIsMatchStarted(true)
     }
 
@@ -199,7 +202,6 @@ class ActiveMatchViewmodel(
         _state.update {
             it.copy(
                 activeMatchDialogToShow = null,
-                showServingDialog = false,
                 isMatchFinished = true
             )
         }

@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -123,7 +124,6 @@ class MatchTrackerImpl(
                 when (action) {
                     is Start -> {
                         setIsTeam1Serving(action.isTeam1Serving)
-//                        setIsMatchStarted(true)
                         setIsMatchStarted(true)
                         applicationScope.launch(dispatchers.default) {
                             watchConnector.sendActionToWatch(Start(action.isTeam1Serving))
@@ -182,12 +182,13 @@ class MatchTrackerImpl(
     }
 
     override fun undoPoint() {
-        _activeMatch.update { previousMatchStateList.last() }
         applicationScope.launch(dispatchers.default) {
             val setList = previousMatchStateList.last().setList
             val gameList = setList.last().gameList
+
             val points =
                 gameList.last().player1Points.ordinal to gameList.last().player2Points.ordinal
+
             watchConnector.sendActionToWatch(
                 MessagingAction.UpdateAfterUndo(
                     points = points,
@@ -195,10 +196,11 @@ class MatchTrackerImpl(
                     sets = setList.getSetCount()
                 )
             )
-        }
+            _activeMatch.update { previousMatchStateList.last() }
 
-        if (previousMatchStateList.size > 1)
-            previousMatchStateList.removeAt(previousMatchStateList.size - 1)
+            if (previousMatchStateList.size > 1)
+                previousMatchStateList.removeAt(previousMatchStateList.size - 1)
+        }
     }
 
     override suspend fun discardMatch() {
