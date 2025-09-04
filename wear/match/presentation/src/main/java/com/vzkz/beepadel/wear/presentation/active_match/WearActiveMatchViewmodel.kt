@@ -115,7 +115,7 @@ class WearActiveMatchViewmodel(
         viewModelScope.launch {
             val messagingAction = when (intent) {
                 is WearActiveMatchIntent.AddPointToTeam1 -> AddPointTo(true)
-                WearActiveMatchIntent.AddPointToTeam2 -> AddPointTo(true)
+                WearActiveMatchIntent.AddPointToTeam2 -> AddPointTo(false)
                 WearActiveMatchIntent.UndoPoint -> UndoPoint
                 is WearActiveMatchIntent.StartMatch -> Start(intent.isTeam1Serving)
                 WearActiveMatchIntent.FinishMatch -> Finish

@@ -28,10 +28,8 @@ class WearMessagingClient(
         connectedNodeId = nodeId
         return callbackFlow {
             val listener: (MessageEvent) -> Unit = { event ->
-                Timber.i("Event received in message event listener: $event")
                 if (event.path.startsWith(BASE_PATH_MESSAGING_ACTION)) {
                     val json = event.data.decodeToString()
-                    Timber.i("decoded message json: $json")
                     val action = Json.decodeFromString<MessagingActionDto>(json)
                     trySend(action.toMessagingAction())
                 }

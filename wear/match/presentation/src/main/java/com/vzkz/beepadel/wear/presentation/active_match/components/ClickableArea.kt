@@ -4,11 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import timber.log.Timber
 
 @Composable
 internal fun ClickableArea(
@@ -16,9 +18,10 @@ internal fun ClickableArea(
     onAddPointToTeam1: () -> Unit,
     onAddPointToTeam2: () -> Unit,
 ) {
-    Row(modifier = modifier.fillMaxSize()) {
+    Row(modifier = modifier) {
         Box(
             Modifier
+                .fillMaxHeight()
                 .weight(1f)
                 .clickable {
                     onAddPointToTeam1()
@@ -30,6 +33,7 @@ internal fun ClickableArea(
         Box(
             Modifier
                 .weight(1f)
+                .fillMaxHeight()
                 .clickable {
                     onAddPointToTeam2()
                 }
