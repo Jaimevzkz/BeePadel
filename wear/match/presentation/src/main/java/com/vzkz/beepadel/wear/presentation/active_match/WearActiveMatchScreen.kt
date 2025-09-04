@@ -151,8 +151,7 @@ private fun WearActiveMatchScreen(
         }
 
         when (state.dialogToShow) {
-            WearDialogs.NONE -> {/*No-Op*/
-            }
+            WearDialogs.NONE -> {/*No-Op*/ }
 
             WearDialogs.SERVING -> {
                 ServingDialog(

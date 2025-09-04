@@ -48,8 +48,8 @@ internal fun FinishMatchDialog(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = paddingValues,
-                onClick = {},
-                onLongClick = onDiscardMatch,
+                onClick = onDiscardMatch,
+//                onLongClick = onDiscardMatch, // todo decide whether to use long press or normal
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 )

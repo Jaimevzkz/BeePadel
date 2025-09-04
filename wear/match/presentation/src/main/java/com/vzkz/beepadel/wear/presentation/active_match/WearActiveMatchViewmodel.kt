@@ -117,16 +117,12 @@ class WearActiveMatchViewmodel(
                 is WearActiveMatchIntent.AddPointToTeam1 -> AddPointTo(true)
                 WearActiveMatchIntent.AddPointToTeam2 -> AddPointTo(true)
                 WearActiveMatchIntent.UndoPoint -> UndoPoint
-                is WearActiveMatchIntent.StartMatch -> {
-                    Timber.i("Sending start message to phone")
-                    Start(intent.isTeam1Serving)
-                }
+                is WearActiveMatchIntent.StartMatch -> Start(intent.isTeam1Serving)
                 WearActiveMatchIntent.FinishMatch -> Finish
                 WearActiveMatchIntent.DiscardMatch -> Discard
                 else -> null
             }
             messagingAction?.let {
-                Timber.i("Message action: $messagingAction")
                 val result = phoneConnector.sendActionToPhone(it)
                 if (result is Result.Error) {
                     Timber.e("Tracker error: ${result.error}")
@@ -141,7 +137,6 @@ class WearActiveMatchViewmodel(
             .onEach { action ->
                 when (action) {
                     is Start -> {
-                        Timber.i("Receiving start message on watch")
                         exerciseTracker.startExercise()
                         matchTracker.setHasMatchStarted(true)
                         _state.update {
