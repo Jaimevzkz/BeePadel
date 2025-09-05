@@ -20,13 +20,11 @@ data class ActiveMatchState(
     val pointsPlayer2: Points,
     val isTeam1Serving: Boolean?,
     val elapsedTime: Duration,
-//    val isMatchResumed: Boolean,
     val isMatchStarted: Boolean,
     val isMatchFinished: Boolean,
     val activeMatchDialogToShow: ActiveMatchDialog?,
     val insertMatchLoading: Boolean,
     val showNotificationRationale: Boolean,
-//    val showServingDialog: Boolean,
     val currentHeartRate: Int? ,
     val goldenPoint: Boolean,
     ) : State {

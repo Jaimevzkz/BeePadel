@@ -1,5 +1,6 @@
 package com.vzkz.core.connectivity.domain.messaging
 
+import com.vzkz.core.domain.error.DataError
 import kotlin.time.Duration
 
 sealed interface MessagingAction {
@@ -8,6 +9,7 @@ sealed interface MessagingAction {
     data class Start(val isTeam1Serving: Boolean) : MessagingAction
     data object Finish : MessagingAction
     data object Discard : MessagingAction
+    data object CloseError : MessagingAction
 
     // Watch -> Phone
     data class HeartRateUpdate(val heartRate: Int) : MessagingAction
@@ -25,4 +27,5 @@ sealed interface MessagingAction {
     ) : MessagingAction
     data class ServingUpdate(val isTeam1Serving: Boolean?) : MessagingAction
     data class TimeUpdate(val elapsedDuration: Duration) : MessagingAction
+    data object FinishMatchError: MessagingAction
 }

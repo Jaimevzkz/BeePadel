@@ -6,38 +6,57 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.FilledTonalIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.OutlinedButton
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
+import com.vzkz.beepadel.wear.presentation.R
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.*
 import com.vzkz.beepadel.wear.presentation.active_match.components.ClickableArea
 import com.vzkz.beepadel.wear.presentation.active_match.components.FinishMatchDialog
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearServingDialog
 import com.vzkz.beepadel.wear.presentation.active_match.components.UndoButton
-import com.vzkz.beepadel.wear.presentation.active_match.components.WarningScreen
+import com.vzkz.beepadel.wear.presentation.active_match.components.WarningDialog
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.presentation.designsystem.FinishIcon
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun WearActiveMatchScreenRoot(
@@ -70,7 +89,7 @@ private fun WearActiveMatchScreen(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { perms ->
         val hasBodySensorPermission = perms[Manifest.permission.BODY_SENSORS] == true
-        onAction(WearActiveMatchIntent.OnBodySensorPermissionResult(hasBodySensorPermission))
+        onAction(OnBodySensorPermissionResult(hasBodySensorPermission))
     }
     LaunchedEffect(Unit) {
         val hasBodySensorPermission = ContextCompat.checkSelfPermission(
@@ -84,7 +103,7 @@ private fun WearActiveMatchScreen(
             ) == PackageManager.PERMISSION_GRANTED
         } else true
 
-        onAction(WearActiveMatchIntent.OnBodySensorPermissionResult(hasBodySensorPermission))
+        onAction(OnBodySensorPermissionResult(hasBodySensorPermission))
 
         val permissions = mutableListOf<String>()
         if (!hasBodySensorPermission) {
@@ -98,13 +117,12 @@ private fun WearActiveMatchScreen(
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         ClickableArea(
-            modifier = Modifier.fillMaxSize()
-            ,
+            modifier = Modifier.fillMaxSize(),
             onAddPointToTeam1 = {
-                onAction(WearActiveMatchIntent.AddPointToTeam1)
+                onAction(AddPointToTeam1)
             },
             onAddPointToTeam2 = {
-                onAction(WearActiveMatchIntent.AddPointToTeam2)
+                onAction(AddPointToTeam2)
             }
         )
 
@@ -119,7 +137,7 @@ private fun WearActiveMatchScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FilledTonalIconButton(
-                onClick = { onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.FINISH)) },
+                onClick = { onAction(ToggleDialog(WearDialogs.FINISH)) },
                 colors = IconButtonDefaults.filledTonalIconButtonColors(
                     contentColor = MaterialTheme.colorScheme.onBackground
                 )
@@ -141,31 +159,116 @@ private fun WearActiveMatchScreen(
                 elapsedTime = state.elapsedTime
             )
 
-            UndoButton(onUndoPoint = { onAction(WearActiveMatchIntent.UndoPoint) })
+            UndoButton(onUndoPoint = { onAction(UndoPoint) })
         }
 
         when (state.dialogToShow) {
-            WearDialogs.NONE -> {/*No-Op*/ }
+            WearDialogs.NONE -> {/*No-Op*/
+            }
 
             WearDialogs.SERVING -> {
                 WearServingDialog(
                     modifier = Modifier,
-                    onStartMatch = { onAction(WearActiveMatchIntent.StartMatch(it)) }
+                    onStartMatch = { onAction(StartMatch(it)) }
                 )
             }
 
             WearDialogs.FINISH -> {
                 FinishMatchDialog(
                     modifier = Modifier,
-                    onFinishMatch = { onAction(WearActiveMatchIntent.FinishMatch) },
-                    onDiscardMatch = { onAction(WearActiveMatchIntent.DiscardMatch) },
-                    onCancel = { onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.NONE)) }
+                    onFinishMatch = { onAction(FinishMatch) },
+                    onDiscardMatch = { onAction(DiscardMatch) },
+                    onCancel = { onAction(ToggleDialog(WearDialogs.NONE)) }
                 )
             }
 
             WearDialogs.PHONE_NOT_CONNECTED -> {
-                WarningScreen(textToDisplay = stringResource(com.vzkz.beepadel.wear.presentation.R.string.connect_your_phone))
+                WarningDialog(textToDisplay = stringResource(R.string.connect_your_phone))
             }
+
+            WearDialogs.ERROR -> {
+                WearErrorDialog(
+                    modifier = Modifier,
+                    title = stringResource(com.vzkz.match.presentation.R.string.error_occurred),
+                    description = state.error?.asString(),
+                    primaryButton = {
+                        Button(
+                            modifier = Modifier
+                                .weight(1f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
+                            ),
+                            onClick = { onAction(WearActiveMatchIntent.DiscardMatch) }
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 10.sp,
+                                textAlign = TextAlign.Center,
+                                text = stringResource(R.string.discard)
+                            )
+                        }
+                    },
+                    secondaryButton = {
+                        OutlinedButton(
+                            modifier = Modifier
+                                .weight(1f),
+                            onClick = { onAction(WearActiveMatchIntent.CloseError) }
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 10.sp,
+                                textAlign = TextAlign.Center,
+                                text = stringResource(R.string.cancel)
+                            )
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+internal fun WearErrorDialog(
+    modifier: Modifier = Modifier,
+    title: String,
+    description: String? = null,
+    primaryButton: @Composable RowScope.() -> Unit,
+    secondaryButton: @Composable RowScope.() -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(
+            text = title,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        if (description != null)
+            Text(
+                text = description,
+                fontSize = 10.sp,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            secondaryButton()
+            primaryButton()
+
         }
     }
 }
@@ -181,7 +284,7 @@ private fun WearActiveMatchScreenPreview() {
                 setsTeam2 = 2,
                 isTeam1Serving = true,
 //                dialogToShow = WearDialogs.SERVING,
-                dialogToShow = WearDialogs.NONE,
+                dialogToShow = WearDialogs.ERROR,
             ),
             onAction = {}
         )

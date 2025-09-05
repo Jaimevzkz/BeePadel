@@ -1,7 +1,6 @@
 package com.vzkz.connectivity.core.data.messaging
 
-import android.annotation.SuppressLint
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction
+import com.vzkz.core.domain.error.DataError
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -26,6 +25,8 @@ sealed interface MessagingActionDto {
     data class AddPointTo(val team1: Boolean) : MessagingActionDto
     @Serializable
     data object UndoPoint : MessagingActionDto
+    @Serializable
+    data object CloseError : MessagingActionDto
 
     @Serializable @InternalSerializationApi
     data class GamesUpdate(val games: Pair<Int, Int>) : MessagingActionDto
@@ -43,5 +44,7 @@ sealed interface MessagingActionDto {
     data class ServingUpdate(val isTeam1Serving: Boolean?) : MessagingActionDto
     @Serializable @InternalSerializationApi
     data class TimeUpdate(val elapsedDuration: Duration) : MessagingActionDto
+    @Serializable
+    data object FinishMatchError: MessagingActionDto
 
 }

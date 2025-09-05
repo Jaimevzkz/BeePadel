@@ -26,7 +26,7 @@ data class WearActiveMatchState(
     val heartRate: Int,
     //
     val hasMatchStarted: Boolean,
-    val isConnectedPhoneNearBy: Boolean,
+//    val isConnectedPhoneNearBy: Boolean,
     val canTrackHeartRate: Boolean,
     val isAmbientMode: Boolean,
     val burnInProtectionRequired: Boolean
@@ -46,7 +46,7 @@ data class WearActiveMatchState(
             isMatchStarted = false,
             isMatchFinished = false,
             hasMatchStarted = false,
-            isConnectedPhoneNearBy = false,
+//            isConnectedPhoneNearBy = false,
             canTrackHeartRate = false,
             isAmbientMode = false,
             burnInProtectionRequired = false,
@@ -66,6 +66,7 @@ sealed class WearActiveMatchIntent : Intent {
     data class ToggleDialog(val newVal: WearDialogs) : WearActiveMatchIntent()
     data class OnBodySensorPermissionResult(val isGranted: Boolean) : WearActiveMatchIntent()
     data class StartMatch(val isTeam1Serving: Boolean): WearActiveMatchIntent()
+    data object CloseError : WearActiveMatchIntent()
 
 }
 

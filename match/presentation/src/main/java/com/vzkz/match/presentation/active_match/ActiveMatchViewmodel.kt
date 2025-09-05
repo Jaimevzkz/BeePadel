@@ -3,9 +3,6 @@ package com.vzkz.match.presentation.active_match
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.ConnectionRequest
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Discard
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Finish
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.ui.BaseViewModel
@@ -109,7 +106,8 @@ class ActiveMatchViewmodel(
             ActiveMatchIntent.DiscardMatch -> discardMatch()
             ActiveMatchIntent.NavToHistoryScreen -> sendEvent(ActiveMatchEvent.NavToHistoryScreen)
             is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
-            ActiveMatchIntent.CloseActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = null) }
+            ActiveMatchIntent.CloseActiveDialog ->
+                _state.update { it.copy(activeMatchDialogToShow = null) }
             is ActiveMatchIntent.ShowActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
             is ActiveMatchIntent.SubmitNotificationPermissionInfo -> {
                 _state.update {
@@ -132,6 +130,7 @@ class ActiveMatchViewmodel(
                 ActiveMatchIntent.DiscardMatch -> MessagingAction.Discard
                 ActiveMatchIntent.FinishMatch -> MessagingAction.Finish
                 is ActiveMatchIntent.StartMatch -> MessagingAction.Start(intent.isTeam1Serving)
+                ActiveMatchIntent.CloseActiveDialog -> MessagingAction.CloseError
                 else -> null
             }
             messagingAction?.let {
@@ -150,12 +149,18 @@ class ActiveMatchViewmodel(
                 when (action) {
                     ConnectionRequest -> {
                         if (state.value.isMatchStarted) {
-                            watchConnector.sendActionToWatch(Start(state.value.isTeam1Serving!!))
+                            watchConnector.sendActionToWatch(MessagingAction.Start(state.value.isTeam1Serving!!))
                         }
                     }
 
-                    Discard -> discardMatch()
-                    Finish -> finishMatch()
+                    MessagingAction.Discard -> discardMatch()
+                    MessagingAction.Finish -> finishMatch()
+                    MessagingAction.CloseError -> {
+                        _state.update { it.copy(
+                            error = null,
+                            activeMatchDialogToShow = null
+                        ) }
+                    }
                     else -> Unit
                 }
             }
@@ -190,6 +195,10 @@ class ActiveMatchViewmodel(
                             activeMatchDialogToShow = ActiveMatchDialog.ERROR,
                             error = insert.error.asUiText(),
                         )
+                    }
+                    val result = watchConnector.sendActionToWatch(MessagingAction.FinishMatchError)
+                    if (result is Result.Error) {
+                        Timber.e("Tracker error: ${result.error}")
                     }
                 }
             }

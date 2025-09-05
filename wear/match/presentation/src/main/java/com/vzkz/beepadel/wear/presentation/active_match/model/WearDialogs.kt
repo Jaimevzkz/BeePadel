@@ -5,5 +5,5 @@ enum class WearDialogs {
     SERVING,
     FINISH,
     PHONE_NOT_CONNECTED,
-
+    ERROR,
 }

@@ -24,6 +24,9 @@ fun MessagingAction.toMessagingActionDto(): MessagingActionDto {
             games = games,
             sets = sets
         )
+
+        MessagingAction.CloseError -> MessagingActionDto.CloseError
+        is MessagingAction.FinishMatchError -> MessagingActionDto.FinishMatchError
     }
 }
 
@@ -46,5 +49,8 @@ fun MessagingActionDto.toMessagingAction(): MessagingAction {
             games = games,
             sets = sets
         )
+
+        MessagingActionDto.CloseError -> MessagingAction.CloseError
+        is MessagingActionDto.FinishMatchError -> MessagingAction.FinishMatchError
     }
 }

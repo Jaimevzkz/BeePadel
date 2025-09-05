@@ -10,21 +10,20 @@ import com.vzkz.beepadel.wear.match.domain.MatchTracker
 import com.vzkz.beepadel.wear.match.domain.PhoneConnector
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction.*
 import com.vzkz.core.domain.DispatchersProvider
+import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.presentation.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 import com.vzkz.core.domain.error.Result
+import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.domain.model.toPoints
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,7 +49,13 @@ class WearActiveMatchViewmodel(
         phoneConnector
             .connectedNode
             .onEach { connectedNode ->
-                _state.update { it.copy(isConnectedPhoneNearBy = connectedNode?.isNearby == true) }
+                if (connectedNode?.isNearby != true)
+                    _state.update { it.copy(dialogToShow = WearDialogs.PHONE_NOT_CONNECTED) }
+                else if (matchTracker.hasMatchStarted.value)
+                    _state.update { it.copy(dialogToShow = WearDialogs.NONE) }
+                else
+                    _state.update { it.copy(dialogToShow = WearDialogs.SERVING) }
+
                 phoneConnector.sendActionToPhone(MessagingAction.ConnectionRequest)
             }
             .flowOn(dispatchers.default)
@@ -106,6 +111,8 @@ class WearActiveMatchViewmodel(
                 }
             }
 
+            WearActiveMatchIntent.CloseError -> _state.update { it.copy(dialogToShow = WearDialogs.NONE) }
+
             else -> Unit
         }
     }
@@ -114,12 +121,13 @@ class WearActiveMatchViewmodel(
     private fun sendActionToPhone(intent: WearActiveMatchIntent) {
         viewModelScope.launch {
             val messagingAction = when (intent) {
-                is WearActiveMatchIntent.AddPointToTeam1 -> AddPointTo(true)
-                WearActiveMatchIntent.AddPointToTeam2 -> AddPointTo(false)
-                WearActiveMatchIntent.UndoPoint -> UndoPoint
-                is WearActiveMatchIntent.StartMatch -> Start(intent.isTeam1Serving)
-                WearActiveMatchIntent.FinishMatch -> Finish
-                WearActiveMatchIntent.DiscardMatch -> Discard
+                is WearActiveMatchIntent.AddPointToTeam1 -> MessagingAction.AddPointTo(true)
+                WearActiveMatchIntent.AddPointToTeam2 -> MessagingAction.AddPointTo(false)
+                WearActiveMatchIntent.UndoPoint -> MessagingAction.UndoPoint
+                is WearActiveMatchIntent.StartMatch -> MessagingAction.Start(intent.isTeam1Serving)
+                WearActiveMatchIntent.FinishMatch -> MessagingAction.Finish
+                WearActiveMatchIntent.DiscardMatch -> MessagingAction.Discard
+                WearActiveMatchIntent.CloseError -> MessagingAction.CloseError
                 else -> null
             }
             messagingAction?.let {
@@ -136,7 +144,7 @@ class WearActiveMatchViewmodel(
             .messagingActions
             .onEach { action ->
                 when (action) {
-                    is Start -> {
+                    is MessagingAction.Start -> {
                         exerciseTracker.startExercise()
                         matchTracker.setHasMatchStarted(true)
                         _state.update {
@@ -147,19 +155,19 @@ class WearActiveMatchViewmodel(
                         }
                     }
 
-                    Discard -> {
+                    MessagingAction.Discard -> {
                         matchTracker.setHasMatchStarted(false)
                         exerciseTracker.stopExercise()
                         _state.update { WearActiveMatchState.initial }
                     }
 
-                    Finish -> {
+                    MessagingAction.Finish -> {
                         matchTracker.setHasMatchStarted(false)
                         exerciseTracker.stopExercise()
                         _state.update { WearActiveMatchState.initial }
                     }
 
-                    is PointsUpdate -> {
+                    is MessagingAction.PointsUpdate -> {
                         _state.update {
                             it.copy(
                                 pointsTeam1 = action.points.first.toPoints(),
@@ -168,7 +176,7 @@ class WearActiveMatchViewmodel(
                         }
                     }
 
-                    is GamesUpdate -> {
+                    is MessagingAction.GamesUpdate -> {
                         _state.update {
                             it.copy(
                                 pointsTeam1 = Points.Zero,
@@ -179,7 +187,7 @@ class WearActiveMatchViewmodel(
                         }
                     }
 
-                    is UpdateAfterUndo -> {
+                    is MessagingAction.UpdateAfterUndo -> {
                         _state.update {
                             it.copy(
                                 pointsTeam1 = action.points.first.toPoints(),
@@ -192,7 +200,7 @@ class WearActiveMatchViewmodel(
                         }
                     }
 
-                    is SetsUpdate -> {
+                    is MessagingAction.SetsUpdate -> {
                         _state.update {
                             it.copy(
                                 pointsTeam1 = Points.Zero,
@@ -205,9 +213,24 @@ class WearActiveMatchViewmodel(
                         }
                     }
 
-                    is ServingUpdate -> _state.update { it.copy(isTeam1Serving = action.isTeam1Serving) }
+                    is MessagingAction.ServingUpdate -> _state.update { it.copy(isTeam1Serving = action.isTeam1Serving) }
 
-                    is TimeUpdate -> _state.update { it.copy(elapsedTime = action.elapsedDuration) }
+                    is MessagingAction.TimeUpdate -> _state.update { it.copy(elapsedTime = action.elapsedDuration) }
+
+                    MessagingAction.FinishMatchError -> _state.update {
+                        it.copy(
+                            error = DataError.Logic.EMPTY_SET_LIST.asUiText(),
+                            dialogToShow = WearDialogs.ERROR
+                        )
+                    }
+
+                    MessagingAction.CloseError -> _state.update {
+                        it.copy(
+                            error = null,
+                            dialogToShow = WearDialogs.NONE
+                        )
+                    }
+
                     else -> Unit
                 }
             }
