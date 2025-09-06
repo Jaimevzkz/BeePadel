@@ -27,6 +27,7 @@ fun MessagingAction.toMessagingActionDto(): MessagingActionDto {
 
         MessagingAction.CloseError -> MessagingActionDto.CloseError
         is MessagingAction.FinishMatchError -> MessagingActionDto.FinishMatchError
+        MessagingAction.EnterActiveMatch -> MessagingActionDto.EnterActiveMatch
     }
 }
 
@@ -52,5 +53,6 @@ fun MessagingActionDto.toMessagingAction(): MessagingAction {
 
         MessagingActionDto.CloseError -> MessagingAction.CloseError
         is MessagingActionDto.FinishMatchError -> MessagingAction.FinishMatchError
+        MessagingActionDto.EnterActiveMatch -> MessagingAction.EnterActiveMatch
     }
 }

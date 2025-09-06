@@ -33,4 +33,5 @@
     <string name="elapsed_time">Elapsed time</string>
     <string name="settings_screen">Settings screen</string>
     <string name="golden_point">Golden Point</string>
+    <string name="heart_rate">Heart Rate</string>
 </resources>

@@ -53,8 +53,9 @@ class WearActiveMatchViewmodel(
                     _state.update { it.copy(dialogToShow = WearDialogs.PHONE_NOT_CONNECTED) }
                 else if (matchTracker.hasMatchStarted.value)
                     _state.update { it.copy(dialogToShow = WearDialogs.NONE) }
-                else
+                else{
                     _state.update { it.copy(dialogToShow = WearDialogs.SERVING) }
+                }
 
                 phoneConnector.sendActionToPhone(MessagingAction.ConnectionRequest)
             }
@@ -99,7 +100,9 @@ class WearActiveMatchViewmodel(
     override fun reduce(intent: WearActiveMatchIntent) {
         sendActionToPhone(intent)
         when (intent) {
-            is WearActiveMatchIntent.ToggleDialog -> _state.update { it.copy(dialogToShow = intent.newVal) }
+            is WearActiveMatchIntent.ToggleDialog -> {
+                _state.update { it.copy(dialogToShow = intent.newVal) }
+            }
             is WearActiveMatchIntent.OnBodySensorPermissionResult -> {
                 hasBodySensorPermission.value = intent.isGranted
                 if (intent.isGranted) {
@@ -164,7 +167,10 @@ class WearActiveMatchViewmodel(
                     MessagingAction.Finish -> {
                         matchTracker.setHasMatchStarted(false)
                         exerciseTracker.stopExercise()
-                        _state.update { WearActiveMatchState.initial }
+                        _state.update {
+                            WearActiveMatchState.initial
+                                .copy(dialogToShow = WearDialogs.MATCH_FINISHED)
+                        }
                     }
 
                     is MessagingAction.PointsUpdate -> {
@@ -229,6 +235,12 @@ class WearActiveMatchViewmodel(
                             error = null,
                             dialogToShow = WearDialogs.NONE
                         )
+                    }
+
+                    MessagingAction.EnterActiveMatch -> {
+                        if (state.value.dialogToShow == WearDialogs.MATCH_FINISHED){
+                            _state.update { it.copy(dialogToShow = WearDialogs.SERVING) }
+                        }
                     }
 
                     else -> Unit

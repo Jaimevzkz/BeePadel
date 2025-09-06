@@ -28,4 +28,5 @@ sealed interface MessagingAction {
     data class ServingUpdate(val isTeam1Serving: Boolean?) : MessagingAction
     data class TimeUpdate(val elapsedDuration: Duration) : MessagingAction
     data object FinishMatchError: MessagingAction
+    data object EnterActiveMatch: MessagingAction
 }

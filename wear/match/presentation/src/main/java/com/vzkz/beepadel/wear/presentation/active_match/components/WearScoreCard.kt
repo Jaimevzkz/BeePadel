@@ -143,7 +143,7 @@ internal fun WearScoreCard(
                         modifier = Modifier.size(14.dp),
                         tint = BeePadelDarkRed,
                         imageVector = Icons.Filled.Favorite,
-                        contentDescription = stringResource(R.string.heart_rate)
+                        contentDescription = stringResource(com.vzkz.match.presentation.R.string.heart_rate)
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {

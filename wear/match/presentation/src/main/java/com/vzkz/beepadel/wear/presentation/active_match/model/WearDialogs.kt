@@ -6,4 +6,5 @@ enum class WearDialogs {
     FINISH,
     PHONE_NOT_CONNECTED,
     ERROR,
+    MATCH_FINISHED
 }

@@ -30,6 +30,8 @@ class ActiveMatchViewmodel(
 
     init {
         _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
+        ioLaunch {
+            watchConnector.sendActionToWatch(MessagingAction.EnterActiveMatch) }
 
         matchTracker
             .isTeam1Serving
@@ -51,7 +53,6 @@ class ActiveMatchViewmodel(
             .isMatchStarted
             .onEach { isMatchStarted ->
                 _state.update { it.copy(isMatchStarted = isMatchStarted) }
-                Timber.i("is match started: ${_state.value.isMatchStarted}")
             }
             .flowOn(dispatchers.default)
             .launchIn(viewModelScope)
@@ -108,6 +109,7 @@ class ActiveMatchViewmodel(
             is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
             ActiveMatchIntent.CloseActiveDialog ->
                 _state.update { it.copy(activeMatchDialogToShow = null) }
+
             is ActiveMatchIntent.ShowActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
             is ActiveMatchIntent.SubmitNotificationPermissionInfo -> {
                 _state.update {
@@ -156,11 +158,14 @@ class ActiveMatchViewmodel(
                     MessagingAction.Discard -> discardMatch()
                     MessagingAction.Finish -> finishMatch()
                     MessagingAction.CloseError -> {
-                        _state.update { it.copy(
-                            error = null,
-                            activeMatchDialogToShow = null
-                        ) }
+                        _state.update {
+                            it.copy(
+                                error = null,
+                                activeMatchDialogToShow = null
+                            )
+                        }
                     }
+
                     else -> Unit
                 }
             }

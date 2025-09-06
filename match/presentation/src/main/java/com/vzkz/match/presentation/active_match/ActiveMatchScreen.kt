@@ -39,7 +39,6 @@ import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun ActiveMatchScreen(
@@ -116,7 +115,6 @@ fun ActiveMatchScreenRoot(
     }
 
     LaunchedEffect(key1 = state.isMatchStarted) {
-        Timber.i("is match started value in SCREEN: ${state.isMatchStarted}")
         if (state.isMatchStarted && !ActiveMatchService.isServiceActive) {
             onServiceToggle(true)
         }
@@ -150,7 +148,8 @@ fun ActiveMatchScreenRoot(
                     currentOtherGames = state.gamesPlayer2,
                     isServing = state.isTeam1Serving,
                     elapsedTime = state.elapsedTime,
-                    goldenPoint = state.goldenPoint
+                    goldenPoint = state.goldenPoint,
+                    currentHeartRate = state.currentHeartRate
                 )
                 Spacer(Modifier)
                 ControlsSection(
@@ -235,7 +234,8 @@ private fun ActiveMatchScreenPreview() {
 //                pointsPlayer2 = Points.Fifteen,
                 isTeam1Serving = true,
 //                goldenPoint = true,
-                goldenPoint = false
+                goldenPoint = false,
+                currentHeartRate = 122
             ),
             onAction = {},
             onServiceToggle = {}

@@ -52,7 +52,6 @@ data class WearActiveMatchState(
             burnInProtectionRequired = false,
             dialogToShow = WearDialogs.SERVING,
             heartRate = 0,
-//            dialogToShow = WearDialogs.PHONE_NOT_CONNECTED,
         )
     }
 }

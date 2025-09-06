@@ -1,6 +1,5 @@
 package com.vzkz.match.presentation.active_match
 
-import android.R
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
@@ -25,9 +24,9 @@ data class ActiveMatchState(
     val activeMatchDialogToShow: ActiveMatchDialog?,
     val insertMatchLoading: Boolean,
     val showNotificationRationale: Boolean,
-    val currentHeartRate: Int? ,
+    val currentHeartRate: Int?,
     val goldenPoint: Boolean,
-    ) : State {
+) : State {
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
             error = null,
@@ -57,14 +56,15 @@ sealed class ActiveMatchIntent : Intent {
     data object AddPointToTeam1 : ActiveMatchIntent()
     data object AddPointToTeam2 : ActiveMatchIntent()
     data object UndoPoint : ActiveMatchIntent()
-    data object NavToHistoryScreen: ActiveMatchIntent()
-    data object CloseActiveDialog: ActiveMatchIntent()
-    data class ShowActiveDialog(val newActiveDialog: ActiveMatchDialog): ActiveMatchIntent()
+    data object NavToHistoryScreen : ActiveMatchIntent()
+    data object CloseActiveDialog : ActiveMatchIntent()
+    data class ShowActiveDialog(val newActiveDialog: ActiveMatchDialog) : ActiveMatchIntent()
     data class SubmitNotificationPermissionInfo(
         val acceptedNotificationPermission: Boolean,
         val showNotificationPermissionRationale: Boolean
-    ): ActiveMatchIntent()
-    data object DismissRationaleDialog: ActiveMatchIntent()
+    ) : ActiveMatchIntent()
+
+    data object DismissRationaleDialog : ActiveMatchIntent()
 }
 
 sealed class ActiveMatchEvent : Event {

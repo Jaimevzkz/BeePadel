@@ -58,11 +58,6 @@ fun NavigationRoot(
             backStack.add(KeyActiveMatchScreen)
     }
 
-    LaunchedEffect(backStack) {
-        backStack.forEachIndexed { index, key ->
-            Timber.tag("IN-APP").i("index: $index // item: $key")
-        }
-    }
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
@@ -95,9 +90,7 @@ fun NavigationRoot(
                         val context = LocalContext.current
                         ActiveMatchScreen(
                             onNavigateToMatchHistory = {
-                                Timber.tag("IN-APP").i("nav to history before, backstack: $backStack")
                                 backStack.removeLast()
-                                Timber.tag("IN-APP").i("nav to history after, backstack: $backStack")
                             },
                             onServiceToggle = { shouldServiceRun ->
                                 if (shouldServiceRun) {

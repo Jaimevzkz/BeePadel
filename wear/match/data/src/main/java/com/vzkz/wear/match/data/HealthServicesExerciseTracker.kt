@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import kotlin.math.roundToInt
 
 class HealthServicesExerciseTracker(
@@ -107,7 +106,6 @@ class HealthServicesExerciseTracker(
     }
 
     override suspend fun startExercise(): EmptyResult<ExerciseError> {
-        Timber.tag("IN-APP").i("starting exercise")
         if (!isHeartRateTrackingSupported()) {
             return Result.Error(ExerciseError.TRACKING_NOT_SUPPORTED)
         }
@@ -121,7 +119,6 @@ class HealthServicesExerciseTracker(
             .build()
 
         client.startExercise(config)
-        Timber.tag("IN-APP").i("Exercise started")
         return Result.Success(Unit)
 
     }
@@ -159,7 +156,6 @@ class HealthServicesExerciseTracker(
     }
 
     override suspend fun stopExercise(): EmptyResult<ExerciseError> {
-        Timber.tag("IN-APP").i("stoping exercise")
         if (!isHeartRateTrackingSupported()) {
             return Result.Error(ExerciseError.TRACKING_NOT_SUPPORTED)
         }
@@ -169,7 +165,6 @@ class HealthServicesExerciseTracker(
 
         return try {
             client.endExercise()
-            Timber.tag("IN-APP").i("Exercise stopped")
             Result.Success(Unit)
         } catch (e: HealthServicesException) {
             Result.Error(ExerciseError.EXERCISE_ALREADY_ENDED)

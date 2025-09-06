@@ -6,5 +6,6 @@
     <string name="cancel">Cancel</string>
     <string name="connect_your_phone">BeePadel phone app has to be installed and connected.</string>
     <string name="who_starts_serving">Who starts serving?</string>
-    <string name="heart_rate">Heart Rate</string>
+    <string name="match_finished">Match Finished!</string>
+    <string name="match_has_been_saved">The match has been saved on the phone app</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.vzkz.connectivity.core.data.messaging
 
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.domain.error.DataError
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
@@ -46,5 +47,6 @@ sealed interface MessagingActionDto {
     data class TimeUpdate(val elapsedDuration: Duration) : MessagingActionDto
     @Serializable
     data object FinishMatchError: MessagingActionDto
-
+    @Serializable
+    data object EnterActiveMatch: MessagingActionDto
 }

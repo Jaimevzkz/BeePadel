@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -205,6 +204,7 @@ class MatchTrackerImpl(
 
     override suspend fun discardMatch() {
         resetMatchTrackerState()
+        watchConnector.sendActionToWatch(MessagingAction.Discard)
     }
 
     private fun addPointTo(isPlayer1: Boolean) {
@@ -273,7 +273,6 @@ class MatchTrackerImpl(
         _activeMatch.update { initialMatchState() }
         setIsMatchStarted(false)
         setIsTeam1Serving(null)
-        watchConnector.sendActionToWatch(MessagingAction.Discard)
         previousMatchStateList = mutableListOf(activeMatch.value)
         _elapsedTime.value = Duration.ZERO
     }

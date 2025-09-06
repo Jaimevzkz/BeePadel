@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -33,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.core.presentation.designsystem.BallIcon
+import com.vzkz.core.presentation.designsystem.BeePadelDarkRed
 import com.vzkz.core.presentation.designsystem.BeePadelGold
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
@@ -51,17 +55,42 @@ fun CurrentGameScoreCard(
     currentOtherGames: Int,
     isServing: Boolean?,
     elapsedTime: Duration,
-    goldenPoint: Boolean
+    goldenPoint: Boolean,
+    currentHeartRate: Int?,
 ) {
     val pointsFontSize = 60.sp
     val gameFontSize = 30.sp
     val context = LocalContext.current
-    val shouldShowGoldenPoint =  (goldenPoint && ownPoints == Points.Forty && otherPoints == Points.Forty)
+    val shouldShowGoldenPoint =
+        (goldenPoint && ownPoints == Points.Forty && otherPoints == Points.Forty)
 
     Column(
         modifier = modifier
             .fillMaxWidth(),
     ) {
+        currentHeartRate?.let {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    4.dp,
+                    alignment = Alignment.CenterHorizontally
+                )
+            ) {
+                Text(
+                    text = currentHeartRate.toString(),
+                    fontSize = 24.sp,
+                    color = BeePadelDarkRed
+                )
+                Icon(
+                    modifier = Modifier,
+                    tint = BeePadelDarkRed,
+                    imageVector = Icons.Filled.Favorite,
+                    contentDescription = stringResource(R.string.heart_rate)
+                )
+            }
+
+        }
         Text(
             modifier = Modifier
                 .semantics {
@@ -202,6 +231,7 @@ private fun ScoreCardPreview() {
             elapsedTime = Duration.ZERO,
             goldenPoint = true,
 //            goldenPoint = false,
+            currentHeartRate = 120,
         )
     }
 }
