@@ -57,6 +57,7 @@ import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.presentation.designsystem.FinishIcon
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun WearActiveMatchScreenRoot(
@@ -83,22 +84,21 @@ private fun WearActiveMatchScreen(
     state: WearActiveMatchState,
     onAction: (WearActiveMatchIntent) -> Unit
 ) {
-
     val context = LocalContext.current
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { perms ->
         val hasBodySensorPermission = perms[Manifest.permission.BODY_SENSORS] == true
+        Timber.tag("IN-APP").i("on result triggered, has body sensor permission: $hasBodySensorPermission")
         onAction(OnBodySensorPermissionResult(hasBodySensorPermission))
     }
     LaunchedEffect(Unit) {
-        val hasBodySensorPermission = ContextCompat.checkSelfPermission(
-            context,
+        val hasBodySensorPermission = context.checkSelfPermission(
             Manifest.permission.BODY_SENSORS
         ) == PackageManager.PERMISSION_GRANTED
         val hasNotificationPermission = if (Build.VERSION.SDK_INT >= 33) {
-            ContextCompat.checkSelfPermission(
-                context,
+            context.checkSelfPermission(
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         } else true
@@ -112,6 +112,8 @@ private fun WearActiveMatchScreen(
         if (!hasNotificationPermission && Build.VERSION.SDK_INT >= 33) {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
         }
+        Timber.tag("IN-APP").i("has body sensor permissions: $hasBodySensorPermission")
+        Timber.tag("IN-APP").i("permissions: $permissions")
         permissionLauncher.launch(permissions.toTypedArray())
     }
 
@@ -156,15 +158,16 @@ private fun WearActiveMatchScreen(
                 isTeam1Serving = state.isTeam1Serving,
                 setsTeam1 = state.setsTeam1,
                 setsTeam2 = state.setsTeam2,
-                elapsedTime = state.elapsedTime
+                elapsedTime = state.elapsedTime,
+                heartRate = state.heartRate,
+                canTrackHeartRate = state.canTrackHeartRate
             )
 
             UndoButton(onUndoPoint = { onAction(UndoPoint) })
         }
 
         when (state.dialogToShow) {
-            WearDialogs.NONE -> {/*No-Op*/
-            }
+            WearDialogs.NONE -> {}
 
             WearDialogs.SERVING -> {
                 WearServingDialog(
@@ -199,7 +202,7 @@ private fun WearActiveMatchScreen(
                                 containerColor = MaterialTheme.colorScheme.error,
                                 contentColor = MaterialTheme.colorScheme.onError
                             ),
-                            onClick = { onAction(WearActiveMatchIntent.DiscardMatch) }
+                            onClick = { onAction(DiscardMatch) }
                         ) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
@@ -213,7 +216,7 @@ private fun WearActiveMatchScreen(
                         OutlinedButton(
                             modifier = Modifier
                                 .weight(1f),
-                            onClick = { onAction(WearActiveMatchIntent.CloseError) }
+                            onClick = { onAction(CloseError) }
                         ) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
@@ -283,8 +286,9 @@ private fun WearActiveMatchScreenPreview() {
                 setsTeam1 = 3,
                 setsTeam2 = 2,
                 isTeam1Serving = true,
+                dialogToShow = WearDialogs.NONE,
 //                dialogToShow = WearDialogs.SERVING,
-                dialogToShow = WearDialogs.ERROR,
+//                dialogToShow = WearDialogs.ERROR,
             ),
             onAction = {}
         )

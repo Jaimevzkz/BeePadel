@@ -28,7 +28,7 @@ internal fun ClickableArea(
                 }
         )
 
-        Spacer(Modifier.width(2.dp))
+        Spacer(Modifier.width(6.dp))
 
         Box(
             Modifier

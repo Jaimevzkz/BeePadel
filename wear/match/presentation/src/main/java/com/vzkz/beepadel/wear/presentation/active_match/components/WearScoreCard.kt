@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,6 +49,7 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
 import com.vzkz.beepadel.wear.presentation.R
 import com.vzkz.core.presentation.designsystem.BallIcon
+import com.vzkz.core.presentation.designsystem.BeePadelDarkRed
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.designsystem.FinishIcon
 import com.vzkz.core.presentation.designsystem.PlusOneIcon
@@ -63,6 +68,8 @@ internal fun WearScoreCard(
     setsTeam1: Int,
     setsTeam2: Int,
     elapsedTime: Duration,
+    canTrackHeartRate: Boolean,
+    heartRate: Int,
     isTeam1Serving: Boolean?
 ) {
     Column {
@@ -112,23 +119,45 @@ internal fun WearScoreCard(
                     }
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val smallFontSize = 18.sp
-                Text(
-                    text = gamesTeam1.toString(),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = smallFontSize,
-                    fontFamily = Exo2,
-                )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    val textToShow = if (canTrackHeartRate) heartRate.toString() else "-"
+                    Text(
+                        text = textToShow,
+                        fontSize = 14.sp,
+                        color = BeePadelDarkRed
+                    )
+                    Icon(
+                        modifier = Modifier.size(14.dp),
+                        tint = BeePadelDarkRed,
+                        imageVector = Icons.Filled.Favorite,
+                        contentDescription = stringResource(R.string.heart_rate)
+                    )
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val smallFontSize = 18.sp
+                    Text(
+                        text = gamesTeam1.toString(),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = smallFontSize,
+                        fontFamily = Exo2,
+                    )
 
-                Spacer(Modifier.size(8.dp))
+                    Spacer(Modifier.size(8.dp))
 
-                Text(
-                    text = gamesTeam2.toString(),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = smallFontSize,
-                    fontFamily = Exo2,
-                )
+                    Text(
+                        text = gamesTeam2.toString(),
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = smallFontSize,
+                        fontFamily = Exo2,
+                    )
+                }
             }
             Column(horizontalAlignment = Alignment.End) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -178,4 +207,25 @@ internal fun WearScoreCard(
         }
 
     }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    BeePadelTheme {
+        WearScoreCard(
+            pointsTeam1 = Points.Zero,
+            gamesTeam1 = 1,
+            pointsTeam2 = Points.Zero,
+            gamesTeam2 = 2,
+            setsTeam1 = 2,
+            setsTeam2 = 1,
+            elapsedTime = Duration.ZERO,
+            isTeam1Serving = true,
+            heartRate = 130,
+            canTrackHeartRate = true,
+//            canTrackHeartRate = false,
+        )
+    }
+
 }
