@@ -2,6 +2,7 @@ package com.vzkz.beepadel.wear.presentation.active_match
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.health.connect.HealthPermissions
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -89,14 +90,24 @@ private fun WearActiveMatchScreen(
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { perms ->
-        val hasBodySensorPermission = perms[Manifest.permission.BODY_SENSORS] == true
-        Timber.tag("IN-APP").i("on result triggered, has body sensor permission: $hasBodySensorPermission")
+        val hasBodySensorPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA)
+            perms[HealthPermissions.READ_HEART_RATE] == true
+        else
+            perms[Manifest.permission.BODY_SENSORS] == true
+
         onAction(OnBodySensorPermissionResult(hasBodySensorPermission))
     }
     LaunchedEffect(Unit) {
-        val hasBodySensorPermission = context.checkSelfPermission(
-            Manifest.permission.BODY_SENSORS
-        ) == PackageManager.PERMISSION_GRANTED
+        val hasBodySensorPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            context.checkSelfPermission(
+                HealthPermissions.READ_HEART_RATE
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            context.checkSelfPermission(
+                Manifest.permission.BODY_SENSORS
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
         val hasNotificationPermission = if (Build.VERSION.SDK_INT >= 33) {
             context.checkSelfPermission(
                 Manifest.permission.POST_NOTIFICATIONS
@@ -107,13 +118,14 @@ private fun WearActiveMatchScreen(
 
         val permissions = mutableListOf<String>()
         if (!hasBodySensorPermission) {
-            permissions.add(Manifest.permission.BODY_SENSORS)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA)
+                permissions.add(HealthPermissions.READ_HEART_RATE)
+            else
+                permissions.add(Manifest.permission.BODY_SENSORS)
         }
-        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= 33) {
+        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= 33)
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-        }
-        Timber.tag("IN-APP").i("has body sensor permissions: $hasBodySensorPermission")
-        Timber.tag("IN-APP").i("permissions: $permissions")
+
         permissionLauncher.launch(permissions.toTypedArray())
     }
 

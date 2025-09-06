@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -83,7 +84,7 @@ internal fun WearScoreCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -120,12 +121,17 @@ internal fun WearScoreCard(
                 }
             }
             Column(
+                modifier = Modifier
+//                    .padding(horizontal = 12.dp)
+                ,
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
+                    modifier = Modifier.width(58.dp)
+                            ,
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterHorizontally)
                 ) {
                     val textToShow = if (canTrackHeartRate) heartRate.toString() else "-"
                     Text(
@@ -222,7 +228,7 @@ private fun Preview() {
             setsTeam2 = 1,
             elapsedTime = Duration.ZERO,
             isTeam1Serving = true,
-            heartRate = 130,
+            heartRate = 120,
             canTrackHeartRate = true,
 //            canTrackHeartRate = false,
         )

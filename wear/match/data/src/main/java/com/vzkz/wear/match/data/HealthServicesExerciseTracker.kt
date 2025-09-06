@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.health.connect.HealthPermissions
+import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.health.services.client.ExerciseUpdateCallback
 import androidx.health.services.client.HealthServices
@@ -195,10 +197,15 @@ class HealthServicesExerciseTracker(
     }
 
     private fun hasBodySensorsPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.BODY_SENSORS
-        ) == PackageManager.PERMISSION_GRANTED
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            context.checkSelfPermission(
+                HealthPermissions.READ_HEART_RATE
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            context.checkSelfPermission(
+                Manifest.permission.BODY_SENSORS
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 }
 
