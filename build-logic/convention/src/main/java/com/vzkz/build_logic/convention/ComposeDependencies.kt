@@ -13,6 +13,7 @@ fun DependencyHandlerScope.addUiLayerDependencies(project: Project) {
     "implementation"(project.libs.findBundle("compose").get())
     "debugImplementation"(project.libs.findBundle("compose-debug").get())
 
+    "androidTestImplementation"(project.libs.findBundle("koin.test").get())
     "testImplementation"(project.libs.findBundle("test").get())
     "androidTestImplementation"(project.libs.findBundle("androidTest").get())
     // Timber

@@ -30,16 +30,7 @@ class BeePadelApp : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BeePadelApp)
-            modules(
-                appModule,
-                coreDataModule,
-                matchViewmodelModule,
-                matchDataModule,
-                databaseModule,
-                coreConnectivityDataModule,
-                settingsViewmodelModule,
-                preferencesModule
-            )
+            modules(appModules)
         }
     }
 

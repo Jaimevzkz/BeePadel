@@ -28,6 +28,7 @@ import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
+import com.vzkz.match.presentation.BuildConfig
 import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.active_match.components.ActiveMatchDialog
 import com.vzkz.match.presentation.active_match.components.ControlsSection

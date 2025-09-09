@@ -22,8 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.designsystem.PlusOneIcon
 import com.vzkz.core.presentation.designsystem.UndoIcon
@@ -99,7 +101,7 @@ fun ControlsSection(
                 Icon(
                     modifier = Modifier.size(iconSize),
                     imageVector = PlusOneIcon,
-                    contentDescription = stringResource(R.string.add_own_point),
+                    contentDescription = stringResource(R.string.add_other_point),
                     tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
@@ -122,6 +124,22 @@ fun ControlsSection(
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
+    }
+
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    BeePadelTheme {
+        ControlsSection(
+            modifier = Modifier,
+            ownSets = 0,
+            otherSets = 0,
+            onAddOwnPoint = { },
+            onAddOtherPoint = {},
+            onUndo = {}
+        )
     }
 
 }

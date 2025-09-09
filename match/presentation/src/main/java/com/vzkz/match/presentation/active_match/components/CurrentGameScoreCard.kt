@@ -106,6 +106,9 @@ fun CurrentGameScoreCard(
         )
         Row(
             modifier = Modifier
+                .semantics {
+                    contentDescription = context.getString(R.string.team_1_score)
+                }
                 .padding(8.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
@@ -161,6 +164,9 @@ fun CurrentGameScoreCard(
 
         Row(
             modifier = Modifier
+                .semantics {
+                    contentDescription = context.getString(R.string.team_2_score)
+                }
                 .padding(8.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))

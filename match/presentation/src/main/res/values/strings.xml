@@ -6,6 +6,7 @@
     <string name="delete_match">Delete Match</string>
     <string name="own_player_serving">Own player serving</string>
     <string name="add_own_point">Add own point</string>
+    <string name="add_other_point">Add other point</string>
     <string name="undo">Undo</string>
     <string name="discard_match">Discard Match</string>
     <string name="end_match">End Match</string>
@@ -34,4 +35,6 @@
     <string name="settings_screen">Settings screen</string>
     <string name="golden_point">Golden Point</string>
     <string name="heart_rate">Heart Rate</string>
+    <string name="team_1_score">Team 1 score</string>
+    <string name="team_2_score">Team 2 score</string>
 </resources>

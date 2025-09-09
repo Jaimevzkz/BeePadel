@@ -5,7 +5,8 @@
     <string name="match_options">opciones</string>
     <string name="delete_match">Eliminar partido</string>
     <string name="own_player_serving">Saca equipo 1</string>
-    <string name="add_own_point">Aµadir punto propio</string>
+    <string name="add_own_point">Anadir punto equipo 1</string>
+    <string name="add_other_point">Anadir punto equipo 2</string>
     <string name="undo">Deshacer</string>
     <string name="discard_match">Descartar partido</string>
     <string name="end_match">Finalizar</string>
@@ -33,4 +34,6 @@
     <string name="settings_screen">Ajustes</string>
     <string name="golden_point">Punto de Oro</string>
     <string name="heart_rate">Pulsaciones</string>
+    <string name="team_1_score">Puntuación equipo 1</string>
+    <string name="team_2_score">Puntuación equipo 2</string>
 </resources>
