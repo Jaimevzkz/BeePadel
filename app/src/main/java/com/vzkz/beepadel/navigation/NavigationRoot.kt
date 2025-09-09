@@ -90,6 +90,7 @@ fun NavigationRoot(
                         val context = LocalContext.current
                         ActiveMatchScreen(
                             onNavigateToMatchHistory = {
+                                Timber.tag("IN-APP").i("Popping backstack")
                                 backStack.removeLast()
                             },
                             onServiceToggle = { shouldServiceRun ->

@@ -17,9 +17,14 @@ class EndToEndTesting {
         GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
 
     @Test
-    fun testMainScreenShowsData() {
+    fun testStartingAMatchAndDiscardingIt() {
         BeepadelRobot(activityRule, ApplicationProvider.getApplicationContext())
             .navigateToActiveMatch()
             .assertInActiveMatchScreen()
+            .clickStartOnServingDialog()
+            .addPointTo(true, 1)
+            .clickOnDiscardMatch()
+            .confirmDiscardMatch()
+            .assertOnMatchHistoryScreen()
     }
 }

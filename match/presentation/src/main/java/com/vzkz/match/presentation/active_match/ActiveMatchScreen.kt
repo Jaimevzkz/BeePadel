@@ -179,7 +179,9 @@ fun ActiveMatchScreenRoot(
                     activeMatchDialogToShow = state.activeMatchDialogToShow,
                     insertMatchLoading = state.insertMatchLoading,
                     error = state.error,
-                    onAction = onAction
+                    onCloseActiveDialog = { onAction(ActiveMatchIntent.CloseActiveDialog) },
+                    onFinishMatch = { onAction(ActiveMatchIntent.FinishMatch) },
+                    onDiscardMatch = { onAction(ActiveMatchIntent.DiscardMatch) },
                 )
             }
             if (state.showNotificationRationale) {

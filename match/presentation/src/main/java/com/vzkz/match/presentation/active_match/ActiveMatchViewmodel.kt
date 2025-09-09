@@ -110,7 +110,10 @@ class ActiveMatchViewmodel(
             ActiveMatchIntent.CloseActiveDialog ->
                 _state.update { it.copy(activeMatchDialogToShow = null) }
 
-            is ActiveMatchIntent.ShowActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
+            is ActiveMatchIntent.ShowActiveDialog -> {
+                Timber.tag("IN-APP").i("showing dialog: ${intent.newActiveDialog}")
+                _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
+            }
             is ActiveMatchIntent.SubmitNotificationPermissionInfo -> {
                 _state.update {
                     it.copy(
