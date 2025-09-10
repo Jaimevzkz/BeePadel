@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,7 +27,6 @@ import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
-import com.vzkz.match.presentation.BuildConfig
 import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.active_match.components.ActiveMatchDialog
 import com.vzkz.match.presentation.active_match.components.ControlsSection
@@ -40,6 +38,7 @@ import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun ActiveMatchScreen(
@@ -53,6 +52,7 @@ fun ActiveMatchScreen(
     LaunchedEffect(events) {
         when (events) {
             ActiveMatchEvent.NavToHistoryScreen -> {
+                Timber.tag("IN-APP").i("Navigating to history")
                 onNavigateToMatchHistory()
             }
 

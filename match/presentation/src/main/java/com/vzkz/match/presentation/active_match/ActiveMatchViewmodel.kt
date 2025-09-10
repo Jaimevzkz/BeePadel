@@ -31,7 +31,8 @@ class ActiveMatchViewmodel(
     init {
         _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
         ioLaunch {
-            watchConnector.sendActionToWatch(MessagingAction.EnterActiveMatch) }
+            watchConnector.sendActionToWatch(MessagingAction.EnterActiveMatch)
+        }
 
         matchTracker
             .isTeam1Serving
@@ -105,15 +106,14 @@ class ActiveMatchViewmodel(
             ActiveMatchIntent.UndoPoint -> matchTracker.undoPoint()
             ActiveMatchIntent.FinishMatch -> finishMatch()
             ActiveMatchIntent.DiscardMatch -> discardMatch()
-            ActiveMatchIntent.NavToHistoryScreen -> sendEvent(ActiveMatchEvent.NavToHistoryScreen)
             is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
             ActiveMatchIntent.CloseActiveDialog ->
                 _state.update { it.copy(activeMatchDialogToShow = null) }
 
             is ActiveMatchIntent.ShowActiveDialog -> {
-                Timber.tag("IN-APP").i("showing dialog: ${intent.newActiveDialog}")
                 _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
             }
+
             is ActiveMatchIntent.SubmitNotificationPermissionInfo -> {
                 _state.update {
                     it.copy(

@@ -20,14 +20,14 @@ fun ActiveMatchDialog(
     onDiscardMatch: () -> Unit,
 ) {
     val activeDialogTitle: Int
-    val onClickIntent: Unit
+    val onClickIntent: () -> Unit
     val errorButtonColor: Boolean
     val activeDialogDescription: String?
     val primaryButtonText: String
     when (activeMatchDialogToShow) {
         ActiveMatchDialog.DISCARD_MATCH -> {
             activeDialogTitle = R.string.discard_match_question
-            onClickIntent = onDiscardMatch()
+            onClickIntent = onDiscardMatch
             errorButtonColor = true
             activeDialogDescription = null
             primaryButtonText = stringResource(R.string.discard)
@@ -35,7 +35,7 @@ fun ActiveMatchDialog(
 
         ActiveMatchDialog.FINISH_MATCH -> {
             activeDialogTitle = R.string.end_match_question
-            onClickIntent = onFinishMatch()
+            onClickIntent = onFinishMatch
             errorButtonColor = false
             activeDialogDescription = null
             primaryButtonText = stringResource(R.string.end)
@@ -43,7 +43,7 @@ fun ActiveMatchDialog(
 
         ActiveMatchDialog.ERROR -> {
             activeDialogTitle = R.string.error_occurred
-            onClickIntent = onDiscardMatch()
+            onClickIntent = onDiscardMatch
             errorButtonColor = true
             activeDialogDescription = error?.asString()
             primaryButtonText = stringResource(R.string.discard)
@@ -54,27 +54,22 @@ fun ActiveMatchDialog(
         modifier = Modifier,
         title = stringResource(activeDialogTitle),
         description = activeDialogDescription,
-        onDismiss = {
-            onCloseActiveDialog
-        },
+        onDismiss = onCloseActiveDialog,
         primaryButton = {
             BeePadelActionButton(
                 modifier = Modifier.weight(1f),
                 text = primaryButtonText,
                 isLoading = insertMatchLoading,
                 errorButtonColors = errorButtonColor,
-                onClick = {
-                    onClickIntent
-                }
+                onClick = onClickIntent
+
             )
         },
         secondaryButton = {
             BeePadelOutlinedActionButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.cancel),
-                onClick = {
-                    onCloseActiveDialog
-                }
+                onClick = onCloseActiveDialog
             )
         }
     )

@@ -91,7 +91,8 @@ fun NavigationRoot(
                         ActiveMatchScreen(
                             onNavigateToMatchHistory = {
                                 Timber.tag("IN-APP").i("Popping backstack")
-                                backStack.removeLast()
+                                backStack.removeAt(backStack.size - 1)
+//                                backStack.removeLast()
                             },
                             onServiceToggle = { shouldServiceRun ->
                                 if (shouldServiceRun) {

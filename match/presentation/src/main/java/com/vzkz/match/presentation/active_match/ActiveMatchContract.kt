@@ -56,7 +56,6 @@ sealed class ActiveMatchIntent : Intent {
     data object AddPointToTeam1 : ActiveMatchIntent()
     data object AddPointToTeam2 : ActiveMatchIntent()
     data object UndoPoint : ActiveMatchIntent()
-    data object NavToHistoryScreen : ActiveMatchIntent()
     data object CloseActiveDialog : ActiveMatchIntent()
     data class ShowActiveDialog(val newActiveDialog: ActiveMatchDialog) : ActiveMatchIntent()
     data class SubmitNotificationPermissionInfo(
