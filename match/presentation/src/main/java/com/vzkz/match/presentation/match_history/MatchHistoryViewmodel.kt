@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import java.util.UUID
 
 class MatchHistoryViewModel(
@@ -39,8 +40,11 @@ class MatchHistoryViewModel(
         matchTracker
             .isMatchStarted
             .onEach {isMatchStarted ->
-                if (isMatchStarted)
+                if (isMatchStarted){
+                    Timber.tag("IN-APP").i("match started true NAV TO ACTIVE MATCH")
                     sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
+                }
+
             }
             .flowOn(dispatchers.default)
             .launchIn(viewModelScope)

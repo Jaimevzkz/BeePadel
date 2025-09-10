@@ -38,7 +38,6 @@ import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun ActiveMatchScreen(
@@ -52,7 +51,6 @@ fun ActiveMatchScreen(
     LaunchedEffect(events) {
         when (events) {
             ActiveMatchEvent.NavToHistoryScreen -> {
-                Timber.tag("IN-APP").i("Navigating to history")
                 onNavigateToMatchHistory()
             }
 

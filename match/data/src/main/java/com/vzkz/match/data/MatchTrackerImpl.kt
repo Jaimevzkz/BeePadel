@@ -22,7 +22,6 @@ import com.vzkz.match.domain.model.getGameCount
 import com.vzkz.match.domain.model.getSetCount
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,6 +37,7 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -259,6 +259,7 @@ class MatchTrackerImpl(
             ) ?: GOLDEN_POINT.DEFAULT_VAL
         }
         this._isMatchStarted.value = isPlayingMatch
+        Timber.tag("IN-APP").i("is match started change, new val: ${_isMatchStarted.value}")
     }
 
     override fun setIsTeam1Serving(isTeam1Serving: Boolean?) {
@@ -268,8 +269,7 @@ class MatchTrackerImpl(
         }
     }
 
-    private suspend fun resetMatchTrackerState() {
-        delay(100L)
+    private fun resetMatchTrackerState() {
         _activeMatch.update { initialMatchState() }
         setIsMatchStarted(false)
         setIsTeam1Serving(null)

@@ -5,10 +5,15 @@ import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -66,65 +71,49 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
         ),
-        entryProvider = { key ->
-            when (key) {
-                KeyMatchHistoryScreen -> {
-                    NavEntry(
-                        key = key,
-                    ) {
-                        MatchHistoryScreen(
-                            onNavigateToActiveMatch = {
-                                backStack.add(KeyActiveMatchScreen)
-                            },
-                            onNavigateToSettings = {
-                                backStack.add(KeySettingsScreen)
-                            }
-                        )
-                    }
+        entryProvider =
+            entryProvider {
+                entry<KeyMatchHistoryScreen> {
+                    MatchHistoryScreen(
+                        onNavigateToActiveMatch = {
+//                            backStack.add(KeyActiveMatchScreen)
+                            backStack[0] = KeyActiveMatchScreen
+                        },
+                        onNavigateToSettings = {
+//                            backStack.add(KeySettingsScreen)
+                            backStack[0] = KeySettingsScreen
+                        }
+                    )
                 }
-
-                is KeyActiveMatchScreen -> {
-                    NavEntry(
-                        key = key
-                    ) {
-                        val context = LocalContext.current
-                        ActiveMatchScreen(
-                            onNavigateToMatchHistory = {
-                                Timber.tag("IN-APP").i("Popping backstack")
-                                backStack.removeAt(backStack.size - 1)
-//                                backStack.removeLast()
-                            },
-                            onServiceToggle = { shouldServiceRun ->
-                                if (shouldServiceRun) {
-                                    context.startService(
-                                        ActiveMatchService.createStartIntent(
-                                            context = context,
-                                            activityClass = MainActivity::class.java
-                                        )
+                entry<KeyActiveMatchScreen> {
+                    val context = LocalContext.current
+                    ActiveMatchScreen(
+                        onNavigateToMatchHistory = {
+//                            backStack.removeLastOrNull()
+                            backStack[0] = KeyMatchHistoryScreen
+                        },
+                        onServiceToggle = { shouldServiceRun ->
+                            if (shouldServiceRun) {
+                                context.startService(
+                                    ActiveMatchService.createStartIntent(
+                                        context = context,
+                                        activityClass = MainActivity::class.java
                                     )
-                                } else {
-                                    context.startService(
-                                        ActiveMatchService.createStopIntent(context)
-                                    )
-                                }
-
+                                )
+                            } else {
+                                context.startService(
+                                    ActiveMatchService.createStopIntent(context)
+                                )
                             }
-                        )
-                    }
-                }
 
-                is KeySettingsScreen -> {
-                    NavEntry(
-                        key = key
-                    ) {
-                        SettingsScreen(
-                            onNavigateBack = { backStack.removeLast() }
-                        )
-                    }
+                        }
+                    )
                 }
-
-                else -> throw RuntimeException("Invalid NavKey")
+                entry<KeySettingsScreen> {
+                    SettingsScreen(
+                        onNavigateBack = { backStack.removeLast() }
+                    )
+                }
             }
-        }
     )
 }

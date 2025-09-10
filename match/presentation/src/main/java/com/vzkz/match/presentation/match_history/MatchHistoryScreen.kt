@@ -55,6 +55,7 @@ fun MatchHistoryScreen(
         when (events) {
             is MatchHistoryEvent.NavigateToActiveMatch -> onNavigateToActiveMatch()
 
+
             MatchHistoryEvent.NavigateToSettings -> onNavigateToSettings()
 
             null -> {}
