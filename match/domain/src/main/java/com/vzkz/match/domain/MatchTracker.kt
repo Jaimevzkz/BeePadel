@@ -22,4 +22,8 @@ interface MatchTracker {
 
     fun setIsTeam1Serving(isTeam1Serving: Boolean?)
     fun setIsMatchStarted(isPlayingMatch: Boolean)
+
+    companion object Constants {
+        const val DISCARD_MATCH_DELAY = 50L
+    }
 }

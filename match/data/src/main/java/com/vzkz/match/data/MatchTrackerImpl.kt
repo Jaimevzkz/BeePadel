@@ -22,6 +22,7 @@ import com.vzkz.match.domain.model.getGameCount
 import com.vzkz.match.domain.model.getSetCount
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -160,9 +161,8 @@ class MatchTrackerImpl(
             is Result.Success -> {
                 applicationScope.launch {
                     watchConnector.sendActionToWatch(MessagingAction.Finish)
-                    resetMatchTrackerState()
                 }
-
+                resetMatchTrackerState()
                 Result.Success(Unit)
             }
 
@@ -270,10 +270,13 @@ class MatchTrackerImpl(
     }
 
     private fun resetMatchTrackerState() {
-        _activeMatch.update { initialMatchState() }
-        setIsMatchStarted(false)
-        setIsTeam1Serving(null)
-        previousMatchStateList = mutableListOf(activeMatch.value)
-        _elapsedTime.value = Duration.ZERO
+        applicationScope.launch {
+            delay(MatchTracker.DISCARD_MATCH_DELAY)
+            _activeMatch.update { initialMatchState() }
+            setIsMatchStarted(false)
+            setIsTeam1Serving(null)
+            previousMatchStateList = mutableListOf(activeMatch.value)
+            _elapsedTime.value = Duration.ZERO
+        }
     }
 }

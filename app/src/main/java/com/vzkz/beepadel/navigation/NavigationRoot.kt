@@ -111,7 +111,10 @@ fun NavigationRoot(
                 }
                 entry<KeySettingsScreen> {
                     SettingsScreen(
-                        onNavigateBack = { backStack.removeLast() }
+                        onNavigateBack = {
+//                            backStack.removeLast()
+                            backStack[0] = KeyMatchHistoryScreen
+                        }
                     )
                 }
             }

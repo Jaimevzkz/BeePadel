@@ -215,13 +215,13 @@ class ActiveMatchViewmodel(
     }
 
     private fun discardMatch() {
-        ioLaunch { matchTracker.discardMatch() }
         _state.update {
             it.copy(
                 activeMatchDialogToShow = null,
                 isMatchFinished = true
             )
         }
+        ioLaunch { matchTracker.discardMatch() }
         sendEvent(ActiveMatchEvent.NavToHistoryScreen)
     }
 

@@ -5,6 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.GrantPermissionRule
 import com.vzkz.beepadel.MainActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 
@@ -25,6 +27,18 @@ class EndToEndTesting {
             .addPointTo(true, 1)
             .clickOnDiscardMatch()
             .confirmDiscardMatch()
+            .assertOnMatchHistoryScreen()
+    }
+
+    @Test
+    fun testStartingAMatchAndFinishingAfterASet() = runBlocking<Unit> {
+        BeepadelRobot(activityRule, ApplicationProvider.getApplicationContext())
+            .navigateToActiveMatch()
+            .assertInActiveMatchScreen()
+            .clickStartOnServingDialog()
+            .addPointTo(true, 24)
+            .clickOnFinishMatch()
+            .confirmFinishMatch()
             .assertOnMatchHistoryScreen()
     }
 }

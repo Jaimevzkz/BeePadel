@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - master
+  push:
 jobs:
   instrumented:
     runs-on: ubuntu-latest

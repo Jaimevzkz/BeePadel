@@ -83,4 +83,22 @@ class BeepadelRobot(
         }
         return this
     }
+
+    fun clickOnFinishMatch(): BeepadelRobot {
+        runBlocking {
+            activityRule
+                .onNodeWithContentDescription(context.getString(R.string.end_match))
+                .performClick()
+        }
+        return this
+    }
+
+    fun confirmFinishMatch(): BeepadelRobot {
+        runBlocking {
+            activityRule
+                .onNodeWithText(context.getString(R.string.end))
+                .performClick()
+        }
+        return this
+    }
 }
