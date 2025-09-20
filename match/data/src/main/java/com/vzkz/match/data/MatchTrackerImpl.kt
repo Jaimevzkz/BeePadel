@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -189,7 +188,7 @@ class MatchTrackerImpl(
                 gameList.last().player1Points.ordinal to gameList.last().player2Points.ordinal
 
             watchConnector.sendActionToWatch(
-                MessagingAction.UpdateAfterUndo(
+                MessagingAction.TotalUpdate(
                     points = points,
                     games = gameList.getGameCount(),
                     sets = setList.getSetCount()
@@ -259,7 +258,6 @@ class MatchTrackerImpl(
             ) ?: GOLDEN_POINT.DEFAULT_VAL
         }
         this._isMatchStarted.value = isPlayingMatch
-        Timber.tag("IN-APP").i("is match started change, new val: ${_isMatchStarted.value}")
     }
 
     override fun setIsTeam1Serving(isTeam1Serving: Boolean?) {

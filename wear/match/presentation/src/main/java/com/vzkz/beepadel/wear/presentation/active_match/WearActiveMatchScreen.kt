@@ -49,6 +49,8 @@ import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.On
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.StartMatch
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.ToggleDialog
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.UndoPoint
+import com.vzkz.beepadel.wear.presentation.active_match.ambient.AmbientObserver
+import com.vzkz.beepadel.wear.presentation.active_match.ambient.ambientMode
 import com.vzkz.beepadel.wear.presentation.active_match.components.ClickableArea
 import com.vzkz.beepadel.wear.presentation.active_match.components.FinishMatchDialog
 import com.vzkz.beepadel.wear.presentation.active_match.components.UndoButton
@@ -57,20 +59,30 @@ import com.vzkz.beepadel.wear.presentation.active_match.components.WearErrorDial
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearServingDialog
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.designsystem.FinishIcon
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun WearActiveMatchScreenRoot(
-    viewModel: WearActiveMatchViewmodel = koinViewModel()
+    viewModel: WearActiveMatchViewmodel = koinViewModel(),
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
+    val isServiceActive by ActiveMatchService.isServiceActive.collectAsStateWithLifecycle()
 
     LaunchedEffect(events) {
         when (events) {
+            WearActiveMatchEvent.StopService -> onServiceToggle(false)
             null -> {}
-            else -> {}
+        }
+    }
+
+    LaunchedEffect(state.hasMatchStarted, isServiceActive) {
+        if (state.hasMatchStarted && !isServiceActive) {
+            onServiceToggle(true)
         }
     }
 
@@ -129,7 +141,17 @@ private fun WearActiveMatchScreen(
         permissionLauncher.launch(permissions.toTypedArray())
     }
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    AmbientObserver(
+        onEnterAmbient = { onAction(WearActiveMatchIntent.OnEnterAmbientMode(it.burnInProtectionRequired)) },
+        onExitAmbientMode = { onAction(WearActiveMatchIntent.OnExitAmbientMode) }
+    )
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .ambientMode(state.isAmbientMode, state.burnInProtectionRequired),
+        contentAlignment = Alignment.Center
+    ) {
         ClickableArea(
             modifier = Modifier.fillMaxSize(),
             onAddPointToTeam1 = {

@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
@@ -33,7 +34,6 @@ import com.vzkz.match.presentation.active_match.components.ControlsSection
 import com.vzkz.match.presentation.active_match.components.CurrentGameScoreCard
 import com.vzkz.match.presentation.active_match.components.ServingDialog
 import com.vzkz.match.presentation.active_match.components.TopSection
-import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
@@ -113,8 +113,9 @@ fun ActiveMatchScreenRoot(
         }
     }
 
-    LaunchedEffect(key1 = state.isMatchStarted) {
-        if (state.isMatchStarted && !ActiveMatchService.isServiceActive) {
+    val isServiceActive by ActiveMatchService.isServiceActive.collectAsStateWithLifecycle()
+    LaunchedEffect(key1 = state.isMatchStarted, isServiceActive) {
+        if (state.isMatchStarted && !isServiceActive) {
             onServiceToggle(true)
         }
     }

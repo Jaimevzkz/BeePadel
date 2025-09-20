@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.presentation.ui)
     implementation(projects.core.presentation.designsystem)
+    implementation(projects.core.notification)
 
     implementation(projects.match.data)
     implementation(projects.match.domain)

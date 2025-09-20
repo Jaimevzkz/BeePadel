@@ -5,11 +5,11 @@ import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.ConnectionRequest
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.Result
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.BaseViewModel
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
-import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -29,7 +29,7 @@ class ActiveMatchViewmodel(
     ) {
 
     init {
-        _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
+        _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive.value) }
         ioLaunch {
             watchConnector.sendActionToWatch(MessagingAction.EnterActiveMatch)
         }
@@ -167,6 +167,23 @@ class ActiveMatchViewmodel(
                                 activeMatchDialogToShow = null
                             )
                         }
+                    }
+
+                    MessagingAction.RequestPointUpdate -> {
+                        val currentState = state.value
+                        val points = Pair(
+                            currentState.pointsPlayer1.ordinal,
+                            currentState.pointsPlayer2.ordinal
+                        )
+                        val games = Pair(currentState.gamesPlayer1, currentState.gamesPlayer2)
+                        val sets = Pair(currentState.setsPlayer1, currentState.setsPlayer2)
+                        watchConnector.sendActionToWatch(
+                            MessagingAction.TotalUpdate(
+                                points = points,
+                                games = games,
+                                sets = sets
+                            )
+                        )
                     }
 
                     else -> Unit

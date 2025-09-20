@@ -17,10 +17,8 @@ import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.UUIDProvider
-import com.vzkz.match.data.connectivity.PhoneToWatchConnector
 import com.vzkz.match.data.util.addGame
 import com.vzkz.match.data.util.addSet
-import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.domain.model.Game
 import com.vzkz.match.domain.model.Points
 import kotlinx.coroutines.CoroutineScope

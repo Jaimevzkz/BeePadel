@@ -1,7 +1,6 @@
 package com.vzkz.connectivity.core.data.messaging
 
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
-import com.vzkz.core.domain.error.DataError
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -35,7 +34,7 @@ sealed interface MessagingActionDto {
     data class SetsUpdate(val sets: Pair<Int, Int>) : MessagingActionDto
 
     @Serializable @InternalSerializationApi
-    data class UpdateAfterUndo(
+    data class TotalUpdate(
         val points: Pair<Int, Int>,
         val games: Pair<Int, Int>,
         val sets: Pair<Int, Int>
@@ -49,4 +48,6 @@ sealed interface MessagingActionDto {
     data object FinishMatchError: MessagingActionDto
     @Serializable
     data object EnterActiveMatch: MessagingActionDto
+    @Serializable
+    data object RequestPointUpdate : MessagingActionDto
 }

@@ -15,4 +15,5 @@
     <string name="error_connection_interrupted">Phone-Watch connection interrupted</string>
     <string name="error_disconnected">Phone-Watch connection disconnected</string>
     <string name="error_disk_full">There is not enough storage in the device to store preferences</string>
+    <string name="active_match">Active Match</string>
 </resources>

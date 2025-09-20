@@ -19,7 +19,7 @@ fun MessagingAction.toMessagingActionDto(): MessagingActionDto {
         is MessagingAction.Start -> MessagingActionDto.Start(isTeam1Serving = isTeam1Serving)
         is MessagingAction.TimeUpdate -> MessagingActionDto.TimeUpdate(elapsedDuration = elapsedDuration)
         MessagingAction.UndoPoint -> MessagingActionDto.UndoPoint
-        is MessagingAction.UpdateAfterUndo -> MessagingActionDto.UpdateAfterUndo(
+        is MessagingAction.TotalUpdate -> MessagingActionDto.TotalUpdate(
             points = points,
             games = games,
             sets = sets
@@ -28,6 +28,7 @@ fun MessagingAction.toMessagingActionDto(): MessagingActionDto {
         MessagingAction.CloseError -> MessagingActionDto.CloseError
         is MessagingAction.FinishMatchError -> MessagingActionDto.FinishMatchError
         MessagingAction.EnterActiveMatch -> MessagingActionDto.EnterActiveMatch
+        MessagingAction.RequestPointUpdate -> MessagingActionDto.RequestPointUpdate
     }
 }
 
@@ -45,7 +46,7 @@ fun MessagingActionDto.toMessagingAction(): MessagingAction {
         is MessagingActionDto.Start -> MessagingAction.Start(isTeam1Serving = isTeam1Serving)
         is MessagingActionDto.TimeUpdate -> MessagingAction.TimeUpdate(elapsedDuration = elapsedDuration)
         MessagingActionDto.UndoPoint -> MessagingAction.UndoPoint
-        is MessagingActionDto.UpdateAfterUndo -> MessagingAction.UpdateAfterUndo(
+        is MessagingActionDto.TotalUpdate -> MessagingAction.TotalUpdate(
             points = points,
             games = games,
             sets = sets
@@ -54,5 +55,6 @@ fun MessagingActionDto.toMessagingAction(): MessagingAction {
         MessagingActionDto.CloseError -> MessagingAction.CloseError
         is MessagingActionDto.FinishMatchError -> MessagingAction.FinishMatchError
         MessagingActionDto.EnterActiveMatch -> MessagingAction.EnterActiveMatch
+        MessagingActionDto.RequestPointUpdate -> MessagingAction.RequestPointUpdate
     }
 }

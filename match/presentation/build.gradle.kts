@@ -12,5 +12,6 @@ dependencies {
     implementation(projects.core.presentation.ui)
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.connectivity.domain)
+    implementation(projects.core.notification)
     testImplementation(testFixtures(projects.common.sharedTest))
 }

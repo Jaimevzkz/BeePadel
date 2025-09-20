@@ -1,21 +1,10 @@
 package com.vzkz.match.presentation.util
 
+import com.vzkz.core.presentation.ui.formatted
 import com.vzkz.match.domain.model.Match
 import com.vzkz.match.presentation.match_history.model.MatchUi
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
-import kotlin.math.max
-import kotlin.time.Duration
-
-fun Duration.formatted(): String {
-    val totalSeconds = inWholeSeconds
-    val hours = String.format(Locale.ENGLISH, "%02d", totalSeconds / 3600)
-    val minutes = String.format(Locale.ENGLISH, "%02d", totalSeconds % 3600 / 60)
-    val seconds = String.format(Locale.ENGLISH, "%02d", totalSeconds % 60)
-
-    return "$hours:$minutes:$seconds"
-}
 
 
 fun Match.toMatchUi(zoneId: ZoneId = ZoneId.systemDefault()): MatchUi {

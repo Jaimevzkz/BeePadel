@@ -20,7 +20,6 @@
     <string name="error_occurred">Error</string>
     <string name="discard">Descartar</string>
     <string name="end">Finalizar</string>
-    <string name="active_match">Partido Actual</string>
     <string name="permission_required">Se requiere permiso</string>
     <string name="notification_rationale">Para mostrar el tiempo y marcador del partido como notificación, esta aplicación necesita tu permiso. Por favor, haz clic en \"Aceptar\" para otorgarlo.</string>
     <string name="start">Empezar</string>
