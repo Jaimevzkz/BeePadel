@@ -110,7 +110,6 @@ class WearActiveMatchViewmodel(
             }
             .launchIn(viewModelScope)
 
-
         listenToPhoneActions()
     }
 
