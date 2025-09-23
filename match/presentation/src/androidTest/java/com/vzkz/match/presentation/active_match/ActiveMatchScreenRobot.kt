@@ -10,9 +10,7 @@ class ActiveMatchScreenRobot(
     private val composeActivityRule: ComposeContentTestRule,
     private val context: Context
 ) {
-
     fun assertAllContentDescriptionsAreDisplayed(contentDescriptionList: List<Int>): ActiveMatchScreenRobot {
-
         runBlocking {
             contentDescriptionList.forEach { contentDescriptionList ->
                 composeActivityRule

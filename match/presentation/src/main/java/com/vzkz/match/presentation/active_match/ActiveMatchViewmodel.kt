@@ -2,14 +2,14 @@ package com.vzkz.match.presentation.active_match
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
-import com.vzkz.core.connectivity.domain.messaging.MessagingAction.*
+import com.vzkz.core.connectivity.domain.messaging.MessagingAction.ConnectionRequest
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.Result
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.BaseViewModel
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
-import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -29,7 +29,10 @@ class ActiveMatchViewmodel(
     ) {
 
     init {
-        _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive) }
+        _state.update { it.copy(isMatchStarted = ActiveMatchService.isServiceActive.value) }
+        ioLaunch {
+            watchConnector.sendActionToWatch(MessagingAction.EnterActiveMatch)
+        }
 
         matchTracker
             .isTeam1Serving
@@ -103,10 +106,14 @@ class ActiveMatchViewmodel(
             ActiveMatchIntent.UndoPoint -> matchTracker.undoPoint()
             ActiveMatchIntent.FinishMatch -> finishMatch()
             ActiveMatchIntent.DiscardMatch -> discardMatch()
-            ActiveMatchIntent.NavToHistoryScreen -> sendEvent(ActiveMatchEvent.NavToHistoryScreen)
             is ActiveMatchIntent.StartMatch -> startMatch(intent.isTeam1Serving)
-            ActiveMatchIntent.CloseActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = null) }
-            is ActiveMatchIntent.ShowActiveDialog -> _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
+            ActiveMatchIntent.CloseActiveDialog ->
+                _state.update { it.copy(activeMatchDialogToShow = null) }
+
+            is ActiveMatchIntent.ShowActiveDialog -> {
+                _state.update { it.copy(activeMatchDialogToShow = intent.newActiveDialog) }
+            }
+
             is ActiveMatchIntent.SubmitNotificationPermissionInfo -> {
                 _state.update {
                     it.copy(
@@ -128,6 +135,7 @@ class ActiveMatchViewmodel(
                 ActiveMatchIntent.DiscardMatch -> MessagingAction.Discard
                 ActiveMatchIntent.FinishMatch -> MessagingAction.Finish
                 is ActiveMatchIntent.StartMatch -> MessagingAction.Start(intent.isTeam1Serving)
+                ActiveMatchIntent.CloseActiveDialog -> MessagingAction.CloseError
                 else -> null
             }
             messagingAction?.let {
@@ -146,12 +154,38 @@ class ActiveMatchViewmodel(
                 when (action) {
                     ConnectionRequest -> {
                         if (state.value.isMatchStarted) {
-                            watchConnector.sendActionToWatch(Start(state.value.isTeam1Serving!!))
+                            watchConnector.sendActionToWatch(MessagingAction.Start(state.value.isTeam1Serving!!))
                         }
                     }
 
-                    Discard -> discardMatch()
-                    Finish -> finishMatch()
+                    MessagingAction.Discard -> discardMatch()
+                    MessagingAction.Finish -> finishMatch()
+                    MessagingAction.CloseError -> {
+                        _state.update {
+                            it.copy(
+                                error = null,
+                                activeMatchDialogToShow = null
+                            )
+                        }
+                    }
+
+                    MessagingAction.RequestPointUpdate -> {
+                        val currentState = state.value
+                        val points = Pair(
+                            currentState.pointsPlayer1.ordinal,
+                            currentState.pointsPlayer2.ordinal
+                        )
+                        val games = Pair(currentState.gamesPlayer1, currentState.gamesPlayer2)
+                        val sets = Pair(currentState.setsPlayer1, currentState.setsPlayer2)
+                        watchConnector.sendActionToWatch(
+                            MessagingAction.TotalUpdate(
+                                points = points,
+                                games = games,
+                                sets = sets
+                            )
+                        )
+                    }
+
                     else -> Unit
                 }
             }
@@ -161,7 +195,6 @@ class ActiveMatchViewmodel(
 
     private fun startMatch(isTeam1Serving: Boolean) {
         matchTracker.setIsTeam1Serving(isTeam1Serving)
-//        matchTracker.setIsMatchStarted(true)
         matchTracker.setIsMatchStarted(true)
     }
 
@@ -188,6 +221,10 @@ class ActiveMatchViewmodel(
                             error = insert.error.asUiText(),
                         )
                     }
+                    val result = watchConnector.sendActionToWatch(MessagingAction.FinishMatchError)
+                    if (result is Result.Error) {
+                        Timber.e("Tracker error: ${result.error}")
+                    }
                 }
             }
 
@@ -195,14 +232,13 @@ class ActiveMatchViewmodel(
     }
 
     private fun discardMatch() {
-        ioLaunch { matchTracker.discardMatch() }
         _state.update {
             it.copy(
                 activeMatchDialogToShow = null,
-                showServingDialog = false,
                 isMatchFinished = true
             )
         }
+        ioLaunch { matchTracker.discardMatch() }
         sendEvent(ActiveMatchEvent.NavToHistoryScreen)
     }
 

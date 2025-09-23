@@ -45,7 +45,6 @@ class WatchToPhoneConnector(
         )
 
     override suspend fun sendActionToPhone(action: MessagingAction): EmptyResult<MessagingError> {
-        Timber.i("action received in watch to phone connector: $action")
         return messagingClient.sendOrQueueAction(action)
     }
 }

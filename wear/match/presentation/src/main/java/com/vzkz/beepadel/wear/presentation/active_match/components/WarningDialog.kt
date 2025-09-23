@@ -20,7 +20,7 @@ import androidx.wear.compose.material3.Text
 import com.vzkz.core.presentation.designsystem.ExclamationMarkIcon
 
 @Composable
-internal fun WarningScreen(
+internal fun WarningDialog(
     modifier: Modifier = Modifier,
     textToDisplay: String
 ) {

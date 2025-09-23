@@ -2,6 +2,7 @@ package com.vzkz.beepadel.wear.presentation.active_match
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.health.connect.HealthPermissions
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,53 +11,78 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.FilledTonalIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.OutlinedIconButton
-import androidx.wear.compose.material3.RadioButton
-import androidx.wear.compose.material3.RadioButtonDefaults
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
+import com.vzkz.beepadel.wear.presentation.R
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam1
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam2
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.CloseError
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.DiscardMatch
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.FinishMatch
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.OnBodySensorPermissionResult
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.StartMatch
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.ToggleDialog
+import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.UndoPoint
+import com.vzkz.beepadel.wear.presentation.active_match.ambient.AmbientObserver
+import com.vzkz.beepadel.wear.presentation.active_match.ambient.ambientMode
 import com.vzkz.beepadel.wear.presentation.active_match.components.ClickableArea
 import com.vzkz.beepadel.wear.presentation.active_match.components.FinishMatchDialog
 import com.vzkz.beepadel.wear.presentation.active_match.components.UndoButton
-import com.vzkz.beepadel.wear.presentation.active_match.components.WarningScreen
+import com.vzkz.beepadel.wear.presentation.active_match.components.WarningDialog
+import com.vzkz.beepadel.wear.presentation.active_match.components.WearErrorDialog
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
+import com.vzkz.beepadel.wear.presentation.active_match.components.WearServingDialog
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.designsystem.FinishIcon
-import com.vzkz.core.presentation.designsystem.StartIcon
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun WearActiveMatchScreenRoot(
-    viewModel: WearActiveMatchViewmodel = koinViewModel()
+    viewModel: WearActiveMatchViewmodel = koinViewModel(),
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
+    val isServiceActive by ActiveMatchService.isServiceActive.collectAsStateWithLifecycle()
 
     LaunchedEffect(events) {
         when (events) {
+            WearActiveMatchEvent.StopService -> onServiceToggle(false)
             null -> {}
-            else -> {}
+        }
+    }
+
+    LaunchedEffect(state.hasMatchStarted, isServiceActive) {
+        if (state.hasMatchStarted && !isServiceActive) {
+            onServiceToggle(true)
         }
     }
 
@@ -71,46 +97,68 @@ private fun WearActiveMatchScreen(
     state: WearActiveMatchState,
     onAction: (WearActiveMatchIntent) -> Unit
 ) {
-
     val context = LocalContext.current
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { perms ->
-        val hasBodySensorPermission = perms[Manifest.permission.BODY_SENSORS] == true
-        onAction(WearActiveMatchIntent.OnBodySensorPermissionResult(hasBodySensorPermission))
+        val hasBodySensorPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA)
+            perms[HealthPermissions.READ_HEART_RATE] == true
+        else
+            perms[Manifest.permission.BODY_SENSORS] == true
+
+        onAction(OnBodySensorPermissionResult(hasBodySensorPermission))
     }
     LaunchedEffect(Unit) {
-        val hasBodySensorPermission = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.BODY_SENSORS
-        ) == PackageManager.PERMISSION_GRANTED
+        val hasBodySensorPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            context.checkSelfPermission(
+                HealthPermissions.READ_HEART_RATE
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            context.checkSelfPermission(
+                Manifest.permission.BODY_SENSORS
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
         val hasNotificationPermission = if (Build.VERSION.SDK_INT >= 33) {
-            ContextCompat.checkSelfPermission(
-                context,
+            context.checkSelfPermission(
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         } else true
 
-        onAction(WearActiveMatchIntent.OnBodySensorPermissionResult(hasBodySensorPermission))
+        onAction(OnBodySensorPermissionResult(hasBodySensorPermission))
 
         val permissions = mutableListOf<String>()
         if (!hasBodySensorPermission) {
-            permissions.add(Manifest.permission.BODY_SENSORS)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA)
+                permissions.add(HealthPermissions.READ_HEART_RATE)
+            else
+                permissions.add(Manifest.permission.BODY_SENSORS)
         }
-        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= 33) {
+        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= 33)
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-        }
+
         permissionLauncher.launch(permissions.toTypedArray())
     }
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    AmbientObserver(
+        onEnterAmbient = { onAction(WearActiveMatchIntent.OnEnterAmbientMode(it.burnInProtectionRequired)) },
+        onExitAmbientMode = { onAction(WearActiveMatchIntent.OnExitAmbientMode) }
+    )
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .ambientMode(state.isAmbientMode, state.burnInProtectionRequired),
+        contentAlignment = Alignment.Center
+    ) {
         ClickableArea(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxSize(),
             onAddPointToTeam1 = {
-                onAction(WearActiveMatchIntent.AddPointToTeam1)
+                onAction(AddPointToTeam1)
             },
             onAddPointToTeam2 = {
-                onAction(WearActiveMatchIntent.AddPointToTeam1)
+                onAction(AddPointToTeam2)
             }
         )
 
@@ -125,7 +173,7 @@ private fun WearActiveMatchScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FilledTonalIconButton(
-                onClick = { onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.FINISH)) },
+                onClick = { onAction(ToggleDialog(WearDialogs.FINISH)) },
                 colors = IconButtonDefaults.filledTonalIconButtonColors(
                     contentColor = MaterialTheme.colorScheme.onBackground
                 )
@@ -144,88 +192,122 @@ private fun WearActiveMatchScreen(
                 isTeam1Serving = state.isTeam1Serving,
                 setsTeam1 = state.setsTeam1,
                 setsTeam2 = state.setsTeam2,
-                elapsedTime = state.elapsedTime
+                elapsedTime = state.elapsedTime,
+                heartRate = state.heartRate,
+                canTrackHeartRate = state.canTrackHeartRate
             )
 
-            UndoButton(onUndoPoint = { onAction(WearActiveMatchIntent.UndoPoint) })
+            UndoButton(onUndoPoint = { onAction(UndoPoint) })
         }
 
         when (state.dialogToShow) {
-            WearDialogs.NONE -> {/*No-Op*/
-            }
+            WearDialogs.NONE -> {}
 
             WearDialogs.SERVING -> {
-                ServingDialog(
+                WearServingDialog(
                     modifier = Modifier,
-                    onStartMatch ={onAction(WearActiveMatchIntent.StartMatch(it))}
+                    onStartMatch = { onAction(StartMatch(it)) }
                 )
             }
 
             WearDialogs.FINISH -> {
                 FinishMatchDialog(
                     modifier = Modifier,
-                    onFinishMatch = { onAction(WearActiveMatchIntent.FinishMatch) },
-                    onDiscardMatch = { onAction(WearActiveMatchIntent.DiscardMatch) },
-                    onCancel = { onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.NONE)) }
+                    onFinishMatch = { onAction(FinishMatch) },
+                    onDiscardMatch = { onAction(DiscardMatch) },
+                    onCancel = { onAction(ToggleDialog(WearDialogs.NONE)) }
                 )
             }
 
             WearDialogs.PHONE_NOT_CONNECTED -> {
-                WarningScreen(textToDisplay = stringResource(com.vzkz.beepadel.wear.presentation.R.string.connect_your_phone))
+                WarningDialog(textToDisplay = stringResource(R.string.connect_your_phone))
+            }
+
+            WearDialogs.ERROR -> {
+                WearErrorDialog(
+                    modifier = Modifier,
+                    title = stringResource(com.vzkz.match.presentation.R.string.error_occurred),
+                    description = state.error?.asString(),
+                    primaryButton = {
+                        Button(
+                            modifier = Modifier
+                                .weight(1f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
+                            ),
+                            onClick = { onAction(DiscardMatch) }
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 10.sp,
+                                textAlign = TextAlign.Center,
+                                text = stringResource(R.string.discard)
+                            )
+                        }
+                    },
+                    secondaryButton = {
+                        OutlinedButton(
+                            modifier = Modifier
+                                .weight(1f),
+                            onClick = { onAction(CloseError) }
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 10.sp,
+                                textAlign = TextAlign.Center,
+                                text = stringResource(R.string.cancel)
+                            )
+                        }
+                    }
+                )
+            }
+
+            WearDialogs.MATCH_FINISHED -> {
+                WearMatchFinishedDialog(
+                    onCloseDialog = {
+                        onAction(WearActiveMatchIntent.ToggleDialog(WearDialogs.SERVING))
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun ServingDialog(
+fun WearMatchFinishedDialog(
     modifier: Modifier = Modifier,
-    onStartMatch: (isTeam1Serving: Boolean) -> Unit
+    onCloseDialog: () -> Unit
 ) {
-    var servingTeam1 by remember { mutableStateOf(true) }
-    val radioButtonColors = RadioButtonDefaults.radioButtonColors(
-        selectedControlColor = MaterialTheme.colorScheme.onPrimary,
-        selectedContentColor = MaterialTheme.colorScheme.onPrimary,
-        selectedContainerColor = MaterialTheme.colorScheme.primary,
-        unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-        unselectedContainerColor = MaterialTheme.colorScheme.surfaceContainer
-    )
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterVertically)
+        verticalArrangement = Arrangement.SpaceAround
     ) {
-        Text(modifier = Modifier.padding(top = 28.dp), text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.who_starts_serving), color = MaterialTheme.colorScheme.onBackground)
-        RadioButton(
-            modifier = Modifier.height(34.dp),
-            selected = servingTeam1,
-            onSelect = { servingTeam1 = true },
-            label = { Text(stringResource(com.vzkz.match.presentation.R.string.team_1)) },
-            colors = radioButtonColors
+        Text(
+            modifier = Modifier.padding(top = 28.dp),
+            text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.match_finished),
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
-        RadioButton(
-            modifier = Modifier.height(34.dp),
-            selected = !servingTeam1,
-            onSelect = { servingTeam1 = false },
-            label = { Text(stringResource(com.vzkz.match.presentation.R.string.team_2)) },
-           colors = radioButtonColors.copy(
-               selectedControlColor = MaterialTheme.colorScheme.onSecondary,
-               selectedContentColor = MaterialTheme.colorScheme.onSecondary,
-               selectedContainerColor = MaterialTheme.colorScheme.secondary,
-           )
+        Text(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.match_has_been_saved),
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         OutlinedIconButton(
-            onClick = {onStartMatch(servingTeam1)},
+            onClick = onCloseDialog,
             modifier = Modifier
         ) {
             Icon(
-                imageVector = StartIcon,
-                contentDescription = stringResource(id = com.vzkz.match.presentation.R.string.start_match),
+                imageVector = Icons.Default.Close,
+                contentDescription = stringResource(id = com.vzkz.match.presentation.R.string.cancel),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
@@ -241,8 +323,10 @@ private fun WearActiveMatchScreenPreview() {
                 setsTeam1 = 3,
                 setsTeam2 = 2,
                 isTeam1Serving = true,
+//                dialogToShow = WearDialogs.NONE,
+                dialogToShow = WearDialogs.MATCH_FINISHED,
 //                dialogToShow = WearDialogs.SERVING,
-                dialogToShow = WearDialogs.NONE,
+//                dialogToShow = WearDialogs.ERROR,
             ),
             onAction = {}
         )

@@ -8,7 +8,6 @@ import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.match.presentation.R
-import com.vzkz.match.presentation.active_match.ActiveMatchIntent
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 
 @Composable
@@ -16,17 +15,19 @@ fun ActiveMatchDialog(
     activeMatchDialogToShow: ActiveMatchDialog,
     insertMatchLoading: Boolean,
     error: UiText?,
-    onAction: (ActiveMatchIntent) -> Unit
+    onCloseActiveDialog: () -> Unit,
+    onFinishMatch: () -> Unit,
+    onDiscardMatch: () -> Unit,
 ) {
     val activeDialogTitle: Int
-    val onClickIntent: ActiveMatchIntent
+    val onClickIntent: () -> Unit
     val errorButtonColor: Boolean
     val activeDialogDescription: String?
     val primaryButtonText: String
     when (activeMatchDialogToShow) {
         ActiveMatchDialog.DISCARD_MATCH -> {
             activeDialogTitle = R.string.discard_match_question
-            onClickIntent = ActiveMatchIntent.DiscardMatch
+            onClickIntent = onDiscardMatch
             errorButtonColor = true
             activeDialogDescription = null
             primaryButtonText = stringResource(R.string.discard)
@@ -34,7 +35,7 @@ fun ActiveMatchDialog(
 
         ActiveMatchDialog.FINISH_MATCH -> {
             activeDialogTitle = R.string.end_match_question
-            onClickIntent = ActiveMatchIntent.FinishMatch
+            onClickIntent = onFinishMatch
             errorButtonColor = false
             activeDialogDescription = null
             primaryButtonText = stringResource(R.string.end)
@@ -42,7 +43,7 @@ fun ActiveMatchDialog(
 
         ActiveMatchDialog.ERROR -> {
             activeDialogTitle = R.string.error_occurred
-            onClickIntent = ActiveMatchIntent.DiscardMatch
+            onClickIntent = onDiscardMatch
             errorButtonColor = true
             activeDialogDescription = error?.asString()
             primaryButtonText = stringResource(R.string.discard)
@@ -53,27 +54,22 @@ fun ActiveMatchDialog(
         modifier = Modifier,
         title = stringResource(activeDialogTitle),
         description = activeDialogDescription,
-        onDismiss = {
-            onAction(ActiveMatchIntent.CloseActiveDialog)
-        },
+        onDismiss = onCloseActiveDialog,
         primaryButton = {
             BeePadelActionButton(
                 modifier = Modifier.weight(1f),
                 text = primaryButtonText,
                 isLoading = insertMatchLoading,
                 errorButtonColors = errorButtonColor,
-                onClick = {
-                    onAction(onClickIntent)
-                }
+                onClick = onClickIntent
+
             )
         },
         secondaryButton = {
             BeePadelOutlinedActionButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.cancel),
-                onClick = {
-                    onAction(ActiveMatchIntent.CloseActiveDialog)
-                }
+                onClick = onCloseActiveDialog
             )
         }
     )

@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
@@ -33,7 +34,6 @@ import com.vzkz.match.presentation.active_match.components.ControlsSection
 import com.vzkz.match.presentation.active_match.components.CurrentGameScoreCard
 import com.vzkz.match.presentation.active_match.components.ServingDialog
 import com.vzkz.match.presentation.active_match.components.TopSection
-import com.vzkz.match.presentation.active_match.service.ActiveMatchService
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import com.vzkz.match.presentation.util.hasNotificationPermission
 import com.vzkz.match.presentation.util.shouldShowNotificationPermissionRationale
@@ -113,8 +113,9 @@ fun ActiveMatchScreenRoot(
         }
     }
 
-    LaunchedEffect(key1 = state.isMatchStarted) {
-        if (state.isMatchStarted && !ActiveMatchService.isServiceActive) {
+    val isServiceActive by ActiveMatchService.isServiceActive.collectAsStateWithLifecycle()
+    LaunchedEffect(key1 = state.isMatchStarted, isServiceActive) {
+        if (state.isMatchStarted && !isServiceActive) {
             onServiceToggle(true)
         }
     }
@@ -147,7 +148,8 @@ fun ActiveMatchScreenRoot(
                     currentOtherGames = state.gamesPlayer2,
                     isServing = state.isTeam1Serving,
                     elapsedTime = state.elapsedTime,
-                    goldenPoint = state.goldenPoint
+                    goldenPoint = state.goldenPoint,
+                    currentHeartRate = state.currentHeartRate
                 )
                 Spacer(Modifier)
                 ControlsSection(
@@ -161,7 +163,8 @@ fun ActiveMatchScreenRoot(
                 )
                 Spacer(Modifier)
             }
-            if (!state.isMatchStarted && state.showServingDialog) {
+
+            if (!state.isMatchStarted) {
                 ServingDialog(
                     modifier = Modifier,
                     onStartMatch = { onAction(ActiveMatchIntent.StartMatch(it)) },
@@ -175,7 +178,9 @@ fun ActiveMatchScreenRoot(
                     activeMatchDialogToShow = state.activeMatchDialogToShow,
                     insertMatchLoading = state.insertMatchLoading,
                     error = state.error,
-                    onAction = onAction
+                    onCloseActiveDialog = { onAction(ActiveMatchIntent.CloseActiveDialog) },
+                    onFinishMatch = { onAction(ActiveMatchIntent.FinishMatch) },
+                    onDiscardMatch = { onAction(ActiveMatchIntent.DiscardMatch) },
                 )
             }
             if (state.showNotificationRationale) {
@@ -231,7 +236,8 @@ private fun ActiveMatchScreenPreview() {
 //                pointsPlayer2 = Points.Fifteen,
                 isTeam1Serving = true,
 //                goldenPoint = true,
-                goldenPoint = false
+                goldenPoint = false,
+                currentHeartRate = 122
             ),
             onAction = {},
             onServiceToggle = {}

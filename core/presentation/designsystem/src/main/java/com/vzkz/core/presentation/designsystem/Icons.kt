@@ -39,3 +39,4 @@ val ExclamationMarkIcon: ImageVector
 val StartIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.start)
+

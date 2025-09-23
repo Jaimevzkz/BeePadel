@@ -12,5 +12,8 @@
     <string name="error_ongoing_own_exercise">Ya hay un ejercicio propio en curso (servicios de salud)</string>
     <string name="error_ongoing_other_exercise">Ya hay otro ejercicio en curso (servicios de salud)</string>
     <string name="error_exercise_already_ended">El ejercicio ya ha finalizado (servicios de salud)</string>
-
+    <string name="error_connection_interrupted">Conexión teléfono-reloj interrumpida</string>
+    <string name="error_disconnected">Conexión teléfono-reloj desconectada</string>
+    <string name="error_disk_full">No hay suficiente espacio en el dispositivo para almacenar las preferencias</string>
+    <string name="active_match">Partido Actual</string>
 </resources>

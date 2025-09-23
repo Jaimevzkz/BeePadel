@@ -1,4 +1,4 @@
-package com.vzkz.match.presentation.active_match.service
+package com.vzkz.core.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,22 +9,24 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import com.vzkz.match.domain.MatchTracker
-import com.vzkz.match.presentation.R
-import com.vzkz.match.presentation.util.formatted
+import com.vzkz.core.presentation.ui.formatted
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
+import kotlin.getValue
+import kotlin.time.Duration
 
 class ActiveMatchService : Service() {
 
@@ -35,10 +37,11 @@ class ActiveMatchService : Service() {
     private val baseNotification by lazy {
         NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(com.vzkz.core.presentation.designsystem.R.drawable.logo_no_bg)
-            .setContentTitle(getString(R.string.active_match))
+//            .setContentTitle(getString(R.string.active_match))
+            .setContentTitle(getString(com.vzkz.core.presentation.ui.R.string.active_match))
     }
 
-    private val matchTracker by inject<MatchTracker>()
+    private val elapsedTime by inject<StateFlow<Duration>>()
 
     private var serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
@@ -60,8 +63,8 @@ class ActiveMatchService : Service() {
     }
 
     private fun start(activityClass: Class<*>) {
-        if (!isServiceActive) {
-            isServiceActive = true
+        if (!_isServiceActive.value) {
+            _isServiceActive.value = true
             createNotificationChannel()
 
             val activityIntent = Intent(applicationContext, activityClass).apply {
@@ -73,7 +76,7 @@ class ActiveMatchService : Service() {
                 getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
             }
             val notification = baseNotification
-                .setContentText("00:00:00 00-00 (00-00)")
+                .setContentText("00:00:00")
                 .setContentIntent(pendingIntent)
                 .build()
 
@@ -99,26 +102,19 @@ class ActiveMatchService : Service() {
     }
 
     private fun updateNotification() {
-        matchTracker
-            .elapsedTime
-            .combine(matchTracker.activeMatch) { elapsedTime, activeMatch ->
-                val gamesForSet = activeMatch.setList.last().getGamesForSet()
-                val currentGame = activeMatch.setList.last().gameList.last()
-                "${elapsedTime.formatted()}\n${gamesForSet.first}-${gamesForSet.second} (${currentGame.player1Points.string}-${currentGame.player2Points.string})"
-            }
-            .onEach { formattedString ->
+       elapsedTime
+            .onEach { elapsedTime ->
                 val notification = baseNotification
-                    .setContentText(formattedString)
+                    .setContentText(elapsedTime.formatted())
                     .build()
-
-                notificationManager.notify(NOTIFICATION_ID, notification)
+                notificationManager.notify(1, notification)
             }
             .launchIn(serviceScope)
     }
 
     fun stop() {
         stopSelf()
-        isServiceActive = false
+        _isServiceActive.value = false
         serviceScope.cancel()
 
         serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
@@ -128,7 +124,7 @@ class ActiveMatchService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                getString(R.string.active_match),
+                getString(com.vzkz.core.presentation.ui.R.string.active_match),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 enableVibration(false)
@@ -139,7 +135,8 @@ class ActiveMatchService : Service() {
     }
 
     companion object {
-        var isServiceActive = false
+        private val _isServiceActive = MutableStateFlow(false)
+        val isServiceActive = _isServiceActive.asStateFlow()
         private const val CHANNEL_ID = "active_match"
         private const val NOTIFICATION_ID = 1
 

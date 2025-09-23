@@ -123,7 +123,6 @@ class MatchTrackerImpl(
                 when (action) {
                     is Start -> {
                         setIsTeam1Serving(action.isTeam1Serving)
-//                        setIsMatchStarted(true)
                         setIsMatchStarted(true)
                         applicationScope.launch(dispatchers.default) {
                             watchConnector.sendActionToWatch(Start(action.isTeam1Serving))
@@ -161,9 +160,8 @@ class MatchTrackerImpl(
             is Result.Success -> {
                 applicationScope.launch {
                     watchConnector.sendActionToWatch(MessagingAction.Finish)
-                    resetMatchTrackerState()
                 }
-
+                resetMatchTrackerState()
                 Result.Success(Unit)
             }
 
@@ -182,27 +180,30 @@ class MatchTrackerImpl(
     }
 
     override fun undoPoint() {
-        _activeMatch.update { previousMatchStateList.last() }
         applicationScope.launch(dispatchers.default) {
             val setList = previousMatchStateList.last().setList
             val gameList = setList.last().gameList
+
             val points =
                 gameList.last().player1Points.ordinal to gameList.last().player2Points.ordinal
+
             watchConnector.sendActionToWatch(
-                MessagingAction.UpdateAfterUndo(
+                MessagingAction.TotalUpdate(
                     points = points,
                     games = gameList.getGameCount(),
                     sets = setList.getSetCount()
                 )
             )
-        }
+            _activeMatch.update { previousMatchStateList.last() }
 
-        if (previousMatchStateList.size > 1)
-            previousMatchStateList.removeAt(previousMatchStateList.size - 1)
+            if (previousMatchStateList.size > 1)
+                previousMatchStateList.removeAt(previousMatchStateList.size - 1)
+        }
     }
 
     override suspend fun discardMatch() {
         resetMatchTrackerState()
+        watchConnector.sendActionToWatch(MessagingAction.Discard)
     }
 
     private fun addPointTo(isPlayer1: Boolean) {
@@ -266,13 +267,14 @@ class MatchTrackerImpl(
         }
     }
 
-    private suspend fun resetMatchTrackerState() {
-        delay(100L)
-        _activeMatch.update { initialMatchState() }
-        setIsMatchStarted(false)
-        setIsTeam1Serving(null)
-        watchConnector.sendActionToWatch(MessagingAction.Discard)
-        previousMatchStateList = mutableListOf(activeMatch.value)
-        _elapsedTime.value = Duration.ZERO
+    private fun resetMatchTrackerState() {
+        applicationScope.launch {
+            delay(MatchTracker.DISCARD_MATCH_DELAY)
+            _activeMatch.update { initialMatchState() }
+            setIsMatchStarted(false)
+            setIsTeam1Serving(null)
+            previousMatchStateList = mutableListOf(activeMatch.value)
+            _elapsedTime.value = Duration.ZERO
+        }
     }
 }

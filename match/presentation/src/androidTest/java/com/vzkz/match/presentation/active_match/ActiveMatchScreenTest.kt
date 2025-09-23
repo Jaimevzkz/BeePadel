@@ -47,8 +47,13 @@ class ActiveMatchScreenTest {
                     R.string.end_match,
                     // Score board
                     R.string.elapsed_time,
-//                    R.string.beepadel, // test failing action
-                    //todo complete
+                    R.string.team_1_score,
+                    R.string.team_2_score,
+                    R.string.team_2_score,
+                    // Controls
+                    R.string.add_own_point,
+                    R.string.add_other_point,
+                    R.string.undo,
                 )
             )
 
