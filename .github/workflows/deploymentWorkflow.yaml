@@ -1,3 +1,4 @@
+name: Deployment Workflow
 on:
   workflow_dispatch:
   push:
