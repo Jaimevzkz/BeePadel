@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import com.vzkz.common.general.data_generator.generateDummySet
 import com.vzkz.common.general.data_generator.dummyMatch
 import com.vzkz.common.general.data_generator.dummySet
+import com.vzkz.core.presentation.ui.formatted
 import com.vzkz.match.presentation.match_history.model.MatchUi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
