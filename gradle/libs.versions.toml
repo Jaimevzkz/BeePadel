@@ -60,8 +60,9 @@ projectApplicationId = "com.vzkz.beepadel"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionName = "0.0.0" # This value will be overriden by continous deployment
-projectVersionCode = "1" # This value will be overriden by continous deployment
+projectVersionName = "1.1.1"
+projectVersionCode = "11001001"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

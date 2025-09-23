@@ -39,8 +39,8 @@ jobs:
 
       - name: Update libs.versions.toml with new versions
         run: |
-          sed -i "s/^projectVersionName = .*/projectVersionName = \"${VERSION_NAME}\"/" gradle/libs.versions.toml
-          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"${VERSION_CODE}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionName = .*/projectVersionName = \"0${VERSION_NAME}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"0${VERSION_CODE}\"/" gradle/libs.versions.toml
           cat gradle/libs.versions.toml
 
       - name: Build Mobile prodRelease
@@ -84,6 +84,25 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Extract version info from branch
+        id: extract_version
+        run: |
+          BRANCH_NAME="${GITHUB_REF_NAME}"
+          VERSION_NAME="${BRANCH_NAME%/release}"
+          VERSION_CODE=$(echo $VERSION_NAME | awk -F. '{printf("%d%03d%03d", $1, $2, $3)}')
+
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV  
+
+      - name: Update libs.versions.toml with new versions
+        run: |
+          sed -i "s/^projectVersionName = .*/projectVersionName = \"1${VERSION_NAME}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"1${VERSION_CODE}\"/" gradle/libs.versions.toml
+          cat gradle/libs.versions.toml
+
+      - name: Build Mobile prodRelease
+        run: ./gradlew :app:bundleRelease
+        continue-on-error: false
       - name: Build Wear prodRelease
         run: ./gradlew :wear:app:bundleRelease
         continue-on-error: false
