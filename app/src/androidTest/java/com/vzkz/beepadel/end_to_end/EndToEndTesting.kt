@@ -1,6 +1,7 @@
 package com.vzkz.beepadel.end_to_end
 
 import android.Manifest
+import android.os.Build
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.GrantPermissionRule
@@ -9,14 +10,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 
 class EndToEndTesting {
     @get:Rule
     val activityRule = createAndroidComposeRule<MainActivity>()
 
     @get:Rule
-    val grantPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+    val grantPermissionRule: TestRule =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+        else TestRule { base, _ -> base }
 
     @Test
     fun testStartingAMatchAndDiscardingIt() {
