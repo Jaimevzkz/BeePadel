@@ -1,9 +1,9 @@
 name: Deployment Workflow
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - '**/release'
+#  push:
+#    branches:
+#      - '**/release'
 jobs:
   build:
     runs-on: ubuntu-latest

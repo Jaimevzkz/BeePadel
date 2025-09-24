@@ -13,11 +13,7 @@ class AndroidApplicationWearComposeConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                "implementation"(libs.findLibrary("androidx.wear.compose.material").get())
-                "implementation"(libs.findLibrary("androidx.wear.compose.foundation").get())
-                "implementation"(libs.findLibrary("androidx.wear.compose.ui.tooling").get())
-                "implementation"(libs.findLibrary("play.services.wearable").get())
-                "implementation"(libs.findLibrary("androidx.wear.tooling.preview").get())
+                "implementation"(libs.findBundle("wear").get())
             }
 
         }
