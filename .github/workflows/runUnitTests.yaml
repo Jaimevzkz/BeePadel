@@ -1,4 +1,4 @@
-name: Android Unit Testing CI
+name: Unit Testing
 on:
   workflow_dispatch:
   push:

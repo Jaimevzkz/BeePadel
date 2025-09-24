@@ -2,6 +2,7 @@ package com.vzkz.beepadel.end_to_end
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -19,9 +20,14 @@ class BeepadelRobot(
 
     fun assertOnMatchHistoryScreen(): BeepadelRobot {
         runBlocking {
-            activityRule
-                .onNodeWithText(context.getString(R.string.beepadel))
-                .assertIsDisplayed()
+            activityRule.waitUntil(
+                timeoutMillis = 2000L,
+                condition = {
+                    activityRule
+                        .onNodeWithText(context.getString(R.string.beepadel))
+                        .isDisplayed()
+                }
+            )
         }
         return this
     }
@@ -56,7 +62,8 @@ class BeepadelRobot(
 
     fun addPointTo(addToTeam1: Boolean, numberOfPointsToAdd: Int = 1): BeepadelRobot {
         runBlocking {
-            val contentDescriptionToSearch = if (addToTeam1) R.string.add_own_point else R.string.add_other_point
+            val contentDescriptionToSearch =
+                if (addToTeam1) R.string.add_own_point else R.string.add_other_point
             (0..<numberOfPointsToAdd).forEach { _ ->
                 activityRule
                     .onNodeWithContentDescription(context.getString(contentDescriptionToSearch))
