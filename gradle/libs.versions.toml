@@ -49,6 +49,7 @@ composeMaterialWearOs = "1.0.0-alpha37"
 health = "1.0.0"
 wear = "1.3.0"
 play-services-wearable = "19.0.0"
+wear-ongoing = "1.0.0"
 # Datastore
 datastore = "1.1.7"
 # Icons extended
@@ -57,11 +58,12 @@ materialIconsExtended = "1.7.8"
 rules = "1.7.0"
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
-projectMinSdkVersion = "24"
+projectMinSdkVersion = "25"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionName = "0.0.0" # This value will be overriden by continous deployment
-projectVersionCode = "1" # This value will be overriden by continous deployment
+projectVersionName = "1.1.2"
+projectVersionCode = "11001002"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -116,6 +118,7 @@ kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-cor
 androidx-wear = { group = "androidx.wear", name = "wear", version.ref = "wear" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "play-services-wearable" }
+androidx-wear-ongoing = { group = "androidx.wear", name = "wear-ongoing", version.ref = "wear-ongoing" }
 #Koin
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
@@ -221,4 +224,13 @@ androidTest = [
     "androidx-compose-ui-test-manifest",
     "uiautomator",
     "androidx-rules"
+]
+
+wear = [
+    "androidx-wear-compose-material",
+    "androidx-wear-compose-foundation",
+    "androidx-wear-compose-ui-tooling",
+    "play-services-wearable",
+    "androidx-wear-tooling-preview",
+    "androidx-wear-ongoing"
 ]

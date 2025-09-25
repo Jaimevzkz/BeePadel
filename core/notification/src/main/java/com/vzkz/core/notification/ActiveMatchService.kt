@@ -9,10 +9,13 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
+import android.text.Html
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.wear.ongoing.OngoingActivity
+import androidx.wear.ongoing.Status
 import com.vzkz.core.presentation.ui.formatted
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,9 +40,12 @@ class ActiveMatchService : Service() {
     private val baseNotification by lazy {
         NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(com.vzkz.core.presentation.designsystem.R.drawable.logo_no_bg)
+            .setOngoing(true)
 //            .setContentTitle(getString(R.string.active_match))
             .setContentTitle(getString(com.vzkz.core.presentation.ui.R.string.active_match))
     }
+
+    private lateinit var pendingIntent: PendingIntent
 
     private val elapsedTime by inject<StateFlow<Duration>>()
 
@@ -71,10 +77,14 @@ class ActiveMatchService : Service() {
                 data = "beepadel://active_match".toUri()
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
-            val pendingIntent = TaskStackBuilder.create(applicationContext).run {
+
+            pendingIntent = TaskStackBuilder.create(applicationContext).run {
                 addNextIntentWithParentStack(activityIntent)
-                getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
+                getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)!!
             }
+
+            createOnGoingActivity(elapsedTime.value)
+
             val notification = baseNotification
                 .setContentText("00:00:00")
                 .setContentIntent(pendingIntent)
@@ -102,14 +112,29 @@ class ActiveMatchService : Service() {
     }
 
     private fun updateNotification() {
-       elapsedTime
+        elapsedTime
             .onEach { elapsedTime ->
                 val notification = baseNotification
                     .setContentText(elapsedTime.formatted())
                     .build()
-                notificationManager.notify(1, notification)
+                notificationManager.notify(NOTIFICATION_ID, notification)
             }
             .launchIn(serviceScope)
+    }
+
+    private fun createOnGoingActivity(elapsedTime: Duration) {
+        val ongoingActivityStatus = Status.Builder()
+            .build()
+
+        val ongoingActivity =
+            OngoingActivity.Builder(
+                applicationContext, NOTIFICATION_ID, baseNotification
+            )
+                .setTouchIntent(pendingIntent)
+                .setStatus(ongoingActivityStatus)
+                .build()
+
+        ongoingActivity.apply(applicationContext)
     }
 
     fun stop() {

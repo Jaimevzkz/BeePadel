@@ -10,6 +10,7 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.wear.ongoing)
 
     implementation(projects.core.domain)
     implementation(projects.core.presentation.ui)
