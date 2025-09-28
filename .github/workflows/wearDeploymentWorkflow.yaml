@@ -80,3 +80,4 @@ jobs:
           packageName: com.vzkz.beepadel.wear
           releaseFiles: ${{ github.workspace }}/app-release.aab
           track: production
+          whatsNewDirectory: BeePadel/release-notes/wear

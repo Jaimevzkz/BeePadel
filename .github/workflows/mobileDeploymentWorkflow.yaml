@@ -81,4 +81,5 @@ jobs:
           packageName: com.vzkz.beepadel
           releaseFiles: ${{ github.workspace }}/app-release.aab
           track: production
+          whatsNewDirectory: BeePadel/release-notes/mobile
 
