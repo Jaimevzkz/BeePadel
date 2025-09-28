@@ -77,4 +77,4 @@ jobs:
           packageName: com.vzkz.beepadel
           releaseFiles: ${{ github.workspace }}/app-release.aab
           track: production
-          whatsNewDirectory: distribution/whatsnew
+#          whatsNewDirectory: distribution/whatsnew
