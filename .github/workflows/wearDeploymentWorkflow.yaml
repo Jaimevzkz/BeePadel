@@ -1,9 +1,9 @@
 name: Wear Deployment Workflow
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - '**/release'
+#  push:
+#    branches:
+#      - '**/release'
 jobs:
   build-wear:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF_NAME}"
           VERSION_NAME="${BRANCH_NAME%/release}"
-          VERSION_CODE=$(echo $VERSION_NAME | awk -F. '{printf("%d%03d%03d", $1, $2, $3)}')
+          VERSION_CODE=$(echo $VERSION_NAME | awk -F. '{printf("%03d%03d%03d", $1, $2, $3)}')
 
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV  
@@ -35,7 +35,7 @@ jobs:
       - name: Update libs.versions.toml with new versions
         run: |
           sed -i "s/^projectVersionName = .*/projectVersionName = \"${VERSION_NAME}\"/" gradle/libs.versions.toml
-          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"${VERSION_CODE}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"2${VERSION_CODE}\"/" gradle/libs.versions.toml
           cat gradle/libs.versions.toml
 
         continue-on-error: false
@@ -76,5 +76,5 @@ jobs:
           serviceAccountJsonPlainText: '${{ secrets.SERVICE_ACCOUNT_JSON }}'
           packageName: com.vzkz.beepadel
           releaseFiles: ${{ github.workspace }}/app-release.aab
-          track: production
+          track: wear:production
 #          whatsNewDirectory: distribution/whatsnew
