@@ -47,7 +47,7 @@ fun NavigationRoot(
         val uri = intent?.data
         uri?.let {
             deepLinkHandler(it)?.let { key ->
-                backStack.add(key)
+                backStack[0] = (key)
             }
         }
     }
@@ -55,7 +55,7 @@ fun NavigationRoot(
     val matchTracker = getKoin().get<MatchTracker>()
     LaunchedEffect(Unit) {
         if (matchTracker.isMatchStarted.first() && backStack.last() == KeyMatchHistoryScreen)
-            backStack.add(KeyActiveMatchScreen)
+            backStack[0] = KeyActiveMatchScreen
     }
 
     NavDisplay(
@@ -71,11 +71,9 @@ fun NavigationRoot(
                 entry<KeyMatchHistoryScreen> {
                     MatchHistoryScreen(
                         onNavigateToActiveMatch = {
-//                            backStack.add(KeyActiveMatchScreen)
                             backStack[0] = KeyActiveMatchScreen
                         },
                         onNavigateToSettings = {
-//                            backStack.add(KeySettingsScreen)
                             backStack[0] = KeySettingsScreen
                         }
                     )
@@ -84,7 +82,6 @@ fun NavigationRoot(
                     val context = LocalContext.current
                     ActiveMatchScreen(
                         onNavigateToMatchHistory = {
-//                            backStack.removeLastOrNull()
                             backStack[0] = KeyMatchHistoryScreen
                         },
                         onServiceToggle = { shouldServiceRun ->
@@ -107,7 +104,6 @@ fun NavigationRoot(
                 entry<KeySettingsScreen> {
                     SettingsScreen(
                         onNavigateBack = {
-//                            backStack.removeLast()
                             backStack[0] = KeyMatchHistoryScreen
                         }
                     )

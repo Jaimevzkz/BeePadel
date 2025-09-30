@@ -1,3 +1,1 @@
-- Minor bug fixes
-- First public WearOS release
-- [WearOs] Change Match finished icon
+- Fix bug where when navigating to Active match through foreground service, nav backstack was broken
