@@ -34,8 +34,8 @@ jobs:
 
       - name: Update libs.versions.toml with new versions
         run: |
-          sed -i "s/^projectVersionName = .*/projectVersionName = \"12${VERSION_NAME}\"/" gradle/libs.versions.toml
-          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"12${VERSION_CODE}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionName = .*/projectVersionName = \"${VERSION_NAME}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"${VERSION_CODE}\"/" gradle/libs.versions.toml
           cat gradle/libs.versions.toml
 
         continue-on-error: false
@@ -77,4 +77,4 @@ jobs:
           packageName: com.vzkz.beepadel
           releaseFiles: ${{ github.workspace }}/app-release.aab
           track: production
-#          whatsNewDirectory: distribution/whatsnew
+          whatsNewDirectory: ../../distribution/whatsnew

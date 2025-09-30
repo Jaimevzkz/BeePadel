@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -306,7 +307,7 @@ fun WearMatchFinishedDialog(
             modifier = Modifier
         ) {
             Icon(
-                imageVector = Icons.Default.Close,
+                imageVector = Icons.Default.Done,
                 contentDescription = stringResource(id = com.vzkz.match.presentation.R.string.cancel),
                 tint = MaterialTheme.colorScheme.onBackground
             )

@@ -61,8 +61,8 @@ projectApplicationId = "com.vzkz.beepadel"
 projectMinSdkVersion = "25"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionName = "1.1.3"
-projectVersionCode = "11001003"
+projectVersionName = "1.1.4"
+projectVersionCode = "001001004"
 
 
 [libraries]
