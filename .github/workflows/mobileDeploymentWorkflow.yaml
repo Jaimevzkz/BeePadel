@@ -39,8 +39,8 @@ jobs:
 
       - name: Update libs.versions.toml with new versions
         run: |
-          sed -i "s/^projectVersionName = .*/projectVersionName = \"0${VERSION_NAME}\"/" gradle/libs.versions.toml
-          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"0${VERSION_CODE}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionName = .*/projectVersionName = \"11${VERSION_NAME}\"/" gradle/libs.versions.toml
+          sed -i "s/^projectVersionCode = .*/projectVersionCode = \"11${VERSION_CODE}\"/" gradle/libs.versions.toml
           cat gradle/libs.versions.toml
 
       - name: Build Mobile prodRelease
