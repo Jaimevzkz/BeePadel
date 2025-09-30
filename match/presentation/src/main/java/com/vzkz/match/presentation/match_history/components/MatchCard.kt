@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
@@ -33,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.common.general.data_generator.dummyMatch
+import com.vzkz.core.presentation.designsystem.BeePadelDarkRed
 import com.vzkz.core.presentation.designsystem.BeePadelGold
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.CalendarIcon
@@ -71,7 +74,8 @@ fun MatchCard(
         )
 
         MatchDateSection(
-            dateTime = match.dateTimeFormatted
+            dateTime = match.dateTimeFormatted,
+            avgHeartRate = match.avgHeartRate
         )
     }
 }
@@ -100,7 +104,11 @@ private fun MatchDurationSection(
         }
         Spacer(Modifier.weight(1f))
         if (isMatchWon) {
-            Icon(imageVector = TrophyIcon, contentDescription = stringResource(R.string.match_won), tint = BeePadelGold)
+            Icon(
+                imageVector = TrophyIcon,
+                contentDescription = stringResource(R.string.match_won),
+                tint = BeePadelGold
+            )
         }
         Box() {
             DropdownMenu(
@@ -182,7 +190,8 @@ private fun SetOverviewSection(
 @Composable
 private fun MatchDateSection(
     modifier: Modifier = Modifier,
-    dateTime: String
+    dateTime: String,
+    avgHeartRate: Int?
 ) {
     Row(
         modifier = modifier,
@@ -198,6 +207,28 @@ private fun MatchDateSection(
             text = dateTime,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        Spacer(Modifier.weight(1f))
+
+
+        avgHeartRate?.let {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    modifier = Modifier.padding(end = 4.dp),
+                    text = "Ø $it",
+                    color = BeePadelDarkRed
+                )
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    tint = BeePadelDarkRed,
+                    imageVector = Icons.Filled.Favorite,
+                    contentDescription = stringResource(R.string.heart_rate)
+                )
+
+            }
+        }
     }
 }
 
