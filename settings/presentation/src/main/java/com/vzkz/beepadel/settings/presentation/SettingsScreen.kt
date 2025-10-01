@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.widget.ToggleButton
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,6 +62,10 @@ fun SettingsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
+
+    BackHandler {
+        onNavigateBack()
+    }
 
     LaunchedEffect(events) {
         when (events) {
