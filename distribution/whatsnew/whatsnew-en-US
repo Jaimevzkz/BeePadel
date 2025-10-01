@@ -1,2 +1,4 @@
 - Fix bug where when navigating to Active match through foreground service, nav backstack was broken
 - Bump project dependencies
+- Change monochrome icon to better fit
+- Fix bug where create first match dialog would appear for an instant before the data was loaded
