@@ -69,7 +69,7 @@ fun MatchHistoryScreen(
 }
 
 @Composable
-private fun MatchHistoryScreenRoot(
+fun MatchHistoryScreenRoot(
     state: MatchHistoryState,
     onAction: (MatchHistoryIntent) -> Unit
 ) {

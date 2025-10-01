@@ -1,12 +1,7 @@
 package com.vzkz.match.presentation.active_match
 
 import android.content.Context
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.match.presentation.R
@@ -17,7 +12,7 @@ import org.junit.Test
 
 class ActiveMatchScreenTest {
     @get:Rule
-    val composeRule = createComposeRule() // Starts a component in isolation
+    val composeRule = createComposeRule()
 
     private lateinit var activeMatchScreenRobot: ActiveMatchScreenRobot
     private lateinit var context: Context
@@ -29,7 +24,7 @@ class ActiveMatchScreenTest {
     }
 
     @Test
-    fun testInitialScreenState() {
+    fun test_initial_screen_state() {
         composeRule.setContent {
             BeePadelTheme {
                 ActiveMatchScreenRoot(
@@ -56,7 +51,5 @@ class ActiveMatchScreenTest {
                     R.string.undo,
                 )
             )
-
     }
-
 }

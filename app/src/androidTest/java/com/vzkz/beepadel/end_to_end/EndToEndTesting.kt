@@ -33,7 +33,7 @@ class EndToEndTesting {
         context = ApplicationProvider.getApplicationContext()
         beepadelRobot = BeepadelRobot(activityRule, context)
     }
-    
+
     @Test
     fun clicking_finish_match_displays_the_correct_dialogs() = runBlocking<Unit> {
         beepadelRobot
