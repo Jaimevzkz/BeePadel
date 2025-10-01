@@ -10,7 +10,6 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.vzkz.beepadel.MainActivity
 import com.vzkz.match.presentation.R
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 class BeepadelRobot(
@@ -18,7 +17,7 @@ class BeepadelRobot(
     private val context: Context
 ) {
 
-    fun assertOnMatchHistoryScreen(): BeepadelRobot {
+    fun assert_on_match_history_screen(): BeepadelRobot {
         runBlocking {
             activityRule.waitUntil(
                 timeoutMillis = 2000L,
@@ -32,7 +31,7 @@ class BeepadelRobot(
         return this
     }
 
-    fun navigateToActiveMatch(): BeepadelRobot {
+    fun navigate_to_active_match(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithContentDescription(context.getString(R.string.start_match))
@@ -42,7 +41,7 @@ class BeepadelRobot(
         return this
     }
 
-    fun assertInActiveMatchScreen(): BeepadelRobot {
+    fun assert_in_active_match_screen(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithText(context.getString(R.string.who_starts_serving))
@@ -51,7 +50,7 @@ class BeepadelRobot(
         return this
     }
 
-    fun clickStartOnServingDialog(): BeepadelRobot {
+    fun click_start_on_serving_dialog(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithText(context.getString(R.string.start))
@@ -60,7 +59,7 @@ class BeepadelRobot(
         return this
     }
 
-    fun addPointTo(addToTeam1: Boolean, numberOfPointsToAdd: Int = 1): BeepadelRobot {
+    fun add_point_to(addToTeam1: Boolean, numberOfPointsToAdd: Int = 1): BeepadelRobot {
         runBlocking {
             val contentDescriptionToSearch =
                 if (addToTeam1) R.string.add_own_point else R.string.add_other_point
@@ -73,7 +72,7 @@ class BeepadelRobot(
         return this
     }
 
-    fun clickOnDiscardMatch(): BeepadelRobot {
+    fun click_on_discard_match(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithContentDescription(context.getString(R.string.discard_match))
@@ -82,7 +81,16 @@ class BeepadelRobot(
         return this
     }
 
-    fun confirmDiscardMatch(): BeepadelRobot {
+    fun click_on_cancel(): BeepadelRobot {
+        runBlocking {
+            activityRule
+                .onNodeWithText(context.getString(R.string.cancel))
+                .performClick()
+        }
+        return this
+    }
+
+    fun click_discard(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithText(context.getString(R.string.discard))
@@ -91,7 +99,7 @@ class BeepadelRobot(
         return this
     }
 
-    fun clickOnFinishMatch(): BeepadelRobot {
+    fun click_on_finish_match(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithContentDescription(context.getString(R.string.end_match))
@@ -100,11 +108,26 @@ class BeepadelRobot(
         return this
     }
 
-    fun confirmFinishMatch(): BeepadelRobot {
+    fun confirm_finish_match(): BeepadelRobot {
         runBlocking {
             activityRule
                 .onNodeWithText(context.getString(R.string.end))
                 .performClick()
+        }
+        return this
+    }
+
+    fun assert_dialog_is_displayed(title: String, description: String? = null): BeepadelRobot{
+        runBlocking {
+            activityRule
+                .onNodeWithText(title)
+                .assertIsDisplayed()
+
+            description?.let {
+                activityRule
+                    .onNodeWithText(it)
+                    .assertIsDisplayed()
+            }
         }
         return this
     }

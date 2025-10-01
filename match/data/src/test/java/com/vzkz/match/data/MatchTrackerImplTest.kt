@@ -153,9 +153,9 @@ class MatchTrackerImplTest {
             val expectedGame = Game(defaultUUID(), Points.Zero, Points.Zero)
             val expectedPreviousGame = Game(defaultUUID(), Points.Forty, Points.Won)
             assertThat(emission.setList.first().gameList[1]).isEqualTo(expectedGame)
-            assertThat(emission.setList.first().gameList.first()).isEqualTo(
-                expectedPreviousGame
-            )
+
+            assertThat(emission.setList.first().gameList.first())
+                .isEqualTo(expectedPreviousGame)
         }
     }
 
