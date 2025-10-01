@@ -42,8 +42,8 @@ class MatchHistoryViewModel(
             delay(MatchTracker.DISCARD_MATCH_DELAY)
             matchTracker
                 .isMatchStarted
-                .onEach {isMatchStarted ->
-                    if (isMatchStarted){
+                .onEach { isMatchStarted ->
+                    if (isMatchStarted) {
                         sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
                     }
                 }
@@ -54,9 +54,9 @@ class MatchHistoryViewModel(
         matchHistoryRepository.getMatchHistory()
             .onEach { matchList ->
                 val matchUiList = matchList.map { it.toMatchUi() }
-                _state.update {
-                    it.copy(matchHistory = matchUiList)
-                }
+                _state.update { it.copy(matchHistory = matchUiList) }
+                if (!state.value.dataLoaded)
+                    _state.update { it.copy(dataLoaded = true) }
             }
             .flowOn(dispatchers.io)
             .launchIn(viewModelScope)

@@ -130,7 +130,7 @@ private fun MatchHistoryScreenRoot(
                     )
                 }
             }
-            if (state.matchHistory.isEmpty()) {
+            if (state.dataLoaded && state.matchHistory.isEmpty()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = stringResource(R.string.create_you_first_match),

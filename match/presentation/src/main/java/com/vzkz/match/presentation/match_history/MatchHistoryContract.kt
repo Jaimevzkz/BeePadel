@@ -8,11 +8,13 @@ import java.util.UUID
 
 
 data class MatchHistoryState(
+    val dataLoaded: Boolean,
     val matchHistory: List<MatchUi>,
     val showDeleteDialog: Boolean
 ) : State {
     companion object {
         val initial: MatchHistoryState = MatchHistoryState(
+            dataLoaded = false,
             matchHistory = emptyList(),
             showDeleteDialog = false
         )
