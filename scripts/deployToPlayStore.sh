@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
-  echo "Usage: $0 <*.*.*> <mobile|wear> [mobile|wear]"
+  echo "Usage: $0 <version> <mobile|wear> [mobile|wear]"
   exit 1
 fi
 
@@ -15,6 +15,7 @@ branchName=$1/release
 git checkout master
 git checkout -b $branchName
 git push origin $branchName
-./triggerWorkflow.sh $2 $3
+
+util/triggerWorkflow.sh $2 $3
 
 git checkout master
