@@ -1,9 +1,6 @@
 name: Mobile Deployment Workflow
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - '**/release'
 jobs:
   build-phone:
     runs-on: ubuntu-latest
