@@ -16,6 +16,6 @@ git checkout master
 git checkout -b $branchName
 git push origin $branchName
 
-util/triggerWorkflow.sh $2 $3
+util/triggerDeployWorkflow.sh $2 $3
 
 git checkout master
