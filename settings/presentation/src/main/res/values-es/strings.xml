@@ -2,4 +2,8 @@
 <resources>
     <string name="settings">Ajustes</string>
     <string name="golden_point">Punto de Oro</string>
+    <string name="features">Funcionalidad</string>
+    <string name="connect">Conectar</string>
+    <string name="connect_with_strava">Conectar con Strava</string>
+    <string name="connected_to_strava">Conectado a Strava</string>
 </resources>

@@ -1,7 +1,6 @@
-package com.vzkz.beepadel
+package com.vzkz.beepadel.di
 
 import com.vzkz.beepadel.core.preferences.data.di.preferencesModule
-import com.vzkz.beepadel.di.appModule
 import com.vzkz.beepadel.settings.presentation.di.settingsViewmodelModule
 import com.vzkz.connectivity.core.data.di.coreConnectivityDataModule
 import com.vzkz.core.data.di.coreDataModule

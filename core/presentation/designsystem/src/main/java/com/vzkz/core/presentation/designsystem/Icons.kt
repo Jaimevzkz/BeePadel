@@ -40,3 +40,7 @@ val StartIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.start)
 
+
+val StravaIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.strava)

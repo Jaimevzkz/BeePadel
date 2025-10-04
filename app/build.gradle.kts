@@ -49,4 +49,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Crypto
+    implementation(libs.androidx.security.crypto.ktx)
+    // AppAuth
+    implementation(libs.net.openid.appauth)
 }

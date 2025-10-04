@@ -11,6 +11,7 @@ private fun DataError.asUiText(): UiText {
     return when (this) {
         is DataError.Local -> this.asUiText()
         is DataError.Logic -> this.asUiText()
+        is DataError.Network -> this.asUiText()
     }
 }
 
@@ -54,6 +55,45 @@ private fun MessagingError.asUiText(): UiText {
 private fun DataError.Logic.asUiText(): UiText {
     return when (this) {
         DataError.Logic.EMPTY_SET_LIST -> StringResource(R.string.error_empty_set_list)
+    }
+}
+
+private fun DataError.Network.asUiText(): UiText{
+    return when(this){
+        DataError.Network.REQUEST_TIMEOUT ->
+            UiText.StringResource(
+                R.string.error_request_timeout
+            )
+
+        DataError.Network.TOO_MANY_REQUEST ->
+            UiText.StringResource(
+                R.string.error_too_many_request
+            )
+
+        DataError.Network.NO_INTERNET ->
+            UiText.StringResource(
+                R.string.error_no_internet
+            )
+
+        DataError.Network.PAYLOAD_TOO_LARGE ->
+            UiText.StringResource(
+                R.string.error_payload_too_large
+            )
+
+        DataError.Network.SERVER_ERROR ->
+            UiText.StringResource(
+                R.string.error_server_error
+            )
+
+        DataError.Network.SERIALIZATION ->
+            UiText.StringResource(
+                R.string.error_serialization
+            )
+
+        else ->
+            UiText.StringResource(
+                R.string.error_unknown
+            )
     }
 }
 

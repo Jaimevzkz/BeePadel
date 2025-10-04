@@ -1,14 +1,7 @@
 package com.vzkz.beepadel
 
 import android.app.Application
-import com.vzkz.beepadel.core.preferences.data.di.preferencesModule
-import com.vzkz.beepadel.di.appModule
-import com.vzkz.beepadel.settings.presentation.di.settingsViewmodelModule
-import com.vzkz.connectivity.core.data.di.coreConnectivityDataModule
-import com.vzkz.core.data.di.coreDataModule
-import com.vzkz.core.database.data.di.databaseModule
-import com.vzkz.match.data.di.matchDataModule
-import com.vzkz.match.presentation.di.matchViewmodelModule
+import com.vzkz.beepadel.di.appModules
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
