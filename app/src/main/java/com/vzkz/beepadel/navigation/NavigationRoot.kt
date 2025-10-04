@@ -14,34 +14,47 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.vzkz.beepadel.MainActivity
+import com.vzkz.beepadel.MainViewmodel
 import com.vzkz.beepadel.settings.presentation.SettingsScreen
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.presentation.active_match.ActiveMatchScreen
 import com.vzkz.match.presentation.match_history.MatchHistoryScreen
 import kotlinx.coroutines.flow.first
+import net.openid.appauth.AuthorizationService
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
+import timber.log.Timber
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
+    mainViewModel: MainViewmodel = koinViewModel(),
 ) {
     val backStack = rememberNavBackStack(KeyMatchHistoryScreen)
 
-    val deepLinkHandler: DeepLinkHandler = { uri ->
+    val activity = LocalActivity.current
+    val intent = activity?.intent
 
+    val deepLinkHandler: DeepLinkHandler = { uri ->
         when {
             uri.toString().contains("active_match") -> {
                 KeyActiveMatchScreen
+            }
+
+            uri.toString().contains("oauth2redirect") -> {
+                Timber.tag("IN-APP").i("received intent in compose: $intent")
+                intent?.let {
+                    mainViewModel.handleAuthResponseIntent(intent = intent)
+                }
+                KeySettingsScreen
             }
 
             else -> null
         }
     }
 
-    val activity = LocalActivity.current
-    val intent = activity?.intent
     LaunchedEffect(Unit) {
         val uri = intent?.data
         uri?.let {
