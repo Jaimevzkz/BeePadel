@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="error_serialization">No se ha podido parsear los datos</string>
     <string name="error_unknown">Ha ocurrido un error</string>
     <string name="error_insert_match">Ha ocurrido un error guardando el partido</string>
     <string name="error_insert_set">Ha ocurrido un error guardando el partido (set)</string>
@@ -16,4 +17,9 @@
     <string name="error_disconnected">Conexión teléfono-reloj desconectada</string>
     <string name="error_disk_full">No hay suficiente espacio en el dispositivo para almacenar las preferencias</string>
     <string name="active_match">Partido Actual</string>
+    <string name="error_request_timeout">El servidor no responde (timeout)</string>
+    <string name="error_too_many_request">Demasiadas peticiones (rate limit)</string>
+    <string name="error_no_internet">No se puede conectar con el servidor, revisa tu conexión a internet</string>
+    <string name="error_payload_too_large">Archivo demasiado pesado</string>
+    <string name="error_server_error">Error al conectar con el servidor</string>
 </resources>

@@ -12,4 +12,5 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.preferences.domain)
     implementation(projects.common.general)
+    implementation(libs.net.openid.appauth)
 }

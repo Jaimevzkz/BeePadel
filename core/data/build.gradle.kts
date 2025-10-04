@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.beepadel.android.library)
+    alias(libs.plugins.beepadel.jvm.ktor)
 }
 
 android {
@@ -8,4 +9,5 @@ android {
 
 dependencies {
     implementation(projects.core.domain)
+    implementation(libs.net.openid.appauth)
 }

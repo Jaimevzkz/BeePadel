@@ -9,12 +9,14 @@ import com.vzkz.core.presentation.ui.model.State
 data class SettingsState(
     val error: UiText?,
     val goldenPoint: Boolean,
+    val isLoggedIntoStrava: Boolean
 
 ) : State {
     companion object {
         val initial: SettingsState = SettingsState(
             error = null,
             goldenPoint = GOLDEN_POINT.DEFAULT_VAL,
+            isLoggedIntoStrava = false,
         )
     }
 }
@@ -22,8 +24,10 @@ data class SettingsState(
 sealed class SettingsIntent : Intent {
     data object NavigateBack: SettingsIntent()
     data object ToggleGoldenPoint: SettingsIntent()
+    data object LaunchAuthRequestIntent: SettingsIntent()
 }
 
 sealed class SettingsEvent : Event {
     data object NavigateBack: SettingsEvent()
+    data class LaunchAuthRequestIntent(val intent: android.content.Intent): SettingsEvent()
 }

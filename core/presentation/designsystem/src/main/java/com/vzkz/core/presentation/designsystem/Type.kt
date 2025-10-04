@@ -44,8 +44,14 @@ val Typography = Typography(
     ),
     headlineMedium = TextStyle(
         fontFamily = Exo2,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         color = BeePadelWhite
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = Exo2,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 22.sp,
+        color = BeePadelLightWhite
     ),
 )
