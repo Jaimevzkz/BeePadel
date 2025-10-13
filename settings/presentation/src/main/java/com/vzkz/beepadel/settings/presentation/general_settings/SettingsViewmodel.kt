@@ -1,7 +1,6 @@
-package com.vzkz.beepadel.settings.presentation
+package com.vzkz.beepadel.settings.presentation.general_settings
 
-import android.app.PendingIntent
-import android.content.Context
+import android.content.Intent
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
@@ -9,32 +8,27 @@ import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.auth.AuthRepository
 import com.vzkz.core.presentation.ui.BaseViewModel
-import com.vzkz.core.presentation.ui.model.Intent
+import com.vzkz.core.presentation.ui.BuildConfig
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.ResponseTypeValues
-import timber.log.Timber
 
 class SettingsViewModel(
     private val dispatchers: DispatchersProvider,
     private val preferencesRepository: PreferencesRepository,
-    private val authService: AuthorizationService,
     private val authRepository: AuthRepository
 ) : BaseViewModel<SettingsState, SettingsIntent, SettingsEvent>(
     SettingsState.initial,
     dispatchers
 ) {
     init {
-        viewModelScope.launch(dispatchers.io) {
-            val isLoggedIn = authRepository.isLoggedIn()
-            _state.update { it.copy(isLoggedIntoStrava = isLoggedIn) }
-        }
+        authRepository.isLoggedIn
+            .onEach { isLoggedIn ->
+                _state.update { it.copy(isLoggedIntoStrava = isLoggedIn) }
+            }
+            .flowOn(dispatchers.default)
+            .launchIn(viewModelScope)
 
         preferencesRepository
             .getBooleanPreferenceAsFlow(GOLDEN_POINT.KEY)
@@ -64,23 +58,22 @@ class SettingsViewModel(
     }
 
 
-    private fun createAuthRequestIntent(): android.content.Intent {
+    private fun createAuthRequestIntent(): Intent {
         val scope = "activity:read,activity:write"
-        val clientId = com.vzkz.core.presentation.ui.BuildConfig.STRAVA_CLIENT_ID
-        val redirectUri = "beepadel://oauth2redirect".toUri()
-        val serviceConfig = AuthorizationServiceConfiguration(
-            /* authorizationEndpoint = */ "https://www.strava.com/oauth/authorize".toUri(),
-            /* tokenEndpoint = */ "https://www.strava.com/oauth/token".toUri()
-        )
+        val clientId = BuildConfig.STRAVA_CLIENT_ID
+        val redirectUri = "beepadel://oauth2redirect"
 
-        val authRequest = AuthorizationRequest.Builder(
-            serviceConfig,
-            clientId,
-            ResponseTypeValues.CODE,
-            redirectUri
-        ).setScopes(scope)
+
+        val intentUri = "https://www.strava.com/oauth/mobile/authorize".toUri()
+            .buildUpon()
+            .appendQueryParameter("client_id", clientId.toString())
+            .appendQueryParameter("redirect_uri", redirectUri)
+            .appendQueryParameter("response_type", "code")
+            .appendQueryParameter("approval_prompt", "auto")
+            .appendQueryParameter("scope", scope)
             .build()
 
-        return authService.getAuthorizationRequestIntent(authRequest)
+        return Intent(Intent.ACTION_VIEW, intentUri)
+
     }
 }

@@ -1,4 +1,4 @@
-package com.vzkz.beepadel.settings.presentation
+package com.vzkz.beepadel.settings.presentation.general_settings
 
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.presentation.ui.UiText

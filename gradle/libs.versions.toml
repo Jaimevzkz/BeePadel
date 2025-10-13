@@ -34,8 +34,8 @@ uiTooling = "1.9.2"
 #Koin
 koin = "4.1.1"
 # Navigation 3
-nav3Core = "1.0.0-alpha10"
-nav3Lifecycle = "1.0.0-alpha04"
+nav3Core = "1.0.0-alpha11"
+nav3Lifecycle = "1.0.0-alpha05"
 kotlinSerialization = "2.2.20"
 kotlinxSerializationCore = "1.9.0"
 # Timber
@@ -62,16 +62,14 @@ ktorClientLogging = "2.3.8"
 ktorServerCallLogging = "2.3.7"
 # Cripto
 securityCryptoKtx = "1.1.0-alpha06"
-# AppAuth
-appauthVersion = "0.11.1"
 
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
 projectMinSdkVersion = "25"
 projectTargetSdkVersion = "36"
 projectCompileSdkVersion = "36"
-projectVersionName = "1.1.4"
-projectVersionCode = "001001004"
+projectVersionName = "0.0.0"
+projectVersionCode = "1"
 
 
 [libraries]
@@ -162,8 +160,6 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 # Cripto
 androidx-security-crypto-ktx = { module = "androidx.security:security-crypto-ktx", version.ref = "securityCryptoKtx" }
-# AppAuth
-net-openid-appauth = {group = "net.openid", name = "appauth", version.ref = "appauthVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

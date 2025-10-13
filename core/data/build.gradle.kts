@@ -9,5 +9,4 @@ android {
 
 dependencies {
     implementation(projects.core.domain)
-    implementation(libs.net.openid.appauth)
 }

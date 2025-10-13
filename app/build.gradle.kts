@@ -51,6 +51,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     // Crypto
     implementation(libs.androidx.security.crypto.ktx)
-    // AppAuth
-    implementation(libs.net.openid.appauth)
 }
