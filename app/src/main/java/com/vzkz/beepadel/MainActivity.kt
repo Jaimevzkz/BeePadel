@@ -9,19 +9,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.vzkz.beepadel.navigation.NavigationRoot
+import com.vzkz.core.domain.DispatchersProvider
+import com.vzkz.core.domain.auth.AuthRepository
+import com.vzkz.core.domain.error.Result
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
-import kotlinx.coroutines.flow.StateFlow
-import net.openid.appauth.AuthorizationService
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import kotlin.getValue
-import kotlin.time.Duration
 
 class MainActivity : ComponentActivity() {
 
-    private val authService by inject<AuthorizationService>()
-    private val mainViewmodel by inject<MainViewmodel>()
+    private val authRepository by inject<AuthRepository>()
+    private val dispatchers by inject<DispatchersProvider>()
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,13 +39,14 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onNewIntent(intent: Intent) {
-        Timber.tag("IN-APP").i("Received intent in main activity: $intent")
+        val code = intent.data?.getQueryParameter("code")
+        code?.let {
+            lifecycleScope.launch(dispatchers.io) {
+                val result = authRepository.fetchAndSaveRefreshToken(code)
+                if (result is Result.Error)
+                    Timber.tag("IN-APP").e("Error occurred while fetching refresh token: ${result.error}")
+            }
+        }
         super.onNewIntent(intent)
-    }
-
-
-    override fun onDestroy() {
-        authService.dispose()
-        super.onDestroy()
     }
 }

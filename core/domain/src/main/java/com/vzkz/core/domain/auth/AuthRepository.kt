@@ -1,7 +1,12 @@
 package com.vzkz.core.domain.auth
 
-interface AuthRepository {
-    suspend fun isLoggedIn(): Boolean
+import com.vzkz.core.domain.error.DataError
+import com.vzkz.core.domain.error.EmptyResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
-    suspend fun <T> withFreshAccessToken(action: suspend (accessToken: String) -> T): T
+interface AuthRepository {
+    val isLoggedIn: StateFlow<Boolean>
+
+    suspend fun fetchAndSaveRefreshToken(code: String): EmptyResult<DataError.Network>
 }

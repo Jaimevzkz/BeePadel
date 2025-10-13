@@ -18,11 +18,22 @@ internal fun Project.configureBuildTypes(
             buildConfig = true
         }
 
-
         val clientID =
             gradleLocalProperties(rootDir, rootProject.providers).getProperty("strava_client_id")
+        val clientSecret =
+            gradleLocalProperties(
+                rootDir,
+                rootProject.providers
+            ).getProperty("strava_client_secret")
         defaultConfig {
-            buildConfigField("String", "STRAVA_CLIENT_ID", clientID)
+            buildConfigField(
+                "String",
+                "APP_VERSION_NAME",
+                "\"${libs.findVersion("projectVersionName").get()}\""
+            )
+            buildConfigField("String", "BASE_STRAVA_URL", "\"https://www.strava.com/api/v3\"")
+            buildConfigField("Integer", "STRAVA_CLIENT_ID", clientID)
+            buildConfigField("String", "STRAVA_CLIENT_SECRET", clientSecret)
             manifestPlaceholders["appAuthRedirectScheme"] = "com.vzkz.beepadel"
 //            manifestPlaceholders["appAuthRedirectScheme"] = libs.findVersion("projectVersionName").get()
         }
@@ -43,13 +54,6 @@ internal fun Project.configureBuildTypes(
 
             ExtensionType.LIBRARY -> {
                 extensions.configure<LibraryExtension> {
-                    defaultConfig {
-                        buildConfigField(
-                            "String",
-                            "APP_VERSION_NAME",
-                            "\"${libs.findVersion("projectVersionName").get()}\""
-                        )
-                    }
                     buildTypes {
                         debug {
                             configureDebugBuildType()
@@ -66,7 +70,6 @@ internal fun Project.configureBuildTypes(
 
 
 private fun BuildType.configureReleaseBuildType(commonExtension: CommonExtension<*, *, *, *, *, *>) {
-    buildConfigField("String", "BASE_STRAVA_URL", "\"https://strava-end-point\"")
     isMinifyEnabled = false
     proguardFiles(
         commonExtension.getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -77,6 +80,4 @@ private fun BuildType.configureReleaseBuildType(commonExtension: CommonExtension
 }
 
 private fun BuildType.configureDebugBuildType() {
-    buildConfigField("String", "BASE_STRAVA_URL", "\"https://strava-end-point\"")
-
 }

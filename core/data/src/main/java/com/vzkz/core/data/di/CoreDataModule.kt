@@ -3,8 +3,8 @@ package com.vzkz.core.data.di
 import com.vzkz.core.data.DefaultZonedDateTimeProvider
 import com.vzkz.core.data.DefaultUUIDProvider
 import com.vzkz.core.data.StandardDispatchers
-import com.vzkz.core.data.auth.AppAuthRepositoryImpl
-import com.vzkz.core.data.auth.EncryptedSessionStorage
+import com.vzkz.core.data.AppAuthRepositoryImpl
+import com.vzkz.core.data.EncryptedSessionStorage
 import com.vzkz.core.data.networking.HttpClientFactory
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.SessionStorage
