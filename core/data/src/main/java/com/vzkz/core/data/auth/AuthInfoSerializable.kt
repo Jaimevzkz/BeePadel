@@ -5,5 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @kotlinx.serialization.InternalSerializationApi
 data class AuthInfoSerializable(
-    val authState: String
+    val accessToken: String,
+    val refreshToken: String,
+
 )

@@ -1,5 +1,6 @@
 package com.vzkz.core.domain.auth
 
 data class AuthInfo(
-    val authState: String
+    val accessToken: String,
+    val refreshToken: String,
 )

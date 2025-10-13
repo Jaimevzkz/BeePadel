@@ -1,6 +1,6 @@
 package com.vzkz.beepadel.settings.presentation.di
 
-import com.vzkz.beepadel.settings.presentation.SettingsViewModel
+import com.vzkz.beepadel.settings.presentation.general_settings.SettingsViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

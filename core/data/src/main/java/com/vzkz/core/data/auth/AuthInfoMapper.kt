@@ -7,12 +7,14 @@ import kotlinx.serialization.InternalSerializationApi
 
 fun AuthInfo.toAuthInfoSerializable(): AuthInfoSerializable {
     return AuthInfoSerializable(
-        authState = authState
+        accessToken = accessToken,
+        refreshToken = refreshToken
     )
 }
 
 fun AuthInfoSerializable.toAuthInfo(): AuthInfo {
     return AuthInfo(
-        authState = authState
+        accessToken = accessToken,
+        refreshToken = refreshToken
     )
 }
