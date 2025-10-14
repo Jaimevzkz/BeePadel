@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.vzkz.beepadel.MainActivity
 import com.vzkz.beepadel.settings.presentation.general_settings.SettingsScreen
@@ -44,7 +45,7 @@ fun NavigationRoot(
         val uri = intent?.data
         uri?.let {
             deepLinkHandler(it)?.let { key ->
-                backStack[0] = (key)
+                backStack.add(key)
             }
         }
     }
@@ -52,13 +53,14 @@ fun NavigationRoot(
     val matchTracker = getKoin().get<MatchTracker>()
     LaunchedEffect(Unit) {
         if (matchTracker.isMatchStarted.first() && backStack.last() == KeyMatchHistoryScreen)
-            backStack[0] = KeyActiveMatchScreen
+            backStack.add(KeyActiveMatchScreen)
     }
 
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
         entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
         ),
         entryProvider =
@@ -66,10 +68,10 @@ fun NavigationRoot(
                 entry<KeyMatchHistoryScreen> {
                     MatchHistoryScreen(
                         onNavigateToActiveMatch = {
-                            backStack[0] = KeyActiveMatchScreen
+                            backStack.add(KeyActiveMatchScreen)
                         },
                         onNavigateToSettings = {
-                            backStack[0] = KeySettingsScreen
+                            backStack.add(KeySettingsScreen)
                         }
                     )
                 }
@@ -77,7 +79,7 @@ fun NavigationRoot(
                     val context = LocalContext.current
                     ActiveMatchScreen(
                         onNavigateToMatchHistory = {
-                            backStack[0] = KeyMatchHistoryScreen
+                            backStack.removeLastOrNull()
                         },
                         onServiceToggle = { shouldServiceRun ->
                             if (shouldServiceRun) {
@@ -99,7 +101,7 @@ fun NavigationRoot(
                 entry<KeySettingsScreen> {
                     SettingsScreen(
                         onNavigateBack = {
-                            backStack[0] = KeyMatchHistoryScreen
+                            backStack.removeLastOrNull()
                         }
                     )
                 }

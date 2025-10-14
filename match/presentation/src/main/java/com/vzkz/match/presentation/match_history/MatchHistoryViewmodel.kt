@@ -38,19 +38,6 @@ class MatchHistoryViewModel(
     }
 
     init {
-        ioLaunch {
-            delay(MatchTracker.DISCARD_MATCH_DELAY)
-            matchTracker
-                .isMatchStarted
-                .onEach { isMatchStarted ->
-                    if (isMatchStarted) {
-                        sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
-                    }
-                }
-                .flowOn(dispatchers.default)
-                .launchIn(viewModelScope)
-        }
-
         matchHistoryRepository.getMatchHistory()
             .onEach { matchList ->
                 val matchUiList = matchList.map { it.toMatchUi() }
