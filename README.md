@@ -16,4 +16,6 @@ Feel free to open new issues with possible upgrades you would like to see in the
 - [Timber](https://github.com/JakeWharton/timber) for logging
 - [SqlDelight](https://github.com/sqldelight/sqldelight) for local persistence
 - Use of permissions and foreground services
-- [Github actions](https://github.com/features/actions) in combination with a custom branching strategy for continous integration and continous deployment to the [Google Playstore](https://play.google.com/store)
+- [Github actions](https://github.com/features/actions) in combination with a custom branching strategy for continuous integration and continuous deployment to the [Google Play Store](https://play.google.com/store)
+- [Ktor](https://ktor.io/) for https requests
+- [Strava API](https://developers.strava.com/) for 'Connect to Strava'
