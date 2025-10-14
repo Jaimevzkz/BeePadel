@@ -54,6 +54,8 @@ class SettingsViewModel(
 
             SettingsIntent.LaunchAuthRequestIntent ->
                 sendEvent(SettingsEvent.LaunchAuthRequestIntent(createAuthRequestIntent()))
+
+            SettingsIntent.ConfigureStrava -> sendEvent(SettingsEvent.ConfigureStrava)
         }
     }
 

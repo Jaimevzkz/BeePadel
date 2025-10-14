@@ -25,9 +25,11 @@ sealed class SettingsIntent : Intent {
     data object NavigateBack: SettingsIntent()
     data object ToggleGoldenPoint: SettingsIntent()
     data object LaunchAuthRequestIntent: SettingsIntent()
+    data object ConfigureStrava: SettingsIntent()
 }
 
 sealed class SettingsEvent : Event {
     data object NavigateBack: SettingsEvent()
     data class LaunchAuthRequestIntent(val intent: android.content.Intent): SettingsEvent()
+    data object ConfigureStrava: SettingsEvent()
 }
