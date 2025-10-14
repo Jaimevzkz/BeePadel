@@ -55,7 +55,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavToConfigureStrava: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
@@ -73,6 +74,10 @@ fun SettingsScreen(
 
             is SettingsEvent.LaunchAuthRequestIntent -> {
                 activity?.startActivity((events as SettingsEvent.LaunchAuthRequestIntent).intent)
+            }
+
+            SettingsEvent.ConfigureStrava -> {
+                onNavToConfigureStrava()
             }
 
             null -> {}
@@ -169,10 +174,10 @@ private fun SettingsScreenRoot(
                     },
                     title =
                         if (state.isLoggedIntoStrava) stringResource(R.string.connected_to_strava)
-                        else stringResource(R.string.connect_with_strava),
+                        else stringResource(R.string.configure_strava),
                     onClick = {
                         if (state.isLoggedIntoStrava) {
-                            //open configuration
+                            onAction(SettingsIntent.ConfigureStrava)
                         } else {
                             onAction(SettingsIntent.LaunchAuthRequestIntent)
                         }

@@ -6,4 +6,6 @@
     <string name="connect">Conectar</string>
     <string name="connect_with_strava">Conectar con Strava</string>
     <string name="connected_to_strava">Conectado a Strava</string>
+    <string name="configure_strava">Configura Strava</string>
+    <string name="logout_from_strava">Desconectar Strava</string>
 </resources>

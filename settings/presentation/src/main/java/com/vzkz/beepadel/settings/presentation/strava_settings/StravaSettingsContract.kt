@@ -16,10 +16,12 @@ data class StravaSettingsState(
 }
 
 sealed class StravaSettingsIntent : Intent {
-
+    data object LogoutFromStrava: StravaSettingsIntent()
+    data object NavigateBack: StravaSettingsIntent()
 }
 
 sealed class StravaSettingsEvent : Event {
+    data object NavigateBack: StravaSettingsEvent()
 
 }
 

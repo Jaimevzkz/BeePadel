@@ -14,6 +14,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.vzkz.beepadel.MainActivity
 import com.vzkz.beepadel.settings.presentation.general_settings.SettingsScreen
+import com.vzkz.beepadel.settings.presentation.strava_settings.StravaSettingsScreen
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.presentation.active_match.ActiveMatchScreen
@@ -101,6 +102,16 @@ fun NavigationRoot(
                 entry<KeySettingsScreen> {
                     SettingsScreen(
                         onNavigateBack = {
+                            backStack.removeLastOrNull()
+                        },
+                        onNavToConfigureStrava = {
+                            backStack.add(KeyStravaSettingsScreen)
+                        }
+                    )
+                }
+                entry<KeyStravaSettingsScreen> {
+                    StravaSettingsScreen(
+                        onNavBack = {
                             backStack.removeLastOrNull()
                         }
                     )
