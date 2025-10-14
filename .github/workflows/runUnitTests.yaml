@@ -2,11 +2,7 @@ name: Unit Testing
 on:
   workflow_dispatch:
   push:
-    branches:
-      - develop
   pull_request:
-    branches:
-      - main
 jobs:
   unit:
     runs-on: ubuntu-latest
