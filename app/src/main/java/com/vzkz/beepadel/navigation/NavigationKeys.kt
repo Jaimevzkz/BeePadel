@@ -5,8 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object KeyMatchHistoryScreen : NavKey
-
 @Serializable
 data object KeyActiveMatchScreen : NavKey
 @Serializable
 data object KeySettingsScreen : NavKey
+@Serializable
+data object KeyStravaSettingsScreen : NavKey

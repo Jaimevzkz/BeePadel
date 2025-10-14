@@ -28,9 +28,9 @@ import com.vzkz.core.presentation.designsystem.BeePadelTheme
 
 @Composable
 fun BeePadelActionButton(
+    modifier: Modifier = Modifier,
     text: String,
     isLoading: Boolean = false,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     errorButtonColors: Boolean = false,
     onClick: () -> Unit
@@ -80,9 +80,9 @@ fun BeePadelActionButton(
 
 @Composable
 fun BeePadelOutlinedActionButton(
+    modifier: Modifier = Modifier,
     text: String,
     isLoading: Boolean = false,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {

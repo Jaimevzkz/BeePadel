@@ -2,8 +2,12 @@
 
 package com.vzkz.beepadel.settings.presentation.strava_settings
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,19 +19,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.beepadel.settings.presentation.R
+import com.vzkz.core.presentation.designsystem.BeePadelTheme
+import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
+import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun StravaSettingsScreen(
-    viewModel: StravaSettingsViewmodel = koinViewModel()
+    viewModel: StravaSettingsViewmodel = koinViewModel(),
+    onNavBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
@@ -35,7 +45,7 @@ fun StravaSettingsScreen(
     LaunchedEffect(events) {
         when (events) {
             null -> {}
-            else -> {}
+            StravaSettingsEvent.NavigateBack -> onNavBack()
         }
     }
 
@@ -55,14 +65,14 @@ private fun StravaSettingsScreenRoot(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.settings),
+                        text = stringResource(R.string.configure_strava),
                         style = MaterialTheme.typography.headlineMedium
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onAction(StravaSettingsIntent.NavigateBack)}) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
                             contentDescription = stringResource(R.string.nav_back)
                         )
                     }
@@ -70,11 +80,26 @@ private fun StravaSettingsScreenRoot(
                 colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = Color.Transparent
                 ),
-
-                )
+            )
         },
         withGradient = false
     ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            BeePadelActionButton(
+                modifier = Modifier,
+                text = stringResource(R.string.logout_from_strava),
+                errorButtonColors = true,
+                onClick = { onAction(StravaSettingsIntent.LogoutFromStrava) }
+            )
+
+        }
     }
 
 }

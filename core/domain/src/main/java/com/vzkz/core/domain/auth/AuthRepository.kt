@@ -9,4 +9,5 @@ interface AuthRepository {
     val isLoggedIn: StateFlow<Boolean>
 
     suspend fun fetchAndSaveRefreshToken(code: String): EmptyResult<DataError.Network>
+    suspend fun logoutFromStrava(): EmptyResult<DataError.Network>
 }

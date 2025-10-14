@@ -44,4 +44,16 @@ class AppAuthRepositoryImpl(
         }
         return result.asEmptyDataResult()
     }
+
+    override suspend fun logoutFromStrava(): EmptyResult<DataError.Network>{
+        val result = httpClient.post<Unit, Unit>(
+            route = "/oauth/deauthorize",
+            body = Unit
+        )
+        if (result is Result.Success)
+            sessionStorage.set(null)
+
+        return result.asEmptyDataResult()
+
+    }
 }
