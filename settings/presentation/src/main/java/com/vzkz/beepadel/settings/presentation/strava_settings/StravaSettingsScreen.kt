@@ -3,6 +3,7 @@
 package com.vzkz.beepadel.settings.presentation.strava_settings
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -84,22 +85,20 @@ private fun StravaSettingsScreenRoot(
         },
         withGradient = false
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        ){
             BeePadelActionButton(
-                modifier = Modifier,
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp),
                 text = stringResource(R.string.logout_from_strava),
                 errorButtonColors = true,
                 onClick = { onAction(StravaSettingsIntent.LogoutFromStrava) }
             )
-
         }
+
     }
 
 }
