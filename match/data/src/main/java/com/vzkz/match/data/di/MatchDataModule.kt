@@ -2,7 +2,7 @@ package com.vzkz.match.data.di
 
 import com.vzkz.match.data.MatchTrackerImpl
 import com.vzkz.match.data.connectivity.PhoneToWatchConnector
-import com.vzkz.match.data.match_history.MatchHistoryRepositoryImpl
+import com.vzkz.match.data.MatchHistoryRepositoryImpl
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.domain.match_history.MatchHistoryRepository

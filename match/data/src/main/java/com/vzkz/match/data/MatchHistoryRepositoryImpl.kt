@@ -1,5 +1,4 @@
-package com.vzkz.match.data.match_history
-
+package com.vzkz.match.data
 
 import com.vzkz.core.database.domain.LocalStorageRepository
 import com.vzkz.core.domain.error.DataError
