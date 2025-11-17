@@ -7,19 +7,26 @@ import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.emptySet
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
+import com.vzkz.core.data.networking.post
 import com.vzkz.core.database.domain.LocalStorageRepository
 import com.vzkz.core.domain.DispatchersProvider
+import com.vzkz.core.domain.SessionStorage
 import com.vzkz.core.domain.Timer
 import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
+import com.vzkz.core.domain.error.EmptyResult
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.UUIDProvider
 import com.vzkz.core.domain.error.asEmptyDataResult
+import com.vzkz.match.data.networking.CreateStravaActivityRequest
+import com.vzkz.match.data.networking.CreateStravaActivityResponse
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
+import com.vzkz.match.domain.model.Match
 import com.vzkz.match.domain.model.Points
 import com.vzkz.match.domain.model.getGameCount
 import com.vzkz.match.domain.model.getSetCount
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -38,6 +45,7 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.InternalSerializationApi
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -48,7 +56,9 @@ class MatchTrackerImpl(
     private val zonedDateProvider: ZonedDateTimeProvider,
     private val uUIDProvider: UUIDProvider,
     private val watchConnector: WatchConnector,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val sessionStorage: SessionStorage,
+    private val httpClient: HttpClient,
 ) : MatchTracker {
     private val _elapsedTime = MutableStateFlow(Duration.ZERO)
     override val elapsedTime = _elapsedTime.asStateFlow()
@@ -162,6 +172,10 @@ class MatchTrackerImpl(
                     watchConnector.sendActionToWatch(MessagingAction.Finish)
                 }
                 resetMatchTrackerState()
+
+                if (sessionStorage.get() != null)
+                    return createAndPostStravaActivity(finalMatch)
+
                 Result.Success(Unit)
             }
 
@@ -169,6 +183,17 @@ class MatchTrackerImpl(
                 return insert.asEmptyDataResult()
             }
         }
+    }
+
+    @OptIn(InternalSerializationApi::class)
+    private suspend fun createAndPostStravaActivity(finalMatch: Match): EmptyResult<DataError.Network> {
+        val result = httpClient.post<CreateStravaActivityRequest, CreateStravaActivityResponse>(
+            route = "/oauth/token",
+            body = CreateStravaActivityRequest(
+                name = "Pádel session"
+            )
+        ) // todo this is half way done
+        return result.asEmptyDataResult()
     }
 
     override fun addPointToPlayer1() {

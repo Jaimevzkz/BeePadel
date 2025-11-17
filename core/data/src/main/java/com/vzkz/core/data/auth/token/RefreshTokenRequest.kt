@@ -14,9 +14,3 @@ data class RefreshTokenRequest(
     val grant_type: String,
 )
 
-fun RefreshTokenRequest.toParameters() = Parameters.build {
-    append("client_id", client_id.toString())
-    append("client_secret", client_secret)
-    append("code", code)
-    append("grant_type", grant_type)
-}
