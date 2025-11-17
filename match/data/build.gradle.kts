@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.beepadel.android.library)
+    alias(libs.plugins.beepadel.jvm.ktor)
 }
 
 android {

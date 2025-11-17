@@ -4,6 +4,7 @@ import com.vzkz.common.general.TestDispatchers
 import com.vzkz.common.general.fake.FakeLocalStorageRepository
 import com.vzkz.common.test.util.MainCoroutineExtension
 import com.vzkz.core.database.domain.LocalStorageRepository
+import com.vzkz.match.data.MatchHistoryRepositoryImpl
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.RegisterExtension
 
