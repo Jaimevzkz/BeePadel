@@ -7,12 +7,14 @@ import com.vzkz.common.general.TestDispatchers
 import com.vzkz.common.general.data_generator.defaultUUID
 import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.fixedZonedDateTime
-import com.vzkz.common.general.fake.FakeZonedDateTimeProvider
 import com.vzkz.common.general.fake.FakeLocalStorageRepository
+import com.vzkz.common.general.fake.FakeSessionStorage
 import com.vzkz.common.general.fake.FakeUUIDProvider
 import com.vzkz.common.general.fake.FakeWatchConnector
+import com.vzkz.common.general.fake.FakeZonedDateTimeProvider
 import com.vzkz.common.general.fake.match.FakePreferencesRepository
 import com.vzkz.common.test.util.MainCoroutineExtension
+import com.vzkz.core.data.networking.HttpClientFactory
 import com.vzkz.core.domain.ZonedDateTimeProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
@@ -48,6 +50,8 @@ class MatchTrackerImplTest {
 
     private lateinit var fakePreferencesRepository: FakePreferencesRepository
 
+    private lateinit var fakeSessionStorage: FakeSessionStorage
+
     companion object {
         @JvmField
         @RegisterExtension
@@ -62,6 +66,7 @@ class MatchTrackerImplTest {
         fakeUUIDProvider = FakeUUIDProvider(defaultUUID())
         fakeWatchConnector = FakeWatchConnector()
         fakePreferencesRepository = FakePreferencesRepository()
+        fakeSessionStorage = FakeSessionStorage()
         matchTrackerImpl = MatchTrackerImpl(
             applicationScope = fakeApplicationScope,
             dispatchers = testDispatchers,
@@ -69,7 +74,9 @@ class MatchTrackerImplTest {
             zonedDateProvider = fakeZonedDateTimeProvider,
             uUIDProvider = fakeUUIDProvider,
             watchConnector = fakeWatchConnector,
-            preferencesRepository = fakePreferencesRepository
+            preferencesRepository = fakePreferencesRepository,
+            sessionStorage = fakeSessionStorage,
+            httpClient = HttpClientFactory.mockHttpClient,
         )
     }
 
@@ -78,12 +85,14 @@ class MatchTrackerImplTest {
         matchTrackerImpl.setIsTeam1Serving(true)
         matchTrackerImpl.activeMatch.test {
             val firstEmission = awaitItem()
-            assertThat(firstEmission).isEqualTo(emptyMatch(
-                matchId = defaultUUID(),
-                setId = defaultUUID(),
-                gameId = defaultUUID(),
-                zonedDateTime = fixedZonedDateTime()
-            ))
+            assertThat(firstEmission).isEqualTo(
+                emptyMatch(
+                    matchId = defaultUUID(),
+                    setId = defaultUUID(),
+                    gameId = defaultUUID(),
+                    zonedDateTime = fixedZonedDateTime()
+                )
+            )
             matchTrackerImpl.addPointToPlayer1()
             awaitItem()
             matchTrackerImpl.addPointToPlayer1()

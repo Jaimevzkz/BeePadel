@@ -112,7 +112,7 @@ fun emptyMatch(matchId: UUID, setId: UUID, gameId: UUID, zonedDateTime: ZonedDat
 
 fun fixedZonedDateTime(): ZonedDateTime = ZonedDateTime.of(
     2025, 6, 29,
-    14, 30, 0, 0,
+    14, 30, 24, 0,
     ZoneId.of("UTC")
 )
 

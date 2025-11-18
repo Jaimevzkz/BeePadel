@@ -2,6 +2,8 @@ package com.vzkz.core.data
 
 import com.vzkz.core.data.auth.token.RefreshTokenRequest
 import com.vzkz.core.data.auth.token.RefreshTokenResponse
+import com.vzkz.core.data.networking.DEAUTHORIZE
+import com.vzkz.core.data.networking.TOKEN
 import com.vzkz.core.data.networking.post
 import com.vzkz.core.domain.SessionStorage
 import com.vzkz.core.domain.auth.AuthInfo
@@ -25,7 +27,7 @@ class AppAuthRepositoryImpl(
 
     override suspend fun fetchAndSaveRefreshToken(code: String): EmptyResult<DataError.Network> {
         val result = httpClient.post<RefreshTokenRequest, RefreshTokenResponse>(
-            route = "/oauth/token",
+            route = TOKEN,
             body = RefreshTokenRequest(
                     client_id = BuildConfig.STRAVA_CLIENT_ID,
                     client_secret = BuildConfig.STRAVA_CLIENT_SECRET,
@@ -47,7 +49,7 @@ class AppAuthRepositoryImpl(
 
     override suspend fun logoutFromStrava(): EmptyResult<DataError.Network>{
         val result = httpClient.post<Unit, Unit>(
-            route = "/oauth/deauthorize",
+            route = DEAUTHORIZE,
             body = Unit
         )
         if (result is Result.Success)
