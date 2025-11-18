@@ -11,9 +11,35 @@ data class Match(
     val elapsedTime: Duration,
     val avgHeartRate: Int?,
     val maxHeartRate: Int?
-){
-
+) {
     fun getSetsForMatch(): Pair<Int, Int> {
-       return setList.getSetCount()
+        return setList.getSetCount()
     }
+
+    // 1 won / 0 draw / -1 lost
+    fun getWinner(): Int {
+        val sets = getSetsForMatch()
+        val setDifference = sets.first - sets.second
+        return when {
+            setDifference < 0 -> -1
+            setDifference > 0 -> 1
+            else -> 0
+        }
+    }
+
+    fun getFormattedResultOfMatch(): String {
+        var returnValue = ""
+        setList.forEachIndexed { index, set ->
+            if (index > 0) returnValue += " / "
+            val games = set.getGamesForSet()
+            returnValue += "Set ${index + 1}: ${games.first}-${games.second}"
+        }
+        returnValue += when (getWinner()) {
+            1 -> " -> WON"
+            -1 -> " -> LOST"
+            else -> " -> DRAW"
+        }
+        return returnValue
+    }
+
 }
