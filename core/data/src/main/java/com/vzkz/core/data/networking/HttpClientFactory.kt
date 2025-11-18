@@ -8,6 +8,8 @@ import com.vzkz.core.domain.auth.AuthInfo
 import com.vzkz.core.domain.error.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -17,6 +19,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.InternalSerializationApi
@@ -91,4 +94,17 @@ class HttpClientFactory(
             }
         }
     }
+
+    companion object{
+        val mockHttpClient = HttpClient(MockEngine){
+                engine {
+                    addHandler {request ->
+                        respond(
+                            content = "",
+                            status = HttpStatusCode.OK,
+                        )
+                    }
+                }
+            }
+        }
 }

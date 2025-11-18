@@ -94,3 +94,8 @@ fun constructRoute(route: String): String {
         else -> "$BASE_STRAVA_URL/$route"
     }
 }
+
+const val TOKEN = "/oauth/token"
+const val DEAUTHORIZE = "/oauth/deauthorize"
+const val ACTIVITIES = "/activities"
+const val SPORT = "Racquetball"

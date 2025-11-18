@@ -16,20 +16,14 @@ fun Match.toMatchUi(zoneId: ZoneId = ZoneId.systemDefault()): MatchUi {
         .format(dateTimeInLocalTime)
 
     val formattedSetList = setList.map { it.getGamesForSet() }
-    var setDifference = 0
-    formattedSetList.forEach { set ->
-        if (set.first > set.second) setDifference++
-        else if (set.first < set.second) setDifference--
-    }
 
     return MatchUi(
         matchId = matchId,
-        isMatchWon = setDifference > 0,
+        isMatchWon = this.getWinner() == 1,
         formatedSetList = formattedSetList,
         dateTimeFormatted = formattedDateTime,
         elapsedTime = elapsedTime.formatted(),
         avgHeartRate = avgHeartRate,
         maxHeartRate = maxHeartRate,
     )
-
 }

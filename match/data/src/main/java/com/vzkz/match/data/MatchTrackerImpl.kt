@@ -1,5 +1,6 @@
 package com.vzkz.match.data
 
+import android.content.Context
 import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.common.general.data_generator.emptyGame
@@ -7,6 +8,8 @@ import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.emptySet
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
+import com.vzkz.core.data.networking.ACTIVITIES
+import com.vzkz.core.data.networking.SPORT
 import com.vzkz.core.data.networking.post
 import com.vzkz.core.database.domain.LocalStorageRepository
 import com.vzkz.core.domain.DispatchersProvider
@@ -20,6 +23,7 @@ import com.vzkz.core.domain.error.UUIDProvider
 import com.vzkz.core.domain.error.asEmptyDataResult
 import com.vzkz.match.data.networking.CreateStravaActivityRequest
 import com.vzkz.match.data.networking.CreateStravaActivityResponse
+import com.vzkz.match.data.networking.createRequestFromMatch
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.domain.model.Match
@@ -46,6 +50,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
+import timber.log.Timber
 import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -173,6 +178,7 @@ class MatchTrackerImpl(
                 }
                 resetMatchTrackerState()
 
+                Timber.tag("IN-APP").i("request: ${finalMatch.createRequestFromMatch()}")
                 if (sessionStorage.get() != null)
                     return createAndPostStravaActivity(finalMatch)
 
@@ -188,11 +194,9 @@ class MatchTrackerImpl(
     @OptIn(InternalSerializationApi::class)
     private suspend fun createAndPostStravaActivity(finalMatch: Match): EmptyResult<DataError.Network> {
         val result = httpClient.post<CreateStravaActivityRequest, CreateStravaActivityResponse>(
-            route = "/oauth/token",
-            body = CreateStravaActivityRequest(
-                name = "Pádel session"
-            )
-        ) // todo this is half way done
+            route = ACTIVITIES,
+            body = finalMatch.createRequestFromMatch()
+        )
         return result.asEmptyDataResult()
     }
 
