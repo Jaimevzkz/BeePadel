@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @InternalSerializationApi
 data class CreateStravaActivityResponse(
-    val id: Int
+    val id: Long
 )
