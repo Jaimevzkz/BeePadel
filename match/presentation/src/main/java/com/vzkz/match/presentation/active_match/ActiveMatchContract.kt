@@ -1,5 +1,6 @@
 package com.vzkz.match.presentation.active_match
 
+import androidx.annotation.StringRes
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
@@ -67,5 +68,5 @@ sealed class ActiveMatchIntent : Intent {
 }
 
 sealed class ActiveMatchEvent : Event {
-    data object NavToHistoryScreen : ActiveMatchEvent()
+    data class NavToHistoryScreen(val toastMessage: Int? = null) : ActiveMatchEvent()
 }

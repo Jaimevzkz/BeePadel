@@ -16,7 +16,7 @@ class BeePadelApp : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+            Timber.plant(TimberTaggedDebugTree())
         }
 
 

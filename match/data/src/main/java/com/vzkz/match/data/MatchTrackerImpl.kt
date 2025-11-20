@@ -178,7 +178,6 @@ class MatchTrackerImpl(
                 }
                 resetMatchTrackerState()
 
-                Timber.tag("IN-APP").i("request: ${finalMatch.createRequestFromMatch()}")
                 if (sessionStorage.get() != null)
                     return createAndPostStravaActivity(finalMatch)
 
