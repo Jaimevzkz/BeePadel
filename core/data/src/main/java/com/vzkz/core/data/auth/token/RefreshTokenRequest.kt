@@ -4,13 +4,14 @@ package com.vzkz.core.data.auth.token
 
 import io.ktor.http.Parameters
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RefreshTokenRequest(
-    val client_id: Int,
-    val client_secret: String,
-    val code: String,
-    val grant_type: String,
+    @SerialName("client_id") val clientId: Int,
+    @SerialName("client_secret")val clientSecret: String,
+    @SerialName("code") val code: String,
+    @SerialName("grant_type")val grantType: String,
 )
 

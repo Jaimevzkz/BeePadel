@@ -4,12 +4,14 @@ import androidx.lifecycle.viewModelScope
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.ConnectionRequest
 import com.vzkz.core.domain.DispatchersProvider
+import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.BaseViewModel
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
+import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -210,10 +212,12 @@ class ActiveMatchViewmodel(
                             isMatchFinished = true
                         )
                     }
-                    sendEvent(ActiveMatchEvent.NavToHistoryScreen)
+                    sendEvent(ActiveMatchEvent.NavToHistoryScreen())
                 }
 
                 is Result.Error -> {
+                    Timber.e("[Viewmodel] Error occurred when finishing match -> ${insert.error}: ${insert.error.asUiText()}")
+
                     _state.update {
                         it.copy(
                             insertMatchLoading = false,
@@ -222,9 +226,11 @@ class ActiveMatchViewmodel(
                         )
                     }
                     val result = watchConnector.sendActionToWatch(MessagingAction.FinishMatchError)
-                    if (result is Result.Error) {
-                        Timber.e("Tracker error: ${result.error}")
-                    }
+                    if (result is Result.Error)
+                        Timber.w("[Viewmodel] Watch connector error -> ${result.error}: ${result.error.asUiText()}")
+
+                    if (insert.error is DataError.Network)
+                        sendEvent(ActiveMatchEvent.NavToHistoryScreen(R.string.error_uploading_match_to_strava))
                 }
             }
 
@@ -239,7 +245,7 @@ class ActiveMatchViewmodel(
             )
         }
         ioLaunch { matchTracker.discardMatch() }
-        sendEvent(ActiveMatchEvent.NavToHistoryScreen)
+        sendEvent(ActiveMatchEvent.NavToHistoryScreen())
     }
 
 }

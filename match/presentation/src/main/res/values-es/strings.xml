@@ -35,4 +35,5 @@
     <string name="heart_rate">Pulsaciones</string>
     <string name="team_1_score">Puntuación equipo 1</string>
     <string name="team_2_score">Puntuación equipo 2</string>
+    <string name="error_uploading_match_to_strava">Error al sincronizar tu partido con Strava</string>
 </resources>

@@ -3,6 +3,7 @@ package com.vzkz.match.presentation.active_match
 import android.Manifest
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -48,10 +49,19 @@ fun ActiveMatchScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
+    val context = LocalContext.current
 
     LaunchedEffect(events) {
         when (events) {
-            ActiveMatchEvent.NavToHistoryScreen -> {
+            is ActiveMatchEvent.NavToHistoryScreen -> {
+                val toastRes = (events as ActiveMatchEvent.NavToHistoryScreen).toastMessage
+                if (toastRes != null) {
+                    Toast.makeText(
+                        /* context = */ context,
+                        /* text = */ context.getString(toastRes),
+                        /* duration = */ Toast.LENGTH_LONG
+                    ).show()
+                }
                 onNavigateToMatchHistory()
             }
 
@@ -60,7 +70,7 @@ fun ActiveMatchScreen(
     }
 
     BackHandler(enabled = state.activeMatchDialogToShow == null) {
-       viewModel.onAction(ActiveMatchIntent.ShowActiveDialog(ActiveMatchDialog.DISCARD_MATCH))
+        viewModel.onAction(ActiveMatchIntent.ShowActiveDialog(ActiveMatchDialog.DISCARD_MATCH))
     }
 
     ActiveMatchScreenRoot(

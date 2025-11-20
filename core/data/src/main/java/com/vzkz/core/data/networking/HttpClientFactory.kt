@@ -21,6 +21,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
@@ -42,7 +43,7 @@ class HttpClientFactory(
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
-                        Timber.d(message)
+                        Timber.tag("HttpClientFactory").d(message)
                     }
                 }
                 level = LogLevel.ALL
@@ -52,17 +53,24 @@ class HttpClientFactory(
             }
             install(Auth) {
                 bearer {
+                    sendWithoutRequest { request ->
+                        val path = request.url.encodedPath
+                        !path.startsWith("/api/v3/oauth")
+                    }
+
                     loadTokens {
-                        val info = sessionStorage.get()
-                        Timber.i("Access token: ${info?.accessToken}")
+                        val info = sessionStorage.get() ?: return@loadTokens null
+                        Timber.i("[Load tokens] Access token: ${info.accessToken}")
+
                         BearerTokens(
-                            accessToken = info?.accessToken ?: "",
-                            refreshToken = info?.refreshToken ?: ""
+                            accessToken = info.accessToken,
+                        refreshToken = info.refreshToken
                         )
 
                     }
                     refreshTokens {
                         val info = sessionStorage.get()
+                        Timber.i("[Refresh tokens] Access token: ${info?.accessToken}")
                         val response = client.post<AccessTokenRequest, AccessTokenResponse>(
                             route = "/oauth/token",
                             body = AccessTokenRequest(
@@ -84,10 +92,7 @@ class HttpClientFactory(
                                 refreshToken = newAuthInfo.refreshToken
                             )
                         } else {
-                            BearerTokens(
-                                accessToken = "",
-                                refreshToken = ""
-                            )
+                            return@refreshTokens null
                         }
 
                     }
@@ -96,16 +101,16 @@ class HttpClientFactory(
         }
     }
 
-    companion object{
-        val mockHttpClient = HttpClient(MockEngine){
-                engine {
-                    addHandler {request ->
-                        respond(
-                            content = "",
-                            status = HttpStatusCode.OK,
-                        )
-                    }
+    companion object {
+        val mockHttpClient = HttpClient(MockEngine) {
+            engine {
+                addHandler { request ->
+                    respond(
+                        content = "",
+                        status = HttpStatusCode.OK,
+                    )
                 }
             }
         }
+    }
 }

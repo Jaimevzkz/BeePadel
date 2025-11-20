@@ -1,11 +1,12 @@
 package com.vzkz.core.data.auth.token
 
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @InternalSerializationApi
 data class AccessTokenResponse(
-    val accessToken: String,
-    val expirationTimestamp: Long
+    @SerialName("access_token") val accessToken: String,
+    @SerialName("expires_at")val expirationTimestamp: Long
 )

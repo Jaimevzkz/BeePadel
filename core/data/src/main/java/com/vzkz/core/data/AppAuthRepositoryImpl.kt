@@ -29,20 +29,21 @@ class AppAuthRepositoryImpl(
         val result = httpClient.post<RefreshTokenRequest, RefreshTokenResponse>(
             route = TOKEN,
             body = RefreshTokenRequest(
-                    client_id = BuildConfig.STRAVA_CLIENT_ID,
-                    client_secret = BuildConfig.STRAVA_CLIENT_SECRET,
+                    clientId = BuildConfig.STRAVA_CLIENT_ID,
+                    clientSecret = BuildConfig.STRAVA_CLIENT_SECRET,
                     code = code,
-                    grant_type = "authorization_code"
+                    grantType = "authorization_code"
                 )
         )
 
         if (result is Result.Success) {
             sessionStorage.set(
                 AuthInfo(
-                    accessToken = result.data.access_token,
-                    refreshToken = result.data.refresh_token,
+                    accessToken = result.data.accessToken,
+                    refreshToken = result.data.refreshToken,
                 )
             )
+            Timber.i("[AUTH] New Access Token retrieved and saved: ${result.data.accessToken}")
         }
         return result.asEmptyDataResult()
     }
@@ -52,8 +53,10 @@ class AppAuthRepositoryImpl(
             route = DEAUTHORIZE,
             body = Unit
         )
-        if (result is Result.Success)
+        if (result is Result.Success){
+            Timber.i("Success deauthorizing... deleting local tokens")
             sessionStorage.set(null)
+        }
 
         return result.asEmptyDataResult()
 
