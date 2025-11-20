@@ -23,8 +23,8 @@ data class CreateStravaActivityRequest(
 internal fun Match.createRequestFromMatch(): CreateStravaActivityRequest {
     return CreateStravaActivityRequest(
         name = "Pádel Match", // todo where to put this string?
-        type = SPORT,
-        sportType = TYPE,
+        type = TYPE,
+        sportType = SPORT,
         startDateLocal = dateTime.withZoneSameInstant(ZoneOffset.UTC).toString(),
         elapsedTime = elapsedTime.inWholeSeconds.toInt(),
         description = getFormattedResultOfMatch()

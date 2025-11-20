@@ -20,8 +20,8 @@ class CreateStravaActivityRequestTest {
         val expectedRequest =
             CreateStravaActivityRequest(
                 name = "Pádel Match",
-                type = SPORT,
-                sportType = TYPE,
+                type = TYPE,
+                sportType = SPORT,
                 startDateLocal = "2025-06-29T14:30:24Z",
                 elapsedTime = (1.hours + 30.minutes + 43.seconds).inWholeSeconds.toInt(),
                 description = "Set 1: 6-4 / Set 2: 6-2 / Set 3: 2-6 / Set 4: 7-5 -> WON"
@@ -41,8 +41,8 @@ class CreateStravaActivityRequestTest {
         val expectedRequest =
             CreateStravaActivityRequest(
                 name = "Pádel Match",
-                type = SPORT,
-                sportType = TYPE,
+                type = TYPE,
+                sportType = SPORT,
                 startDateLocal = "2025-06-29T14:30:24Z",
                 elapsedTime = (1.hours + 30.minutes + 43.seconds).inWholeSeconds.toInt(),
                 description = "Set 1: 6-4 / Set 2: 2-6 / Set 3: 6-7 -> LOST"
@@ -67,8 +67,8 @@ class CreateStravaActivityRequestTest {
         val expectedRequest =
             CreateStravaActivityRequest(
                 name = "Pádel Match",
-                type = SPORT,
-                sportType = TYPE,
+                type = TYPE,
+                sportType = SPORT,
                 startDateLocal = "2025-06-29T14:30:24Z",
                 elapsedTime = (1.hours + 30.minutes + 43.seconds).inWholeSeconds.toInt(),
                 description = "Set 1: 6-4 / Set 2: 2-6 -> DRAW"
