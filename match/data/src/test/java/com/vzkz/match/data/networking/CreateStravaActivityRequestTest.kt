@@ -5,9 +5,7 @@ import assertk.assertions.isEqualTo
 import com.vzkz.common.general.data_generator.dummyMatch
 import com.vzkz.core.data.networking.SPORT
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds

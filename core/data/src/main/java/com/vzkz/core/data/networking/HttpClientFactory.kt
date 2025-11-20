@@ -54,6 +54,7 @@ class HttpClientFactory(
                 bearer {
                     loadTokens {
                         val info = sessionStorage.get()
+                        Timber.i("Access token: ${info?.accessToken}")
                         BearerTokens(
                             accessToken = info?.accessToken ?: "",
                             refreshToken = info?.refreshToken ?: ""
