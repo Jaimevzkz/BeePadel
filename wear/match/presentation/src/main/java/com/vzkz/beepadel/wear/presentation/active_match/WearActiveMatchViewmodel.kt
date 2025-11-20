@@ -166,7 +166,7 @@ class WearActiveMatchViewmodel(
             messagingAction?.let {
                 val result = phoneConnector.sendActionToPhone(it)
                 if (result is Result.Error) {
-                    Timber.e("Tracker error: ${result.error}")
+                    Timber.w("Error sending action to phone -> ${result.error}: ${result.error.asUiText()}")
                 }
             }
         }
