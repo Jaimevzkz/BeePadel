@@ -12,6 +12,7 @@ import kotlin.time.Duration
 
 data class ActiveMatchState(
     val error: UiText?,
+    val loading: Boolean,
     val setsPlayer1: Int,
     val gamesPlayer1: Int,
     val pointsPlayer1: Points,
@@ -31,6 +32,7 @@ data class ActiveMatchState(
     companion object {
         val initial: ActiveMatchState = ActiveMatchState(
             error = null,
+            loading = false,
             setsPlayer1 = 0,
             gamesPlayer1 = 0,
             pointsPlayer1 = Points.Zero,
@@ -45,7 +47,7 @@ data class ActiveMatchState(
             insertMatchLoading = false,
             showNotificationRationale = false,
             currentHeartRate = null,
-            goldenPoint = GOLDEN_POINT.DEFAULT_VAL
+            goldenPoint = GOLDEN_POINT.DEFAULT_VAL,
         )
     }
 }
