@@ -201,7 +201,7 @@ class ActiveMatchViewmodel(
     }
 
     private fun finishMatch() {
-        _state.update { it.copy(insertMatchLoading = true) }
+        _state.update { it.copy(insertMatchLoading = true, loading = true) }
         ioLaunch {
             when (val insert = matchTracker.finishMatch()) {
                 is Result.Success -> {
@@ -218,19 +218,27 @@ class ActiveMatchViewmodel(
                 is Result.Error -> {
                     Timber.e("[Viewmodel] Error occurred when finishing match -> ${insert.error}: ${insert.error.asUiText()}")
 
+                    if (insert.error is DataError.Network) {
+                        sendEvent(ActiveMatchEvent.NavToHistoryScreen(R.string.error_uploading_match_to_strava))
+                        discardMatch()
+                        val result = watchConnector.sendActionToWatch(MessagingAction.Discard)
+                        if (result is Result.Error)
+                            Timber.w("[Viewmodel] Watch connector error -> ${result.error}: ${result.error.asUiText()}")
+                    }
+
                     _state.update {
                         it.copy(
                             insertMatchLoading = false,
+                            loading = false,
                             activeMatchDialogToShow = ActiveMatchDialog.ERROR,
                             error = insert.error.asUiText(),
                         )
                     }
+
                     val result = watchConnector.sendActionToWatch(MessagingAction.FinishMatchError)
                     if (result is Result.Error)
                         Timber.w("[Viewmodel] Watch connector error -> ${result.error}: ${result.error.asUiText()}")
 
-                    if (insert.error is DataError.Network)
-                        sendEvent(ActiveMatchEvent.NavToHistoryScreen(R.string.error_uploading_match_to_strava))
                 }
             }
 
@@ -241,7 +249,8 @@ class ActiveMatchViewmodel(
         _state.update {
             it.copy(
                 activeMatchDialogToShow = null,
-                isMatchFinished = true
+                isMatchFinished = true,
+                loading = true
             )
         }
         ioLaunch { matchTracker.discardMatch() }
