@@ -9,4 +9,5 @@
     <string name="connected_to_strava">Connected to Strava</string>
     <string name="configure_strava">Configure Strava</string>
     <string name="logout_from_strava">Logout from Strava</string>
+    <string name="about" translatable="false">About BeePadel</string>
 </resources>
