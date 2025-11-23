@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,7 +72,7 @@ private fun StravaSettingsScreenRoot(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onAction(StravaSettingsIntent.NavigateBack)}) {
+                    IconButton(onClick = { onAction(StravaSettingsIntent.NavigateBack) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
                             contentDescription = stringResource(R.string.nav_back)
@@ -90,9 +91,18 @@ private fun StravaSettingsScreenRoot(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(12.dp),
-        ){
+        ) {
+            Column() {
+                Text(
+                    "This feature is a work in progress. Stay tuned for future updates!",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
             BeePadelActionButton(
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 24.dp),
                 text = stringResource(R.string.logout_from_strava),
                 errorButtonColors = true,
                 onClick = { onAction(StravaSettingsIntent.LogoutFromStrava) }

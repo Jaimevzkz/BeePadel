@@ -60,7 +60,6 @@ class HttpClientFactory(
 
                     loadTokens {
                         val info = sessionStorage.get() ?: return@loadTokens null
-                        Timber.i("[Load tokens] Access token: ${info.accessToken}")
 
                         BearerTokens(
                             accessToken = info.accessToken,
@@ -70,7 +69,6 @@ class HttpClientFactory(
                     }
                     refreshTokens {
                         val info = sessionStorage.get()
-                        Timber.i("[Refresh tokens] Access token: ${info?.accessToken}")
                         val response = client.post<AccessTokenRequest, AccessTokenResponse>(
                             route = "/oauth/token",
                             body = AccessTokenRequest(
