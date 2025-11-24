@@ -2,20 +2,22 @@
 
 package com.vzkz.beepadel.settings.presentation.general_settings
 
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,18 +32,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.beepadel.settings.presentation.BuildConfig
 import com.vzkz.beepadel.settings.presentation.R
 import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ClickableSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
+import com.vzkz.beepadel.settings.presentation.general_settings.components.GithubStartButton
+import com.vzkz.beepadel.settings.presentation.general_settings.components.PlayerStoreButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.SectionTitle
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
-import com.vzkz.core.presentation.designsystem.StravaIcon
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,6 +60,7 @@ fun SettingsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
     val activity = LocalActivity.current
+    val context = LocalContext.current
 
     BackHandler {
         onNavigateBack()
@@ -72,6 +78,36 @@ fun SettingsScreen(
 
             SettingsEvent.ConfigureStrava -> {
                 onNavToConfigureStrava()
+            }
+
+            SettingsEvent.OpenGithub -> {
+                context.startActivity(Intent(Intent.ACTION_VIEW, BuildConfig.GITHUB_URL.toUri()))
+            }
+
+            SettingsEvent.OpenPlayStore -> {
+                val packageName = context.packageName
+                try {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        "market://details?id=$packageName".toUri()
+                    )
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                } catch (_: Exception) {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        "https://play.google.com/store/apps/details?id=$packageName".toUri()
+                    )
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                }
+            }
+
+            SettingsEvent.ContactUs -> {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = "mailto:${BuildConfig.CONTACT_EMAIL}".toUri()
+                }
+                context.startActivity(intent)
             }
 
             null -> {}
@@ -114,6 +150,7 @@ private fun SettingsScreenRoot(
         },
         withGradient = false
     ) { innerPadding ->
+        val itemSpacing = 8.dp
         Box(
             Modifier
                 .padding(innerPadding)
@@ -156,8 +193,18 @@ private fun SettingsScreenRoot(
 
                 SectionTitle(
                     modifier = Modifier,
+                    text = stringResource(R.string.support)
+                )
+                GithubStartButton(onClick = { onAction(SettingsIntent.OpenGithub) })
+                Spacer(Modifier.height(itemSpacing))
+                PlayerStoreButton(onClick = { onAction(SettingsIntent.OpenPlayStore) })
+
+                SectionTitle(
+                    modifier = Modifier,
                     text = stringResource(R.string.about)
                 )
+
+                ContactButton(onClick = { onAction(SettingsIntent.ContactUs) })
             }
 
             Text(
@@ -170,6 +217,29 @@ private fun SettingsScreenRoot(
         }
     }
 
+}
+
+
+@Composable
+fun ContactButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    ClickableSetting(
+        modifier = modifier,
+        icon = {
+            Icon(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(20.dp),
+                imageVector = Icons.Default.Mail,
+                contentDescription = stringResource(R.string.contact_us)
+            )
+        },
+        title =
+            stringResource(R.string.contact_us),
+        onClick = onClick
+    )
 }
 
 @Preview

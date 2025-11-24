@@ -8,4 +8,8 @@
     <string name="connected_to_strava">Conectado a Strava</string>
     <string name="configure_strava">Configura Strava</string>
     <string name="logout_from_strava">Desconectar Strava</string>
+    <string name="support">Apoya el proyecto</string>
+    <string name="leave_a_review">Puntúanos</string>
+    <string name="about">Sobre nosotros</string>
+    <string name="contact_us">Contactar</string>
 </resources>

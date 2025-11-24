@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
+import com.vzkz.beepadel.settings.presentation.general_settings.SettingsEvent.*
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.auth.AuthRepository
@@ -44,7 +45,7 @@ class SettingsViewModel(
 
     override fun reduce(intent: SettingsIntent) {
         when (intent) {
-            SettingsIntent.NavigateBack -> sendEvent(SettingsEvent.NavigateBack)
+            SettingsIntent.NavigateBack -> sendEvent(NavigateBack)
 
             SettingsIntent.ToggleGoldenPoint -> ioLaunch {
                 preferencesRepository.storeBooleanPreference(
@@ -53,9 +54,13 @@ class SettingsViewModel(
             }
 
             SettingsIntent.LaunchAuthRequestIntent ->
-                sendEvent(SettingsEvent.LaunchAuthRequestIntent(createAuthRequestIntent()))
+                sendEvent(LaunchAuthRequestIntent(createAuthRequestIntent()))
 
-            SettingsIntent.ConfigureStrava -> sendEvent(SettingsEvent.ConfigureStrava)
+            SettingsIntent.ConfigureStrava -> sendEvent(ConfigureStrava)
+
+            SettingsIntent.OpenGithub -> sendEvent(OpenGithub)
+            SettingsIntent.OpenPlayStore -> sendEvent(OpenPlayStore)
+            SettingsIntent.ContactUs -> sendEvent(SettingsEvent.ContactUs)
         }
     }
 

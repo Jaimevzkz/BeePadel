@@ -34,8 +34,10 @@ internal fun Project.configureBuildTypes(
             buildConfigField("String", "BASE_STRAVA_URL", "\"https://www.strava.com/api/v3\"")
             buildConfigField("Integer", "STRAVA_CLIENT_ID", clientID)
             buildConfigField("String", "STRAVA_CLIENT_SECRET", clientSecret)
-            manifestPlaceholders["appAuthRedirectScheme"] = "com.vzkz.beepadel"
-//            manifestPlaceholders["appAuthRedirectScheme"] = libs.findVersion("projectVersionName").get()
+            buildConfigField("String", "GITHUB_URL", "\"https://github.com/Jaimevzkz/BeePadel\"")
+            buildConfigField("String", "CONTACT_EMAIL", "\"jaimevazquezmartin23@gmail.com\"")
+
+            manifestPlaceholders["appAuthRedirectScheme"] = libs.findVersion("projectVersionName").get()
         }
 
         when (extensionType) {
