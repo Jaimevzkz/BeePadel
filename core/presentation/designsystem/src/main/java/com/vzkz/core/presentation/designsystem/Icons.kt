@@ -44,3 +44,11 @@ val StartIcon: ImageVector
 val StravaIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.strava)
+
+val GithubIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.github)
+
+val PlayStoreIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.google_play_icon)
