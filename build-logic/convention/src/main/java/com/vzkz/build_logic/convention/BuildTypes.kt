@@ -18,13 +18,15 @@ internal fun Project.configureBuildTypes(
             buildConfig = true
         }
 
+        val notSet = "\"NOT-SET\""
         val clientID =
-            gradleLocalProperties(rootDir, rootProject.providers).getProperty("strava_client_id")
+            gradleLocalProperties(rootDir, rootProject.providers).getProperty("strava_client_id") ?: "-1"
+
         val clientSecret =
             gradleLocalProperties(
                 rootDir,
                 rootProject.providers
-            ).getProperty("strava_client_secret")
+            ).getProperty("strava_client_secret") ?: notSet
         defaultConfig {
             buildConfigField(
                 "String",

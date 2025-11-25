@@ -10,7 +10,6 @@ import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-
         target.run {
             pluginManager.run {
                 apply("org.jetbrains.kotlin.plugin.compose")
