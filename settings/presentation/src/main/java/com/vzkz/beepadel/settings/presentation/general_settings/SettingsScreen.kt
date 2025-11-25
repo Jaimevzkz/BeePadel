@@ -40,9 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.beepadel.settings.presentation.BuildConfig
+import com.vzkz.beepadel.settings.presentation.general_settings.components.AboutButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ClickableSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
+import com.vzkz.beepadel.settings.presentation.general_settings.components.ContactButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.GithubStartButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.PlayerStoreButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.SectionTitle
@@ -220,51 +222,6 @@ private fun SettingsScreenRoot(
         }
     }
 
-}
-
-
-@Composable
-fun ContactButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    ClickableSetting(
-        modifier = modifier,
-        icon = {
-            Icon(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .size(20.dp),
-                imageVector = Icons.Default.Mail,
-                contentDescription = stringResource(R.string.contact_us)
-            )
-        },
-        title =
-            stringResource(R.string.contact_us),
-        onClick = onClick
-    )
-}
-
-@Composable
-fun AboutButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    ClickableSetting(
-        modifier = modifier,
-        icon = {
-            Icon(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .size(20.dp),
-                imageVector = Icons.Default.Info,
-                contentDescription = stringResource(R.string.about) + " ${R.string.beepadel}"
-            )
-        },
-        title =
-            stringResource(R.string.about) + " ${R.string.beepadel}",
-        onClick = onClick
-    )
 }
 
 @Preview
