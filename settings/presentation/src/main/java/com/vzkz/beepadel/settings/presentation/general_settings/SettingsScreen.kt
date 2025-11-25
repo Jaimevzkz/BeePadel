@@ -178,7 +178,7 @@ private fun SettingsScreenRoot(
                     onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
                 )
 
-                SectionTitle(
+               /* SectionTitle( //todo commented until approved by strava
                     modifier = Modifier,
                     text = stringResource(R.string.connect)
                 )
@@ -192,7 +192,7 @@ private fun SettingsScreenRoot(
                     onLaunchAuthRequest = {
                         onAction(SettingsIntent.LaunchAuthRequestIntent)
                     }
-                )
+                )*/
 
                 SectionTitle(
                     modifier = Modifier,
@@ -209,7 +209,7 @@ private fun SettingsScreenRoot(
 
                 ContactButton(onClick = { onAction(SettingsIntent.ContactUs) })
                 Spacer(Modifier.height(itemSpacing))
-                AboutButton(onClick = {})
+//                AboutButton(onClick = {})
             }
 
             Text(
