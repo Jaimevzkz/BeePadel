@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import com.vzkz.core.presentation.ui.R
 
 class EndToEndTesting {
     @get:Rule
@@ -42,10 +43,10 @@ class EndToEndTesting {
             .click_start_on_serving_dialog()
             .add_point_to(true, 3)
             .click_on_finish_match()
-            .assert_dialog_is_displayed(title = context.getString(com.vzkz.match.presentation.R.string.end_match_question))
+            .assert_dialog_is_displayed(title = context.getString(R.string.end_match_question))
             .confirm_finish_match()
             .assert_dialog_is_displayed(
-                title = context.getString(com.vzkz.match.presentation.R.string.error_occurred),
+                title = context.getString(R.string.error_occurred),
                 description =  DataError.Logic.EMPTY_SET_LIST.asUiText().asString(context)
             )
             .click_discard()

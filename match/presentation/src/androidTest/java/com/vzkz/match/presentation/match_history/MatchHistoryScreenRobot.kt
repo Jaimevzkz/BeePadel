@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.vzkz.match.presentation.R
+import com.vzkz.core.presentation.ui.R
 import kotlinx.coroutines.runBlocking
 
 class MatchHistoryScreenRobot(
