@@ -40,7 +40,7 @@ import androidx.wear.compose.material3.OutlinedIconButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
-import com.vzkz.beepadel.wear.presentation.R
+import com.vzkz.core.presentation.ui.R
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam1
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam2
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.CloseError
@@ -227,7 +227,7 @@ private fun WearActiveMatchScreen(
             WearDialogs.ERROR -> {
                 WearErrorDialog(
                     modifier = Modifier,
-                    title = stringResource(com.vzkz.match.presentation.R.string.error_occurred),
+                    title = stringResource(R.string.error_occurred),
                     description = state.error?.asString(),
                     primaryButton = {
                         Button(
@@ -289,14 +289,14 @@ fun WearMatchFinishedDialog(
     ) {
         Text(
             modifier = Modifier.padding(top = 28.dp),
-            text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.match_finished),
+            text = stringResource(R.string.match_finished),
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
             modifier = Modifier.padding(horizontal = 12.dp),
-            text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.match_has_been_saved),
+            text = stringResource(R.string.match_has_been_saved),
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onBackground
@@ -308,7 +308,7 @@ fun WearMatchFinishedDialog(
         ) {
             Icon(
                 imageVector = Icons.Default.Done,
-                contentDescription = stringResource(id = com.vzkz.match.presentation.R.string.cancel),
+                contentDescription = stringResource(id = R.string.cancel),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }

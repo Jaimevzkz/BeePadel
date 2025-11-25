@@ -32,6 +32,7 @@ import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.ui.formatted
 import com.vzkz.match.domain.model.Points
 import kotlin.time.Duration
+import com.vzkz.core.presentation.ui.R
 
 @Composable
 internal fun WearScoreCard(
@@ -75,7 +76,7 @@ internal fun WearScoreCard(
                                 .size(16.dp)
                                 .padding(start = 4.dp),
                             imageVector = BallIcon,
-                            contentDescription = stringResource(com.vzkz.match.presentation.R.string.own_player_serving),
+                            contentDescription = stringResource(R.string.own_player_serving),
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     else
@@ -116,7 +117,7 @@ internal fun WearScoreCard(
                         modifier = Modifier.size(14.dp),
                         tint = BeePadelDarkRed,
                         imageVector = Icons.Filled.Favorite,
-                        contentDescription = stringResource(com.vzkz.match.presentation.R.string.heart_rate)
+                        contentDescription = stringResource(R.string.heart_rate)
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -146,7 +147,7 @@ internal fun WearScoreCard(
                                 .size(16.dp)
                                 .padding(end = 4.dp),
                             imageVector = BallIcon,
-                            contentDescription = stringResource(com.vzkz.match.presentation.R.string.other_player_serving),
+                            contentDescription = stringResource(R.string.other_player_serving),
                             tint = MaterialTheme.colorScheme.onSecondary
                         )
                     else
