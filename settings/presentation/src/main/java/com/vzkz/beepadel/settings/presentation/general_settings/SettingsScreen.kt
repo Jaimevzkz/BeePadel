@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -205,6 +206,8 @@ private fun SettingsScreenRoot(
                 )
 
                 ContactButton(onClick = { onAction(SettingsIntent.ContactUs) })
+                Spacer(Modifier.height(itemSpacing))
+                AboutButton(onClick = {})
             }
 
             Text(
@@ -238,6 +241,28 @@ fun ContactButton(
         },
         title =
             stringResource(R.string.contact_us),
+        onClick = onClick
+    )
+}
+
+@Composable
+fun AboutButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    ClickableSetting(
+        modifier = modifier,
+        icon = {
+            Icon(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(20.dp),
+                imageVector = Icons.Default.Info,
+                contentDescription = stringResource(R.string.about) + " BeePadel"
+            )
+        },
+        title =
+             stringResource(R.string.about) + " BeePadel",
         onClick = onClick
     )
 }
