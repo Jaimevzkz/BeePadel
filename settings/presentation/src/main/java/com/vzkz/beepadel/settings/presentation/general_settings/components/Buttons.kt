@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -102,6 +104,50 @@ fun PlayerStoreButton(
         },
         title =
             stringResource(R.string.leave_a_review),
+        onClick = onClick
+    )
+}
+
+@Composable
+fun ContactButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    ClickableSetting(
+        modifier = modifier,
+        icon = {
+            Icon(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(20.dp),
+                imageVector = Icons.Default.Mail,
+                contentDescription = stringResource(R.string.contact_us)
+            )
+        },
+        title =
+            stringResource(R.string.contact_us),
+        onClick = onClick
+    )
+}
+
+@Composable
+fun AboutButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    ClickableSetting(
+        modifier = modifier,
+        icon = {
+            Icon(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(20.dp),
+                imageVector = Icons.Default.Info,
+                contentDescription = stringResource(R.string.about) + " ${R.string.beepadel}"
+            )
+        },
+        title =
+            stringResource(R.string.about) + " ${R.string.beepadel}",
         onClick = onClick
     )
 }
