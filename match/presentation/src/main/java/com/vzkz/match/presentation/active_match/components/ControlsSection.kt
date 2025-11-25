@@ -29,7 +29,7 @@ import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.designsystem.PlusOneIcon
 import com.vzkz.core.presentation.designsystem.UndoIcon
-import com.vzkz.match.presentation.R
+import com.vzkz.core.presentation.ui.R
 
 @Composable
 fun ControlsSection(

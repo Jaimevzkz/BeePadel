@@ -23,4 +23,63 @@
     <string name="error_payload_too_large">The file you\'re trying to upload is too large.</string>
     <string name="error_server_error">Oops, something went wrong, please try again.</string>
     <string name="error_serialization">Oops, couldn\'t parse data.\t</string>
+
+
+    <string name="beepadel" translatable="false">BeePadel</string>
+    <string name="start_match">Start match</string>
+    <string name="match_options">Match options</string>
+    <string name="delete_match">Delete Match</string>
+    <string name="own_player_serving">Own player serving</string>
+    <string name="add_own_point">Add own point</string>
+    <string name="add_other_point">Add other point</string>
+    <string name="undo">Undo</string>
+    <string name="discard_match">Discard Match</string>
+    <string name="end_match">End Match</string>
+    <string name="who_starts_serving">Who starts serving?</string>
+    <string name="team_1">Team 1</string>
+    <string name="team_2">Team 2</string>
+    <string name="cancel">Cancel</string>
+    <string name="end_match_question">End match?</string>
+    <string name="confirm">Confirm</string>
+    <string name="discard_match_question">Discard match?</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="discard">Discard</string>
+    <string name="end">End</string>
+    <string name="permission_required">Permission required</string>
+    <string name="notification_rationale">In order to display current time and score for the match as a notification, this app needs your permission. Please click on \"Okay\" to grant it.</string>
+    <string name="okay" translatable="false">Okay</string>
+    <string name="start">Start</string>
+    <string name="once_deleted_the_match_can_t_be_recovered">Once deleted, the match can\'t be recovered</string>
+    <string name="permanently_delete">Permanently delete?</string>
+    <string name="other_player_serving">Other player serving</string>
+    <string name="create_you_first_match">Create you first match!</string>
+    <string name="match_won">Match won</string>
+    <string name="match_duration">Match duration</string>
+    <string name="elapsed_time">Elapsed time</string>
+    <string name="settings_screen">Settings screen</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="team_1_score">Team 1 score</string>
+    <string name="team_2_score">Team 2 score</string>
+    <string name="error_uploading_match_to_strava">Error uploading your match to Strava</string>
+
+    <string name="nav_back" translatable="false">Nav back</string>
+    <string name="settings">Settings</string>
+    <string name="golden_point">Golden Point</string>
+    <string name="features">Features</string>
+    <string name="connect">Connect</string>
+    <string name="connect_with_strava">Connect with Strava</string>
+    <string name="connected_to_strava">Connected to Strava</string>
+    <string name="configure_strava">Configure Strava</string>
+    <string name="logout_from_strava">Logout from Strava</string>
+    <string name="support">Support the project</string>
+    <string name="github_star" translatable="false">Star BeePadel</string>
+    <string name="leave_a_review">Leave a review</string>
+    <string name="about">About</string>
+    <string name="contact_us">Contact Us</string>
+
+
+    <string name="finish">Finish Match</string>
+    <string name="connect_your_phone">BeePadel phone app has to be installed and connected.</string>
+    <string name="match_finished">Match Finished!</string>
+    <string name="match_has_been_saved">The match has been saved on the phone app</string>
 </resources>

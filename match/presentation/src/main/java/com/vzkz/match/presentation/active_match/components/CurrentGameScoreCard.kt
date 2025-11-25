@@ -33,9 +33,9 @@ import com.vzkz.core.presentation.designsystem.BeePadelDarkRed
 import com.vzkz.core.presentation.designsystem.BeePadelGold
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
+import com.vzkz.core.presentation.ui.R
 import com.vzkz.core.presentation.ui.formatted
 import com.vzkz.match.domain.model.Points
-import com.vzkz.match.presentation.R
 import kotlin.time.Duration
 
 @Composable
@@ -62,7 +62,9 @@ fun CurrentGameScoreCard(
     ) {
         currentHeartRate?.let {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(
                     4.dp,
