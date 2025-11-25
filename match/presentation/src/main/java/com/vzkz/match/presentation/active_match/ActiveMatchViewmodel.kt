@@ -8,10 +8,10 @@ import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.BaseViewModel
+import com.vzkz.core.presentation.ui.R
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
-import com.vzkz.match.presentation.R
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn

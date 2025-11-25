@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.beepadel.settings.presentation.BuildConfig
-import com.vzkz.beepadel.settings.presentation.R
 import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ClickableSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
@@ -49,6 +48,7 @@ import com.vzkz.beepadel.settings.presentation.general_settings.components.Playe
 import com.vzkz.beepadel.settings.presentation.general_settings.components.SectionTitle
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
+import com.vzkz.core.presentation.ui.R
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -258,11 +258,11 @@ fun AboutButton(
                     .padding(end = 8.dp)
                     .size(20.dp),
                 imageVector = Icons.Default.Info,
-                contentDescription = stringResource(R.string.about) + " BeePadel"
+                contentDescription = stringResource(R.string.about) + " ${R.string.beepadel}"
             )
         },
         title =
-             stringResource(R.string.about) + " BeePadel",
+            stringResource(R.string.about) + " ${R.string.beepadel}",
         onClick = onClick
     )
 }

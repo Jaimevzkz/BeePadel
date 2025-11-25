@@ -37,7 +37,7 @@ import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelFloatingActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
-import com.vzkz.match.presentation.R
+import com.vzkz.core.presentation.ui.R
 import com.vzkz.match.presentation.match_history.components.MatchCard
 import com.vzkz.match.presentation.util.toMatchUi
 import org.koin.compose.viewmodel.koinViewModel

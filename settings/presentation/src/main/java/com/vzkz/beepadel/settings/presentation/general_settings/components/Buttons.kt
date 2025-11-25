@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.vzkz.beepadel.settings.presentation.R
+import com.vzkz.core.presentation.ui.R
 import com.vzkz.core.presentation.designsystem.GithubIcon
 import com.vzkz.core.presentation.designsystem.PlayStoreIcon
 import com.vzkz.core.presentation.designsystem.StravaIcon
