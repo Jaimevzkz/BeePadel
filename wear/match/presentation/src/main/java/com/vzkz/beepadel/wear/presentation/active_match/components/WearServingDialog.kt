@@ -1,4 +1,5 @@
 package com.vzkz.beepadel.wear.presentation.active_match.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.RadioButtonDefaults
 import androidx.wear.compose.material3.Text
 import com.vzkz.core.presentation.designsystem.StartIcon
+import com.vzkz.core.presentation.ui.R
 
 @Composable
 fun WearServingDialog(
@@ -45,14 +47,14 @@ fun WearServingDialog(
     ) {
         Text(
             modifier = Modifier.padding(top = 28.dp),
-            text = stringResource(com.vzkz.beepadel.wear.presentation.R.string.who_starts_serving),
+            text = stringResource(R.string.who_starts_serving),
             color = MaterialTheme.colorScheme.onBackground
         )
         RadioButton(
             modifier = Modifier.height(34.dp),
             selected = servingTeam1,
             onSelect = { servingTeam1 = true },
-            label = { Text(stringResource(com.vzkz.match.presentation.R.string.team_1)) },
+            label = { Text(stringResource(R.string.team_1)) },
             colors = radioButtonColors
         )
 
@@ -60,7 +62,7 @@ fun WearServingDialog(
             modifier = Modifier.height(34.dp),
             selected = !servingTeam1,
             onSelect = { servingTeam1 = false },
-            label = { Text(stringResource(com.vzkz.match.presentation.R.string.team_2)) },
+            label = { Text(stringResource(R.string.team_2)) },
             colors = radioButtonColors.copy(
                 selectedControlColor = MaterialTheme.colorScheme.onSecondary,
                 selectedContentColor = MaterialTheme.colorScheme.onSecondary,
@@ -74,7 +76,7 @@ fun WearServingDialog(
         ) {
             Icon(
                 imageVector = StartIcon,
-                contentDescription = stringResource(id = com.vzkz.match.presentation.R.string.start_match),
+                contentDescription = stringResource(id = R.string.start_match),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }

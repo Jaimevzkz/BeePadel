@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,10 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.beepadel.settings.presentation.BuildConfig
-import com.vzkz.beepadel.settings.presentation.general_settings.components.AboutButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
-import com.vzkz.beepadel.settings.presentation.general_settings.components.ClickableSetting
-import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ContactButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.GithubStartButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.PlayerStoreButton
@@ -178,21 +172,21 @@ private fun SettingsScreenRoot(
                     onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
                 )
 
-               /* SectionTitle( //todo commented until approved by strava
-                    modifier = Modifier,
-                    text = stringResource(R.string.connect)
-                )
+                /* SectionTitle( //todo commented until approved by strava
+                     modifier = Modifier,
+                     text = stringResource(R.string.connect)
+                 )
 
-                ConnectToStravaButton(
-                    modifier = Modifier,
-                    isLoggedIntoStrava = state.isLoggedIntoStrava,
-                    onConfigureStrava = {
-                        onAction(SettingsIntent.ConfigureStrava)
-                    },
-                    onLaunchAuthRequest = {
-                        onAction(SettingsIntent.LaunchAuthRequestIntent)
-                    }
-                )*/
+                 ConnectToStravaButton(
+                     modifier = Modifier,
+                     isLoggedIntoStrava = state.isLoggedIntoStrava,
+                     onConfigureStrava = {
+                         onAction(SettingsIntent.ConfigureStrava)
+                     },
+                     onLaunchAuthRequest = {
+                         onAction(SettingsIntent.LaunchAuthRequestIntent)
+                     }
+                 )*/
 
                 SectionTitle(
                     modifier = Modifier,
