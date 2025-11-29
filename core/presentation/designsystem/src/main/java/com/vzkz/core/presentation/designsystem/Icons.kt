@@ -16,6 +16,10 @@ val PadelIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.padel)
 
+val AppIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.logo_no_bg)
+
 val BallIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ball)
