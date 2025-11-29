@@ -81,7 +81,7 @@ fun BeePadelDialog(
 private fun DialogPreview() {
     BeePadelTheme {
         BeePadelDialog(
-            title = "Hola buenas",
+            title = "About BeePadel",
             onDismiss = {
             },
             description = "Hola buenas",

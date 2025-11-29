@@ -37,7 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.beepadel.settings.presentation.BuildConfig
+import com.vzkz.beepadel.settings.presentation.general_settings.components.AboutButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
+import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ContactButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.GithubStartButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.PlayerStoreButton
@@ -52,7 +54,8 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
-    onNavToConfigureStrava: () -> Unit
+    onNavToConfigureStrava: () -> Unit,
+    onNavToAbout: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
@@ -105,6 +108,10 @@ fun SettingsScreen(
                     data = "mailto:${BuildConfig.CONTACT_EMAIL}".toUri()
                 }
                 context.startActivity(intent)
+            }
+
+            SettingsEvent.NavigateToAbout -> {
+                onNavToAbout()
             }
 
             null -> {}
@@ -172,7 +179,7 @@ private fun SettingsScreenRoot(
                     onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
                 )
 
-                /* SectionTitle( //todo commented until approved by strava
+               /*  SectionTitle( //todo commented until approved by strava
                      modifier = Modifier,
                      text = stringResource(R.string.connect)
                  )
@@ -203,16 +210,8 @@ private fun SettingsScreenRoot(
 
                 ContactButton(onClick = { onAction(SettingsIntent.ContactUs) })
                 Spacer(Modifier.height(itemSpacing))
-//                AboutButton(onClick = {})
+                AboutButton(onClick = { onAction(SettingsIntent.NavigateToAbout) })
             }
-
-            Text(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(12.dp),
-                text = "version ${BuildConfig.APP_VERSION_NAME}",
-                color = MaterialTheme.colorScheme.onBackground
-            )
         }
     }
 
