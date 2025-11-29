@@ -179,7 +179,7 @@ private fun SettingsScreenRoot(
                     onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
                 )
 
-               /*  SectionTitle( //todo commented until approved by strava
+                 SectionTitle( //todo commented until approved by strava
                      modifier = Modifier,
                      text = stringResource(R.string.connect)
                  )
@@ -193,7 +193,7 @@ private fun SettingsScreenRoot(
                      onLaunchAuthRequest = {
                          onAction(SettingsIntent.LaunchAuthRequestIntent)
                      }
-                 )*/
+                 )
 
                 SectionTitle(
                     modifier = Modifier,

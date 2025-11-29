@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
@@ -91,10 +92,11 @@ private fun StravaSettingsScreenRoot(
                 .padding(12.dp),
         ) {
             Column() {
-                Text(
-                    "This feature is a work in progress. Stay tuned for future updates!",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyLarge
+                BooleanSetting(
+                    modifier = Modifier,
+                    title = stringResource(R.string.add_logged_with_beepadel_to_strava),
+                    value = state.loggedWithBeePadelEnabled,
+                    onValueChange = { onAction(StravaSettingsIntent.ToggleLoggedWithBeePadel) }
                 )
             }
             BeePadelActionButton(
