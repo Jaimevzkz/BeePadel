@@ -135,6 +135,7 @@ fun AboutButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val text = stringResource(R.string.about2) + " ${stringResource(R.string.beepadel)}"
     ClickableSetting(
         modifier = modifier,
         icon = {
@@ -143,11 +144,10 @@ fun AboutButton(
                     .padding(end = 8.dp)
                     .size(20.dp),
                 imageVector = Icons.Default.Info,
-                contentDescription = stringResource(R.string.about) + " ${stringResource(R.string.beepadel)}"
+                contentDescription = text
             )
         },
-        title =
-            stringResource(R.string.about) + " ${stringResource(R.string.beepadel)}",
+        title = text,
         onClick = onClick
     )
 }
