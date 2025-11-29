@@ -27,9 +27,11 @@ internal fun Project.configureBuildTypes(
         val notSet = "\"NOT-SET\""
         val clientID = System.getenv("STRAVA_CLIENT_ID")
             ?: localProps.getProperty("strava_client_id")
+            ?: "-1"
 
         val clientSecret = System.getenv("STRAVA_CLIENT_SECRET")
             ?: localProps.getProperty("strava_client_secret")
+            ?: notSet
 
         defaultConfig {
             buildConfigField(
@@ -43,7 +45,8 @@ internal fun Project.configureBuildTypes(
             buildConfigField("String", "GITHUB_URL", "\"https://github.com/Jaimevzkz/BeePadel\"")
             buildConfigField("String", "CONTACT_EMAIL", "\"jaimevazquezmartin23@gmail.com\"")
 
-            manifestPlaceholders["appAuthRedirectScheme"] = libs.findVersion("projectVersionName").get()
+            manifestPlaceholders["appAuthRedirectScheme"] =
+                libs.findVersion("projectVersionName").get()
         }
 
         when (extensionType) {
