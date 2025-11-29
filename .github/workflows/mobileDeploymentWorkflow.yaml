@@ -41,6 +41,9 @@ jobs:
           cat gradle/libs.versions.toml
 
       - name: Build Mobile prodRelease
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
         run: ./gradlew :app:bundleRelease
         continue-on-error: false
 
