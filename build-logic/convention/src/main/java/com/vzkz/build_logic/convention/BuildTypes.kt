@@ -8,6 +8,7 @@ import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import java.util.Properties
 
 internal fun Project.configureBuildTypes(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -17,16 +18,19 @@ internal fun Project.configureBuildTypes(
         buildFeatures {
             buildConfig = true
         }
+        val localProps = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProps.load(localPropertiesFile.inputStream())
+        }
 
         val notSet = "\"NOT-SET\""
-        val clientID =
-            gradleLocalProperties(rootDir, rootProject.providers).getProperty("strava_client_id") ?: "-1"
+        val clientID = System.getenv("STRAVA_CLIENT_ID")
+            ?: localProps.getProperty("strava_client_id")
 
-        val clientSecret =
-            gradleLocalProperties(
-                rootDir,
-                rootProject.providers
-            ).getProperty("strava_client_secret") ?: notSet
+        val clientSecret = System.getenv("STRAVA_CLIENT_SECRET")
+            ?: localProps.getProperty("strava_client_secret")
+
         defaultConfig {
             buildConfigField(
                 "String",

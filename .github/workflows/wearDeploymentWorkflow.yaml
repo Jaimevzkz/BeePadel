@@ -37,6 +37,9 @@ jobs:
 
         continue-on-error: false
       - name: Build Wear prodRelease
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
         run: ./gradlew :wear:app:bundleRelease
         continue-on-error: false
 
