@@ -60,6 +60,7 @@
 
     <string name="settings">Ajustes</string>
     <string name="golden_point">Punto de Oro</string>
+    <string name="add_logged_with_beepadel_to_strava">Guardado con BeePadel</string>
     <string name="features">Funcionalidad</string>
     <string name="connect">Conectar</string>
     <string name="connect_with_strava">Conectar con Strava</string>

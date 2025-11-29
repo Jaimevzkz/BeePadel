@@ -65,6 +65,7 @@
     <string name="nav_back" translatable="false">Nav back</string>
     <string name="settings">Settings</string>
     <string name="golden_point">Golden Point</string>
+    <string name="add_logged_with_beepadel_to_strava">Logged with BeePadel</string>
     <string name="features">Features</string>
     <string name="connect">Connect</string>
     <string name="connect_with_strava">Connect with Strava</string>
