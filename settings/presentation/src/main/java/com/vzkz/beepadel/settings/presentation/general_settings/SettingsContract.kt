@@ -23,6 +23,7 @@ data class SettingsState(
 
 sealed class SettingsIntent : Intent {
     data object NavigateBack: SettingsIntent()
+    data object NavigateToAbout: SettingsIntent()
     data object ToggleGoldenPoint: SettingsIntent()
     data object LaunchAuthRequestIntent: SettingsIntent()
     data object ConfigureStrava: SettingsIntent()
@@ -33,6 +34,7 @@ sealed class SettingsIntent : Intent {
 
 sealed class SettingsEvent : Event {
     data object NavigateBack: SettingsEvent()
+    data object NavigateToAbout: SettingsEvent()
     data class LaunchAuthRequestIntent(val intent: android.content.Intent): SettingsEvent()
     data object ConfigureStrava: SettingsEvent()
     data object OpenGithub: SettingsEvent()

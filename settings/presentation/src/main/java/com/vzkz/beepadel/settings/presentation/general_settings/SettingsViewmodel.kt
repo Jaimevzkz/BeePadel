@@ -59,8 +59,12 @@ class SettingsViewModel(
             SettingsIntent.ConfigureStrava -> sendEvent(ConfigureStrava)
 
             SettingsIntent.OpenGithub -> sendEvent(OpenGithub)
+
             SettingsIntent.OpenPlayStore -> sendEvent(OpenPlayStore)
-            SettingsIntent.ContactUs -> sendEvent(SettingsEvent.ContactUs)
+
+            SettingsIntent.ContactUs -> sendEvent(ContactUs)
+
+            SettingsIntent.NavigateToAbout -> sendEvent((NavigateToAbout))
         }
     }
 

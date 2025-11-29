@@ -143,11 +143,11 @@ fun AboutButton(
                     .padding(end = 8.dp)
                     .size(20.dp),
                 imageVector = Icons.Default.Info,
-                contentDescription = stringResource(R.string.about) + " ${R.string.beepadel}"
+                contentDescription = stringResource(R.string.about) + " ${stringResource(R.string.beepadel)}"
             )
         },
         title =
-            stringResource(R.string.about) + " ${R.string.beepadel}",
+            stringResource(R.string.about) + " ${stringResource(R.string.beepadel)}",
         onClick = onClick
     )
 }

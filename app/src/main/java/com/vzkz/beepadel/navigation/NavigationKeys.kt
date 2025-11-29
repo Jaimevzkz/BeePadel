@@ -11,3 +11,5 @@ data object KeyActiveMatchScreen : NavKey
 data object KeySettingsScreen : NavKey
 @Serializable
 data object KeyStravaSettingsScreen : NavKey
+@Serializable
+data object KeyAboutScreen : NavKey
