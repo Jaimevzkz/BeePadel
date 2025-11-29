@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vzkz.common.general.data_generator.dummyMatchList
+import com.vzkz.core.presentation.designsystem.AppIcon
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.PadelIcon
 import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
@@ -99,7 +101,7 @@ fun MatchHistoryScreenRoot(
         floatingActionButton = {
             BeePadelFloatingActionButton(
                 onClick = { onAction(MatchHistoryIntent.NavigateToActiveMatch) },
-                icon = PadelIcon,
+                icon = Icons.Default.PlayArrow,
                 contentDescription = stringResource(R.string.start_match)
             )
         }
@@ -167,7 +169,7 @@ private fun MatchHistoryScreenPreview() {
         MatchHistoryScreenRoot(
             state = MatchHistoryState.initial.copy(
                 matchHistory = dummyMatchList().map { it.toMatchUi() },
-                showDeleteDialog = true
+//                showDeleteDialog = true
             ),
             onAction = {}
         )
