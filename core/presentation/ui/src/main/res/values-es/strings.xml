@@ -23,7 +23,6 @@
     <string name="error_payload_too_large">Archivo demasiado pesado</string>
     <string name="error_server_error">Error al conectar con el servidor</string>
 
-    <string name="beepadel">BeePadel</string>
     <string name="start_match">Empezar partido</string>
     <string name="match_options">opciones</string>
     <string name="delete_match">Eliminar partido</string>
@@ -69,11 +68,21 @@
     <string name="logout_from_strava">Desconectar Strava</string>
     <string name="support">Apoya el proyecto</string>
     <string name="leave_a_review">Puntúanos</string>
-    <string name="about">Sobre nosotros</string>
+    <string name="about">Sobre Nosotros</string>
+    <string name="about2">Acerca de</string>
     <string name="contact_us">Contactar</string>
 
+    <string name="this_support_is_really_helpful_so_the_project_continues_growing">Este apoyo ayuda enormemente para que el proyecto siga creciendo.</string>
     <string name="finish">Terminar</string>
     <string name="connect_your_phone">Debes tener BeePadel instalada y activa en tu telefono para poder usarla desde el reloj</string>
     <string name="match_finished">¡Partido Terminado!</string>
     <string name="match_has_been_saved">El partido ha sido guardado en tu telefono</string>
+    <string name="who_are_we">Quiénes somos</string>
+    <string name="beepadel_is_a_p_del_tracker_app_designed_by_players_for_players">BeePadel es una applicación para llevar al puntuación de tus partidos, diseñada por jugadores, para jugadores.\n</string>
+    <string name="behind_the_development_of_the_app_is_the_free_open_source_software_foss_philosophy">"Esta aplicación ha sido desarrollada siguiendo la filosofía de 'Free Open Source Software (FOSS)'. "</string>
+    <string name="this_means_that_the_code_for_the_app_can_be_found_publicly_on">"Esto significa que el código de la aplicación es público y se puede encontrar en "</string>
+    <string name="it_also_means_that_this_app_will_never_charge_you_any_kind_of_licensing_fee_for_its_use">. También siginifica que esta aplicación nunca te cobrará por su uso ni limitará sus funcionalidades en función de escalas de pago, siempre será gratuita.\n\n</string>
+    <string name="this_project_is_currently_under_active_development_by_indie_developers_in_their_free_time">El proyecto está siendo desarrollado por programadores independientes en su tiempo libre, y sigue mejorando constantemente.</string>
+    <string name="we_don_t_want_any_monetary_donations_but_we_appreciate_any_other_kind_of_support"> No queremos ningún tipo de donación monetaria, pero apreciamos otro tipo de ayudas—</string>
+    <string name="such_as_a_rating_on_the_play_store_or_a_github_star_that_is_totally_free_of_charge">como una valoración en la Play Store o una estrella en Github—que son totalmente gratuitas. </string>
 </resources>

@@ -54,7 +54,7 @@ private fun AboutScreenRoot(onNavBack: () -> Unit) {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.about) + " ${stringResource(R.string.beepadel)}",
+                        text = stringResource(R.string.about2) + " ${stringResource(R.string.beepadel)}",
                         style = MaterialTheme.typography.headlineMedium
                     )
                 },
@@ -82,7 +82,10 @@ private fun AboutScreenRoot(onNavBack: () -> Unit) {
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(scrollState)
         ) {
-            Text("Who are we?", style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = stringResource(R.string.who_are_we),
+                style = MaterialTheme.typography.headlineMedium
+            )
             AboutText()
 
             Spacer(Modifier.weight(1f))
@@ -100,9 +103,9 @@ private fun AboutScreenRoot(onNavBack: () -> Unit) {
 fun AboutText(modifier: Modifier = Modifier) {
 
     val annotatedText = buildAnnotatedString {
-        append("BeePadel is a pádel tracker app, designed by players, for players.\n")
-        append("Behind the development of the app is the Free Open Source Software (FOSS) philosophy. ")
-        append("This means that the code for the app can be found publicly on ")
+        append(stringResource(R.string.beepadel_is_a_p_del_tracker_app_designed_by_players_for_players))
+        append(stringResource(R.string.behind_the_development_of_the_app_is_the_free_open_source_software_foss_philosophy))
+        append(stringResource(R.string.this_means_that_the_code_for_the_app_can_be_found_publicly_on))
 
         pushLink(
             LinkAnnotation.Url(
@@ -112,12 +115,12 @@ fun AboutText(modifier: Modifier = Modifier) {
         append("GitHub")
         pop()
 
-        append(". It also means that this app will never charge you any kind of licensing fee for its use.\n\n")
+        append(stringResource(R.string.it_also_means_that_this_app_will_never_charge_you_any_kind_of_licensing_fee_for_its_use))
 
-        append("This project is currently under active development by indie developers in their free time. ")
-        append("We don't want any monetary donations, but we appreciate any other kind of support—")
-        append("such as a rating on the Play Store or a GitHub star—that is totally free of charge. ")
-        append("This support is really helpful so the project continues growing.")
+        append(stringResource(R.string.this_project_is_currently_under_active_development_by_indie_developers_in_their_free_time))
+        append(stringResource(R.string.we_don_t_want_any_monetary_donations_but_we_appreciate_any_other_kind_of_support))
+        append(stringResource(R.string.such_as_a_rating_on_the_play_store_or_a_github_star_that_is_totally_free_of_charge))
+        append(stringResource(R.string.this_support_is_really_helpful_so_the_project_continues_growing))
     }
 
     Text(
