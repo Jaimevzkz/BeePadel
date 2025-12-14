@@ -35,9 +35,9 @@ data class Match(
             returnValue += "Set ${index + 1}: ${games.first}-${games.second}"
         }
         returnValue += when (getWinner()) {
-            1 -> " -> WON"
-            -1 -> " -> LOST"
-            else -> " -> DRAW"
+            1 -> " -> 🏆"
+            -1 -> " -> ❌"
+            else -> " -> 🟰"
         }
         return returnValue
     }

@@ -9,6 +9,7 @@ import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.fixedZonedDateTime
 import com.vzkz.common.general.fake.FakeLocalStorageRepository
 import com.vzkz.common.general.fake.FakeSessionStorage
+import com.vzkz.common.general.fake.FakeStringGetter
 import com.vzkz.common.general.fake.FakeUUIDProvider
 import com.vzkz.common.general.fake.FakeWatchConnector
 import com.vzkz.common.general.fake.FakeZonedDateTimeProvider
@@ -52,6 +53,8 @@ class MatchTrackerImplTest {
 
     private lateinit var fakeSessionStorage: FakeSessionStorage
 
+    private lateinit var fakeStringGetter: FakeStringGetter
+
     companion object {
         @JvmField
         @RegisterExtension
@@ -67,6 +70,7 @@ class MatchTrackerImplTest {
         fakeWatchConnector = FakeWatchConnector()
         fakePreferencesRepository = FakePreferencesRepository()
         fakeSessionStorage = FakeSessionStorage()
+        fakeStringGetter = FakeStringGetter()
         matchTrackerImpl = MatchTrackerImpl(
             applicationScope = fakeApplicationScope,
             dispatchers = testDispatchers,
@@ -77,6 +81,7 @@ class MatchTrackerImplTest {
             preferencesRepository = fakePreferencesRepository,
             sessionStorage = fakeSessionStorage,
             httpClient = HttpClientFactory.mockHttpClient,
+            stringGetter = fakeStringGetter,
         )
     }
 

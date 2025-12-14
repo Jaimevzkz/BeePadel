@@ -12,34 +12,33 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
 import org.gradle.kotlin.dsl.project
 
-class AndroidLibraryConventionPlugin: Plugin<Project> {
+class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-       target.run {
-           pluginManager.run {
-               apply("com.android.library")
-               apply("org.jetbrains.kotlin.android")
-           }
+        target.run {
+            pluginManager.run {
+                apply("com.android.library")
+                apply("org.jetbrains.kotlin.android")
+            }
 
-           extensions.configure<LibraryExtension>{
-               configureKotlinAndroid(this)
+            extensions.configure<LibraryExtension> {
+                configureKotlinAndroid(this)
 
-               configureBuildTypes(
-                   commonExtension = this,
-                   extensionType = ExtensionType.LIBRARY
-               )
-               defaultConfig{
-                   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                   consumerProguardFiles("consumer-rules.pro")
-               }
-           }
-           dependencies{
-//               "testImplementation"(kotlin("test"))
-               "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
-               "implementation"(libs.findBundle("koin").get())
-               "testImplementation"(libs.findBundle("test").get())
-               // Timber
-               "implementation"(project.libs.findLibrary("timber").get())
-           }
-       }
+                configureBuildTypes(
+                    commonExtension = this,
+                    extensionType = ExtensionType.LIBRARY
+                )
+                defaultConfig {
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                    consumerProguardFiles("consumer-rules.pro")
+                }
+            }
+            dependencies {
+                "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
+                "implementation"(libs.findBundle("koin").get())
+                "testImplementation"(libs.findBundle("test").get())
+                // Timber
+                "implementation"(project.libs.findLibrary("timber").get())
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.vzkz.core.domain.error.GenericError
 import com.vzkz.core.domain.error.MessagingError
 import com.vzkz.core.domain.error.RootError
 import com.vzkz.core.presentation.ui.UiText.StringResource
+import com.vzkz.common.general.R
 
 private fun DataError.asUiText(): UiText {
     return when (this) {

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import com.vzkz.core.presentation.designsystem.GithubIcon
 import com.vzkz.core.presentation.designsystem.PlayStoreIcon
 import com.vzkz.core.presentation.designsystem.StravaIcon
@@ -45,12 +45,12 @@ fun ConnectToStravaButton(
                             .size(20.dp),
                         imageVector = Icons.Default.Check,
                         tint = Color.Green,
-                        contentDescription = stringResource(R.string.connected_to_strava)
+                        contentDescription = stringResource(R.string.configure_strava)
                     )
             }
         },
         title =
-            if (isLoggedIntoStrava) stringResource(R.string.connected_to_strava)
+            if (isLoggedIntoStrava) stringResource(R.string.configure_strava)
             else stringResource(R.string.connect_with_strava),
         onClick = {
             if (isLoggedIntoStrava) {

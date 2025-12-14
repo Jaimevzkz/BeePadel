@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import com.vzkz.core.presentation.ui.BuildConfig
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 
 @Composable
 fun AboutScreen(onNavBack: () -> Unit) {

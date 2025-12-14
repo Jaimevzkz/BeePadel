@@ -12,4 +12,5 @@ dependencies {
     implementation(projects.core.presentation.designsystem)
 
     implementation(projects.core.domain)
+    implementation(projects.common.general)
 }

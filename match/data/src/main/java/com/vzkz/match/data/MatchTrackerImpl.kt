@@ -3,13 +3,13 @@ package com.vzkz.match.data
 import android.content.Context
 import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
 import com.vzkz.common.general.GOLDEN_POINT
+import com.vzkz.common.general.LOGGED_WITH_BEEPADEL
 import com.vzkz.common.general.data_generator.emptyGame
 import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.emptySet
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.Start
 import com.vzkz.core.data.networking.ACTIVITIES
-import com.vzkz.core.data.networking.SPORT
 import com.vzkz.core.data.networking.post
 import com.vzkz.core.database.domain.LocalStorageRepository
 import com.vzkz.core.domain.DispatchersProvider
@@ -50,12 +50,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
-import timber.log.Timber
 import kotlin.time.Duration
+import com.vzkz.common.general.R
+import com.vzkz.match.domain.StringGetter
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MatchTrackerImpl(
     private val applicationScope: CoroutineScope,
+//    private val context: Context,
+    private val stringGetter: StringGetter,
     private val dispatchers: DispatchersProvider,
     private val localStorageRepository: LocalStorageRepository,
     private val zonedDateProvider: ZonedDateTimeProvider,
@@ -192,9 +195,26 @@ class MatchTrackerImpl(
 
     @OptIn(InternalSerializationApi::class)
     private suspend fun createAndPostStravaActivity(finalMatch: Match): EmptyResult<DataError.Network> {
+        val extraDescription = "\n\n" +
+                (stringGetter.getString(R.string.logged_with_beepadel) ?: "Logged with BeePadel")
+
+        val shouldAddExtraDescription =
+            preferencesRepository.getBooleanPreference(LOGGED_WITH_BEEPADEL.KEY)
+                ?: LOGGED_WITH_BEEPADEL.DEFAULT_VAL
+
+        val description = buildString {
+            append(finalMatch.getFormattedResultOfMatch())
+            if (shouldAddExtraDescription) {
+                append(extraDescription)
+            }
+        }
+
         val result = httpClient.post<CreateStravaActivityRequest, CreateStravaActivityResponse>(
             route = ACTIVITIES,
-            body = finalMatch.createRequestFromMatch()
+            body = finalMatch.createRequestFromMatch(
+                name = stringGetter.getString(R.string.strava_match_name) ?: "Pádel Match",
+                description = description
+            )
         )
         return result.asEmptyDataResult()
     }

@@ -19,7 +19,6 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.match.domain)
     implementation(projects.core.database.domain)
-    implementation(projects.common.general)
     testImplementation(testFixtures(projects.common.sharedTest))
 
     // SqlDelight

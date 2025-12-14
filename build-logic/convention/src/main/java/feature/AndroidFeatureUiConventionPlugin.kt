@@ -18,6 +18,7 @@ class AndroidFeatureUiConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
+                "implementation"(project(":common:general"))
                 addUiLayerDependencies(target)
             }
         }
