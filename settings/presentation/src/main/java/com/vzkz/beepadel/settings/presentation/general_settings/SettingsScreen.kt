@@ -46,8 +46,8 @@ import com.vzkz.beepadel.settings.presentation.general_settings.components.Playe
 import com.vzkz.beepadel.settings.presentation.general_settings.components.SectionTitle
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
-import com.vzkz.core.presentation.ui.R
 import org.koin.androidx.compose.koinViewModel
+import com.vzkz.common.general.R
 
 
 @Composable

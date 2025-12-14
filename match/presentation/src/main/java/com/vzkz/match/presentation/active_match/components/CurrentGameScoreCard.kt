@@ -33,7 +33,7 @@ import com.vzkz.core.presentation.designsystem.BeePadelDarkRed
 import com.vzkz.core.presentation.designsystem.BeePadelGold
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.Exo2
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import com.vzkz.core.presentation.ui.formatted
 import com.vzkz.match.domain.model.Points
 import kotlin.time.Duration

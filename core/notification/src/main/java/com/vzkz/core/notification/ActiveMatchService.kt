@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import kotlin.getValue
 import kotlin.time.Duration
+import com.vzkz.common.general.R
+
 
 class ActiveMatchService : Service() {
 
@@ -41,8 +43,7 @@ class ActiveMatchService : Service() {
         NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(com.vzkz.core.presentation.designsystem.R.drawable.logo_no_bg)
             .setOngoing(true)
-//            .setContentTitle(getString(R.string.active_match))
-            .setContentTitle(getString(com.vzkz.core.presentation.ui.R.string.active_match))
+            .setContentTitle(getString(R.string.active_match))
     }
 
     private lateinit var pendingIntent: PendingIntent
@@ -149,7 +150,7 @@ class ActiveMatchService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                getString(com.vzkz.core.presentation.ui.R.string.active_match),
+                getString(R.string.active_match),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 enableVibration(false)

@@ -17,18 +17,23 @@ class CreateStravaActivityRequestTest {
     @Test
     fun `Create a correctly formatted strava activity request`() = runTest {
         // Arrange
+        val name = "Pádel Match"
+        val description = "Set 1: 6-4 / Set 2: 6-2 / Set 3: 2-6 / Set 4: 7-5 -> 🏆"
         val expectedRequest =
             CreateStravaActivityRequest(
-                name = "Pádel Match",
+                name = name,
                 type = TYPE,
                 sportType = SPORT,
                 startDateLocal = "2025-06-29T14:30:24Z",
                 elapsedTime = (1.hours + 30.minutes + 43.seconds).inWholeSeconds.toInt(),
-                description = "Set 1: 6-4 / Set 2: 6-2 / Set 3: 2-6 / Set 4: 7-5 -> WON"
+                description = description
             )
         val initialMatch = dummyMatch()
         // Act
-        val result = initialMatch.createRequestFromMatch()
+        val result = initialMatch.createRequestFromMatch(
+            name = name,
+            description = description
+        )
 
         // Assert
         assertThat(result).isEqualTo(expectedRequest)
@@ -38,14 +43,16 @@ class CreateStravaActivityRequestTest {
     @Test
     fun `Create a correctly formatted strava activity request when loosing`() = runTest {
         // Arrange
+        val name = "Pádel Match"
+        val description ="Set 1: 6-4 / Set 2: 2-6 / Set 3: 6-7 -> ❌"
         val expectedRequest =
             CreateStravaActivityRequest(
-                name = "Pádel Match",
+                name = name,
                 type = TYPE,
                 sportType = SPORT,
                 startDateLocal = "2025-06-29T14:30:24Z",
                 elapsedTime = (1.hours + 30.minutes + 43.seconds).inWholeSeconds.toInt(),
-                description = "Set 1: 6-4 / Set 2: 2-6 / Set 3: 6-7 -> LOST"
+                description = description
             )
         val initialMatch = dummyMatch().copy(
             setList = listOf(
@@ -55,7 +62,10 @@ class CreateStravaActivityRequestTest {
             )
         )
         // Act
-        val result = initialMatch.createRequestFromMatch()
+        val result = initialMatch.createRequestFromMatch(
+            name = name,
+            description = description
+        )
 
         // Assert
         assertThat(result).isEqualTo(expectedRequest)
@@ -64,14 +74,16 @@ class CreateStravaActivityRequestTest {
     @Test
     fun `Create a correctly formatted strava activity request when drawing`() = runTest {
         // Arrange
+        val name = "Pádel Match"
+        val description = "Set 1: 6-4 / Set 2: 2-6 -> 🟰"
         val expectedRequest =
             CreateStravaActivityRequest(
-                name = "Pádel Match",
+                name = name,
                 type = TYPE,
                 sportType = SPORT,
                 startDateLocal = "2025-06-29T14:30:24Z",
                 elapsedTime = (1.hours + 30.minutes + 43.seconds).inWholeSeconds.toInt(),
-                description = "Set 1: 6-4 / Set 2: 2-6 -> DRAW"
+                description = description
             )
         val initialMatch = dummyMatch().copy(
             setList = listOf(
@@ -80,7 +92,10 @@ class CreateStravaActivityRequestTest {
             )
         )
         // Act
-        val result = initialMatch.createRequestFromMatch()
+        val result = initialMatch.createRequestFromMatch(
+            name = name,
+            description = description
+        )
 
         // Assert
         assertThat(result).isEqualTo(expectedRequest)

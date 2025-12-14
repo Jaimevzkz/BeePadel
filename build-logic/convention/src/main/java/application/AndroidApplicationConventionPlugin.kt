@@ -9,6 +9,7 @@ import com.vzkz.build_logic.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
 class AndroidApplicationConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
@@ -37,7 +38,9 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
 
                 configureBuildTypes(commonExtension = this, extensionType = ExtensionType.APPLICATION)
             }
-
+            dependencies{
+                "implementation"(project(":common:general"))
+            }
         }
     }
 }

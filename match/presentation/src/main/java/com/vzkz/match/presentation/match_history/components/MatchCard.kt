@@ -40,7 +40,7 @@ import com.vzkz.core.presentation.designsystem.BeePadelGold
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.CalendarIcon
 import com.vzkz.core.presentation.designsystem.TrophyIcon
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import com.vzkz.match.presentation.match_history.model.MatchUi
 import com.vzkz.match.presentation.util.toMatchUi
 

@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
 import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelOutlinedActionButton
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 
 @Composable
 fun ServingDialog(

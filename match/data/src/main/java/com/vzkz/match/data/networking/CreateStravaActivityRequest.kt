@@ -2,6 +2,7 @@
 
 package com.vzkz.match.data.networking
 
+import android.content.Context
 import com.vzkz.core.data.networking.SPORT
 import com.vzkz.core.data.networking.TYPE
 import com.vzkz.match.domain.model.Match
@@ -20,13 +21,13 @@ data class CreateStravaActivityRequest(
     @SerialName("description") val description: String,
 )
 
-internal fun Match.createRequestFromMatch(): CreateStravaActivityRequest {
+internal fun Match.createRequestFromMatch(name: String, description: String): CreateStravaActivityRequest {
     return CreateStravaActivityRequest(
-        name = "Pádel Match", // todo where to put this string?
+        name = name,
         type = TYPE,
         sportType = SPORT,
         startDateLocal = dateTime.withZoneSameInstant(ZoneOffset.UTC).toString(),
         elapsedTime = elapsedTime.inWholeSeconds.toInt(),
-        description = getFormattedResultOfMatch()
+        description = description
     )
 }

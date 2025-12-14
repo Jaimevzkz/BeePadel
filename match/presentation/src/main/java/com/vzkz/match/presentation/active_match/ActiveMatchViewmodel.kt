@@ -8,7 +8,7 @@ import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.BaseViewModel
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import com.vzkz.core.presentation.ui.asUiText
 import com.vzkz.match.domain.MatchTracker
 import com.vzkz.match.domain.WatchConnector
@@ -143,7 +143,7 @@ class ActiveMatchViewmodel(
             messagingAction?.let {
                 val result = watchConnector.sendActionToWatch(it)
                 if (result is Result.Error) {
-                    Timber.e("Tracker error: ${result.error}")
+                    Timber.w("Tracker error: ${result.error}")
                 }
             }
         }
