@@ -20,6 +20,7 @@ dependencies {
     implementation(projects.match.domain)
     implementation(projects.core.database.domain)
     testImplementation(testFixtures(projects.common.sharedTest))
+    implementation(projects.common.general)
 
     // SqlDelight
     implementation(libs.sqlDelight.androidDriver)

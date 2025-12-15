@@ -40,7 +40,7 @@ import androidx.wear.compose.material3.OutlinedIconButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam1
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam2
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.CloseError

@@ -22,7 +22,7 @@ import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.Text
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 
 
 @Composable

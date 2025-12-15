@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 
 class EndToEndTesting {
     @get:Rule

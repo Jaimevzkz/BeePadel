@@ -39,7 +39,6 @@ class SqlDelightRepositoryTest : DatabaseTest() {
             db = beePadelDB,
             dispatchers = testDispatchers
         )
-
         sqlDelightRepository = SqlDelightRepository(
             localDB = beePadelDB,
             matchDataSource = matchDataSource,

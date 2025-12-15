@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

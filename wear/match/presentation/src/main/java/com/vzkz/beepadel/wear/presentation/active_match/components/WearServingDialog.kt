@@ -22,7 +22,7 @@ import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.RadioButtonDefaults
 import androidx.wear.compose.material3.Text
 import com.vzkz.core.presentation.designsystem.StartIcon
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 
 @Composable
 fun WearServingDialog(
