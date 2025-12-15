@@ -10,7 +10,6 @@ kotlin {
 }
 
 dependencies{
-
     implementation(projects.core.domain)
     implementation(projects.match.domain)
     implementation(projects.core.database.domain)
