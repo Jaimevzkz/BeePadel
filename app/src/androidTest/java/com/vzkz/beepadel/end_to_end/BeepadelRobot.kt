@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.vzkz.beepadel.MainActivity
-import com.vzkz.core.presentation.ui.R
+import com.vzkz.common.general.R
 import kotlinx.coroutines.runBlocking
 
 class BeepadelRobot(
