@@ -7,6 +7,7 @@ import com.vzkz.core.data.di.coreDataModule
 import com.vzkz.core.database.data.di.databaseModule
 import com.vzkz.match.data.di.matchDataModule
 import com.vzkz.match.presentation.di.matchViewmodelModule
+import com.vzkz.settings.data.di.settingsDataModule
 
 internal val appModules = listOf(
     appModule,
@@ -16,5 +17,6 @@ internal val appModules = listOf(
     databaseModule,
     coreConnectivityDataModule,
     settingsViewmodelModule,
-    preferencesModule
+    preferencesModule,
+    settingsDataModule
 )

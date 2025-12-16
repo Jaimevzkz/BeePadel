@@ -214,7 +214,7 @@ private fun SettingsScreenRoot(
             ImportExportMatchesButton(
                 modifier = Modifier,
                 onImport = {},
-                onExport = {},
+                onExport = { onAction(SettingsIntent.ExportMatchData) },
             )
 
             SectionTitle(

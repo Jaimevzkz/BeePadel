@@ -65,6 +65,8 @@ class SettingsViewModel(
             SettingsIntent.ContactUs -> sendEvent(ContactUs)
 
             SettingsIntent.NavigateToAbout -> sendEvent((NavigateToAbout))
+
+            SettingsIntent.ExportMatchData -> {/*todo export match data*/}
         }
     }
 
