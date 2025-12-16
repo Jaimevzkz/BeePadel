@@ -23,9 +23,7 @@ fun BeePadelScaffold(
         topBar = topAppBar
     ) { innerPadding ->
         if (withGradient) {
-            GradientBackground(
-//                modifier = Modifier.padding(innerPadding)
-            ) {
+            GradientBackground {
                 content(innerPadding)
             }
         } else {

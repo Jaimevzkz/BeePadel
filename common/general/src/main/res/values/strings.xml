@@ -95,4 +95,8 @@
     <string name="match_finished">Match Finished!</string>
     <string name="match_has_been_saved">The match has been saved on the phone app</string>
     <string name="strava_match_name">Pádel Match</string>
+    <string name="import_export_matches">Import/Export Matches</string>
+    <string name="import_matches">Import Matches</string>
+    <string name="export_matches">Export Matches</string>
+    <string name="data">Data</string>
 </resources>

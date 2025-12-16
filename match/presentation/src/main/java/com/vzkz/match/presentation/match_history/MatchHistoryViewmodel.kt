@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.presentation.ui.BaseViewModel
 import com.vzkz.match.domain.MatchTracker
+import com.vzkz.match.domain.MatchTrackerEvents
 import com.vzkz.match.domain.match_history.MatchHistoryRepository
 import com.vzkz.match.presentation.util.toMatchUi
 import kotlinx.coroutines.delay
@@ -46,6 +47,17 @@ class MatchHistoryViewModel(
                     _state.update { it.copy(dataLoaded = true) }
             }
             .flowOn(dispatchers.io)
+            .launchIn(viewModelScope)
+
+        matchTracker
+            .matchTrackerEvents
+            .onEach { event ->
+                when (event) {
+                    MatchTrackerEvents.MatchStartedFromWatch -> sendEvent(MatchHistoryEvent.NavigateToActiveMatch)
+                    null -> {}
+                }
+            }
+            .flowOn(dispatchers.default)
             .launchIn(viewModelScope)
     }
 

@@ -1,3 +1,3 @@
-- Añadida la pantalla de 'Sobre BeePadel'
-- Cambiar el posicionamiento de la version
-- Cambio en el icono de 'Empezar partido'
+- Corregir regresión al iniciar un partido desde el reloj
+- Actualizar las dependencias del proyecto
+- Añadir funcionalidad para importar/exportar partidos

@@ -22,6 +22,7 @@ import com.vzkz.match.presentation.active_match.ActiveMatchScreen
 import com.vzkz.match.presentation.match_history.MatchHistoryScreen
 import kotlinx.coroutines.flow.first
 import org.koin.compose.getKoin
+import timber.log.Timber
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable

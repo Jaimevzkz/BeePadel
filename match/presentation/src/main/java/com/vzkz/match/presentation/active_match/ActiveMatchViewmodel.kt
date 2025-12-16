@@ -253,8 +253,10 @@ class ActiveMatchViewmodel(
                 loading = true
             )
         }
-        ioLaunch { matchTracker.discardMatch() }
-        sendEvent(ActiveMatchEvent.NavToHistoryScreen())
+        ioLaunch {
+            matchTracker.discardMatch()
+            sendEvent(ActiveMatchEvent.NavToHistoryScreen())
+        }
     }
 
 }
