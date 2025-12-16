@@ -30,6 +30,7 @@ sealed class SettingsIntent : Intent {
     data object OpenGithub: SettingsIntent()
     data object OpenPlayStore: SettingsIntent()
     data object ContactUs: SettingsIntent()
+    data object ExportMatchData: SettingsIntent()
 }
 
 sealed class SettingsEvent : Event {

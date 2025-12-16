@@ -19,7 +19,6 @@ class BeePadelApp : Application() {
             Timber.plant(TimberTaggedDebugTree())
         }
 
-
         startKoin {
             androidLogger()
             androidContext(this@BeePadelApp)
