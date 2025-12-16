@@ -1,9 +1,9 @@
 package com.vzkz.match.data
 
-import android.content.Context
 import com.vzkz.beepadel.core.preferences.domain.PreferencesRepository
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.common.general.LOGGED_WITH_BEEPADEL
+import com.vzkz.common.general.R
 import com.vzkz.common.general.data_generator.emptyGame
 import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.emptySet
@@ -25,6 +25,8 @@ import com.vzkz.match.data.networking.CreateStravaActivityRequest
 import com.vzkz.match.data.networking.CreateStravaActivityResponse
 import com.vzkz.match.data.networking.createRequestFromMatch
 import com.vzkz.match.domain.MatchTracker
+import com.vzkz.match.domain.MatchTrackerEvents
+import com.vzkz.match.domain.StringGetter
 import com.vzkz.match.domain.WatchConnector
 import com.vzkz.match.domain.model.Match
 import com.vzkz.match.domain.model.Points
@@ -33,6 +35,7 @@ import com.vzkz.match.domain.model.getSetCount
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,19 +48,18 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
+import timber.log.Timber
 import kotlin.time.Duration
-import com.vzkz.common.general.R
-import com.vzkz.match.domain.StringGetter
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MatchTrackerImpl(
     private val applicationScope: CoroutineScope,
-//    private val context: Context,
     private val stringGetter: StringGetter,
     private val dispatchers: DispatchersProvider,
     private val localStorageRepository: LocalStorageRepository,
@@ -78,6 +80,9 @@ class MatchTrackerImpl(
             gameId = uUIDProvider.randomUUID(),
             zonedDateTime = zonedDateProvider.now()
         )
+
+    private val _matchTrackerEvents = Channel<MatchTrackerEvents?>(Channel.BUFFERED)
+    override val matchTrackerEvents: Flow<MatchTrackerEvents?> = _matchTrackerEvents.receiveAsFlow()
 
     private val _activeMatch = MutableStateFlow(initialMatchState())
     override val activeMatch = _activeMatch.asStateFlow()
@@ -140,11 +145,13 @@ class MatchTrackerImpl(
             .onEach { action ->
                 when (action) {
                     is Start -> {
+                        Timber.i("Start match received from watch")
                         setIsTeam1Serving(action.isTeam1Serving)
                         setIsMatchStarted(true)
                         applicationScope.launch(dispatchers.default) {
                             watchConnector.sendActionToWatch(Start(action.isTeam1Serving))
                         }
+                        _matchTrackerEvents.trySend(MatchTrackerEvents.MatchStartedFromWatch)
                     }
 
                     is MessagingAction.AddPointTo -> addPointTo(action.addToTeam1)
@@ -176,9 +183,7 @@ class MatchTrackerImpl(
 
         return when (val insert = localStorageRepository.insertOrReplaceMatch(finalMatch)) {
             is Result.Success -> {
-                applicationScope.launch {
-                    watchConnector.sendActionToWatch(MessagingAction.Finish)
-                }
+                watchConnector.sendActionToWatch(MessagingAction.Finish)
                 resetMatchTrackerState()
 
                 if (sessionStorage.get() != null)
@@ -249,9 +254,10 @@ class MatchTrackerImpl(
         }
     }
 
-    override suspend fun discardMatch() {
+    override suspend fun discardMatch(): EmptyResult<DataError.Logic> {
         resetMatchTrackerState()
         watchConnector.sendActionToWatch(MessagingAction.Discard)
+        return Result.Success(Unit)
     }
 
     private fun addPointTo(isPlayer1: Boolean) {
@@ -315,14 +321,11 @@ class MatchTrackerImpl(
         }
     }
 
-    private fun resetMatchTrackerState() {
-        applicationScope.launch {
-            delay(MatchTracker.DISCARD_MATCH_DELAY)
-            _activeMatch.update { initialMatchState() }
-            setIsMatchStarted(false)
-            setIsTeam1Serving(null)
-            previousMatchStateList = mutableListOf(activeMatch.value)
-            _elapsedTime.value = Duration.ZERO
-        }
+    private suspend fun resetMatchTrackerState() {
+        _activeMatch.update { initialMatchState() }
+        setIsMatchStarted(false)
+        setIsTeam1Serving(null)
+        previousMatchStateList = mutableListOf(activeMatch.value)
+        _elapsedTime.value = Duration.ZERO
     }
 }

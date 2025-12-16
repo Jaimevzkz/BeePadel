@@ -1,3 +1,3 @@
-- Add 'About BeePadel' screen
-- Change version number to 'About Beepadel'
-- Change 'Start Match' icon
+- Fix regression when starting a match from watch
+- Bump project dependencies
+- Add import export match data feature

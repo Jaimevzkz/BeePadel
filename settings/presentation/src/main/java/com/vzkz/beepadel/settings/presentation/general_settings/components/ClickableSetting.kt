@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -23,8 +24,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ClickableSetting(
     modifier: Modifier = Modifier,
-    icon: @Composable RowScope.() -> Unit = {},
+    startIcon: @Composable RowScope.() -> Unit = {},
     title: String,
+    endIcon: (@Composable RowScope.() -> Unit)? = null,
     onClick: () -> Unit
 ) {
     Row(
@@ -33,18 +35,23 @@ fun ClickableSetting(
                 onClick()
             }
             .fillMaxWidth()
+            .height(80.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(horizontal = 12.dp, vertical = 24.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        icon()
+        startIcon()
         Text(text = title, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.weight(1f))
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-            contentDescription = null
-        )
+        if (endIcon != null) {
+            endIcon()
+        } else {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                contentDescription = null
+            )
+        }
     }
 }

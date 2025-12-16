@@ -28,7 +28,7 @@ fun ConnectToStravaButton(
 ) {
     ClickableSetting(
         modifier = modifier,
-        icon = {
+        startIcon = {
             Row {
                 Icon(
                     modifier = Modifier
@@ -70,7 +70,7 @@ fun GithubStartButton(
 ) {
     ClickableSetting(
         modifier = modifier,
-        icon = {
+        startIcon = {
             Icon(
                 modifier = Modifier
                     .padding(end = 8.dp)
@@ -93,7 +93,7 @@ fun PlayerStoreButton(
 ) {
     ClickableSetting(
         modifier = modifier,
-        icon = {
+        startIcon = {
             Icon(
                 modifier = Modifier
                     .padding(end = 8.dp)
@@ -115,7 +115,7 @@ fun ContactButton(
 ) {
     ClickableSetting(
         modifier = modifier,
-        icon = {
+        startIcon = {
             Icon(
                 modifier = Modifier
                     .padding(end = 8.dp)
@@ -138,7 +138,7 @@ fun AboutButton(
     val text = stringResource(R.string.about2) + " ${stringResource(R.string.beepadel)}"
     ClickableSetting(
         modifier = modifier,
-        icon = {
+        startIcon = {
             Icon(
                 modifier = Modifier
                     .padding(end = 8.dp)

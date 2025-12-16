@@ -1,6 +1,7 @@
 package com.vzkz.match.domain
 
 import com.vzkz.core.domain.error.DataError
+import com.vzkz.core.domain.error.EmptyResult
 import com.vzkz.core.domain.error.Result
 import com.vzkz.match.domain.model.Match
 import kotlinx.coroutines.flow.Flow
@@ -15,17 +16,18 @@ interface MatchTracker {
     val goldenPoint: Flow<Boolean>
     val isMatchStarted: Flow<Boolean>
     val currentHeartRate: Flow<Int?>
+    val matchTrackerEvents: Flow<MatchTrackerEvents?>
 
     fun addPointToPlayer1()
     fun addPointToPlayer2()
     fun undoPoint()
-    suspend fun discardMatch()
+    suspend fun discardMatch(): EmptyResult<DataError.Logic>
     suspend fun finishMatch(): Result<Unit, DataError>
 
     fun setIsTeam1Serving(isTeam1Serving: Boolean?)
     fun setIsMatchStarted(isPlayingMatch: Boolean)
 
     companion object Constants {
-        const val DISCARD_MATCH_DELAY = 50L
+//        const val DISCARD_MATCH_DELAY = 50L
     }
 }
