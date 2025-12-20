@@ -44,6 +44,7 @@ internal fun Project.configureBuildTypes(
             buildConfigField("String", "STRAVA_CLIENT_SECRET", clientSecret)
             buildConfigField("String", "GITHUB_URL", "\"https://github.com/Jaimevzkz/BeePadel\"")
             buildConfigField("String", "CONTACT_EMAIL", "\"jaimevazquezmartin23@gmail.com\"")
+            buildConfigField("String", "EXPORT_MATCHES_FILE_NAME", "\"beepadel-match-list-export.json\"")
 
             manifestPlaceholders["appAuthRedirectScheme"] =
                 libs.findVersion("projectVersionName").get()

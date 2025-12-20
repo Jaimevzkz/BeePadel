@@ -3,7 +3,6 @@
 package com.vzkz.beepadel.wear.presentation.active_match
 
 
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
 import com.vzkz.beepadel.wear.match.domain.ExerciseTracker
 import com.vzkz.beepadel.wear.match.domain.MatchTracker
@@ -25,8 +24,8 @@ import kotlin.time.Duration.Companion.seconds
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.asUiText
-import com.vzkz.match.domain.model.Points
-import com.vzkz.match.domain.model.toPoints
+import com.vzkz.core.domain.model.Points
+import com.vzkz.core.domain.model.toPoints
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.distinctUntilChanged

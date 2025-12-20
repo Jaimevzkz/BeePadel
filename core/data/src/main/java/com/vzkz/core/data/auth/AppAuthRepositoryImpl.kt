@@ -1,5 +1,6 @@
-package com.vzkz.core.data
+package com.vzkz.core.data.auth
 
+import com.vzkz.core.data.BuildConfig
 import com.vzkz.core.data.auth.token.RefreshTokenRequest
 import com.vzkz.core.data.auth.token.RefreshTokenResponse
 import com.vzkz.core.data.networking.DEAUTHORIZE
@@ -29,11 +30,11 @@ class AppAuthRepositoryImpl(
         val result = httpClient.post<RefreshTokenRequest, RefreshTokenResponse>(
             route = TOKEN,
             body = RefreshTokenRequest(
-                    clientId = BuildConfig.STRAVA_CLIENT_ID,
-                    clientSecret = BuildConfig.STRAVA_CLIENT_SECRET,
-                    code = code,
-                    grantType = "authorization_code"
-                )
+                clientId = BuildConfig.STRAVA_CLIENT_ID,
+                clientSecret = BuildConfig.STRAVA_CLIENT_SECRET,
+                code = code,
+                grantType = "authorization_code"
+            )
         )
 
         if (result is Result.Success) {
@@ -43,18 +44,18 @@ class AppAuthRepositoryImpl(
                     refreshToken = result.data.refreshToken,
                 )
             )
-            Timber.i("[AUTH] New Access Token retrieved and saved: ${result.data.accessToken}")
+            Timber.Forest.i("[AUTH] New Access Token retrieved and saved: ${result.data.accessToken}")
         }
         return result.asEmptyDataResult()
     }
 
-    override suspend fun logoutFromStrava(): EmptyResult<DataError.Network>{
+    override suspend fun logoutFromStrava(): EmptyResult<DataError.Network> {
         val result = httpClient.post<Unit, Unit>(
             route = DEAUTHORIZE,
             body = Unit
         )
         if (result is Result.Success){
-            Timber.i("Success deauthorizing... deleting local tokens")
+            Timber.Forest.i("Success deauthorizing... deleting local tokens")
             sessionStorage.set(null)
         }
 

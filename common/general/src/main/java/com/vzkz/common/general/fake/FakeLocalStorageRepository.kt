@@ -3,7 +3,7 @@ package com.vzkz.common.general.fake
 import com.vzkz.core.database.domain.LocalStorageRepository
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID

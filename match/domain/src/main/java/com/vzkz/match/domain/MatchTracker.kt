@@ -3,10 +3,9 @@ package com.vzkz.match.domain
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.EmptyResult
 import com.vzkz.core.domain.error.Result
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import javax.swing.plaf.nimbus.State
 import kotlin.time.Duration
 
 interface MatchTracker {

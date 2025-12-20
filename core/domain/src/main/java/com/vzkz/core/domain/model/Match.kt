@@ -1,4 +1,4 @@
-package com.vzkz.match.domain.model
+package com.vzkz.core.domain.model
 
 import java.time.ZonedDateTime
 import java.util.UUID

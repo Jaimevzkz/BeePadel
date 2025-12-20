@@ -5,8 +5,8 @@ import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
-import com.vzkz.match.domain.model.Points
-import com.vzkz.match.domain.model.Points.Zero
+import com.vzkz.core.domain.model.Points
+import com.vzkz.core.domain.model.Points.Zero
 import kotlin.time.Duration
 
 data class WearActiveMatchState(

@@ -1,10 +1,10 @@
 package com.vzkz.common.general.data_generator
 
-import com.vzkz.match.domain.model.Game
-import com.vzkz.match.domain.model.Match
-import com.vzkz.match.domain.model.Points
-import com.vzkz.match.domain.model.Points.*
-import com.vzkz.match.domain.model.Set
+import com.vzkz.core.domain.model.Game
+import com.vzkz.core.domain.model.Match
+import com.vzkz.core.domain.model.Points
+import com.vzkz.core.domain.model.Points.*
+import com.vzkz.core.domain.model.Set
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID

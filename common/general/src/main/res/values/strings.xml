@@ -24,6 +24,7 @@
     <string name="error_payload_too_large">The file you\'re trying to upload is too large.</string>
     <string name="error_server_error">Oops, something went wrong, please try again.</string>
     <string name="error_serialization">Oops, couldn\'t parse data.\t</string>
+    <string name="error_export_match_data">An error occurred while exporting match data.</string>
 
 
     <string name="beepadel" translatable="false">BeePadel</string>
@@ -99,4 +100,5 @@
     <string name="import_matches">Import Matches</string>
     <string name="export_matches">Export Matches</string>
     <string name="data">Data</string>
+    <string name="match_data_exported_successfully">Success exporting data</string>
 </resources>
