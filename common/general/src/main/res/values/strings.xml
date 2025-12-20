@@ -101,4 +101,9 @@
     <string name="export_matches">Export Matches</string>
     <string name="data">Data</string>
     <string name="match_data_exported_successfully">Success exporting data</string>
+    <string name="match_data_imported_successfully">Success importing data</string>
+    <string name="error_total_import">Fatal error while importing matches, 0 matches imported.</string>
+    <string name="error_partial_import">Some matches were not successfully imported.</string>
+    <string name="error_badly_formed_json">The format for the selected import file is not correct.</string>
+    <string name="error_wrong_match_list_structure">The selected file does not have the proper Beepadel match structure.</string>
 </resources>

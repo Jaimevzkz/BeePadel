@@ -93,4 +93,9 @@
     <string name="data">Datos</string>
     <string name="error_export_match_data">Ha ocurrido un error exprotando los datos de partidos</string>
     <string name="match_data_exported_successfully">Datos exportados con éxito</string>
+    <string name="match_data_imported_successfully">Datos importados con éxito</string>
+    <string name="error_total_import">Ha ocurrido un error importando tus partidos, no se ha importado ninguno.</string>
+    <string name="error_partial_import">Algunos partidos no se han importado correctamente.</string>
+    <string name="error_badly_formed_json">El formato del archivo de importación seleccionado es incorrecto</string>
+    <string name="error_wrong_match_list_structure">El archivo seleccionado no sigue la estructura requerida por BeePadel.</string>
 </resources>

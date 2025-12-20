@@ -87,6 +87,15 @@ class SqlDelightRepository(
         }
     }
 
+    override suspend fun insertMatchList(matchList: List<Match>): Int {
+        var failedInserts = 0
+        matchList.forEach { match ->
+            val insert = insertOrReplaceMatch(match)
+            if (insert is Result.Error) failedInserts++
+        }
+        return failedInserts
+    }
+
     override suspend fun deleteMatch(matchId: UUID): Result<Unit, DataError.Local> { // Turn into transaction??
         return withContext(dispatchers.io) {
             val deleteGamesDeferredList =

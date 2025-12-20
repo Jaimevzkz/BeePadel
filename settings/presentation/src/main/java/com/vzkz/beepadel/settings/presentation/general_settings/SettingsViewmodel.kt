@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import timber.log.Timber
+import java.io.InputStream
 import java.io.OutputStream
 
 class SettingsViewModel(
@@ -84,6 +85,10 @@ class SettingsViewModel(
             is SettingsIntent.ExportMatchData -> exportMatchData(intent.outputStream)
 
             SettingsIntent.OnExportMatchDataClick -> sendEvent(SelectExportLauncher)
+
+            SettingsIntent.OnImportMatchDataClick -> sendEvent(SettingsEvent.OpenFilePickerLauncher)
+
+            is SettingsIntent.ImportMatchData -> importMatchData(intent.inputStream)
         }
     }
 
@@ -91,15 +96,21 @@ class SettingsViewModel(
         ioLaunch {
             val resultStringRes =
                 when (val export = importExportRepository.exportData(outputStream)) {
-                    is Result.Success -> {
+                    is Result.Success -> UiText.StringResource(R.string.match_data_exported_successfully)
+                    is Result.Error -> export.error.asUiText()
 
-                        Timber.tag("IN-APP").i("Success exporting")
-                        UiText.StringResource(R.string.match_data_exported_successfully)
-                    }
-                    is Result.Error -> {
-                        Timber.tag("IN-APP").i("Error exporting")
-                        export.error.asUiText()
-                    }
+                }
+
+            sendEvent(SettingsEvent.MakeToast(resultStringRes))
+        }
+    }
+
+    private fun importMatchData(inputStream: InputStream) {
+        ioLaunch {
+            val resultStringRes =
+                when (val import = importExportRepository.importData(inputStream)) {
+                    is Result.Success -> UiText.StringResource(R.string.match_data_imported_successfully)
+                    is Result.Error -> import.error.asUiText()
                 }
 
             sendEvent(SettingsEvent.MakeToast(resultStringRes))

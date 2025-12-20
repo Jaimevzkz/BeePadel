@@ -12,4 +12,5 @@ interface LocalStorageRepository {
     suspend fun deleteMatch(matchId: UUID): Result<Unit, DataError.Local>
 
     suspend fun insertOrReplaceMatch(match: Match): Result<Unit, DataError.Local>
+    suspend fun insertMatchList(matchList: List<Match>): Int
 }

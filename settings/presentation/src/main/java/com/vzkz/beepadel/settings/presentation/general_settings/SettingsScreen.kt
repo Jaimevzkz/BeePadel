@@ -66,7 +66,6 @@ import com.vzkz.common.general.R
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 
 @Composable
@@ -84,11 +83,22 @@ fun SettingsScreen(
         rememberLauncherForActivityResult(
             ActivityResultContracts.CreateDocument("application/json")
         ) { uri ->
-            Timber.tag("IN-APP").i("launcher triggered with uri: $uri")
             uri?.let {
                 val stream = context.contentResolver.openOutputStream(it)
                 if (stream != null) {
                     viewModel.onAction(SettingsIntent.ExportMatchData(stream))
+                }
+            }
+        }
+
+    val importLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.OpenDocument()
+        ) { uri ->
+            uri?.let {
+                val stream = context.contentResolver.openInputStream(it)
+                if (stream != null) {
+                    viewModel.onAction(SettingsIntent.ImportMatchData(stream))
                 }
             }
         }
@@ -147,6 +157,10 @@ fun SettingsScreen(
 
             SettingsEvent.SelectExportLauncher -> {
                 exportLauncher.launch(BuildConfig.EXPORT_MATCHES_FILE_NAME)
+            }
+
+            SettingsEvent.OpenFilePickerLauncher -> {
+                importLauncher.launch(arrayOf("application/json"))
             }
 
             is SettingsEvent.MakeToast -> {
@@ -241,7 +255,7 @@ private fun SettingsScreenRoot(
             )
             ImportExportMatchesButton(
                 modifier = Modifier,
-                onImport = {},
+                onImport = { onAction(SettingsIntent.OnImportMatchDataClick) },
                 onExport = { onAction(SettingsIntent.OnExportMatchDataClick) },
             )
 
