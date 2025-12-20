@@ -42,4 +42,13 @@ class FakeLocalStorageRepository: LocalStorageRepository {
 
         return Result.Success(Unit)
     }
+
+    override suspend fun insertMatchList(matchList: List<Match>): Int {
+        var failureNumber = 0
+        matchList.forEach { match ->
+            val insert = insertOrReplaceMatch(match)
+            if (insert is Result.Error) failureNumber++
+        }
+        return failureNumber
+    }
 }

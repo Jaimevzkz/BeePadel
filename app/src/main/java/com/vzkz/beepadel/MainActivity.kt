@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
             lifecycleScope.launch(dispatchers.io) {
                 val result = authRepository.fetchAndSaveRefreshToken(code)
                 if (result is Result.Error)
-                    Timber.tag("IN-APP").e("Error occurred while fetching refresh token: ${result.error}")
+                    Timber.e("Error occurred while fetching refresh token: ${result.error}")
             }
         }
         super.onNewIntent(intent)

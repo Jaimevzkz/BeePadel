@@ -7,6 +7,7 @@ import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
 import java.io.DataOutputStream
+import java.io.InputStream
 import java.io.OutputStream
 
 data class SettingsState(
@@ -35,6 +36,8 @@ sealed class SettingsIntent : Intent {
     data object ContactUs: SettingsIntent()
     data class ExportMatchData(val outputStream: OutputStream): SettingsIntent()
     data object OnExportMatchDataClick: SettingsIntent()
+    data class ImportMatchData(val inputStream: InputStream): SettingsIntent()
+    data object OnImportMatchDataClick: SettingsIntent()
 }
 
 sealed class SettingsEvent : Event {
@@ -47,4 +50,5 @@ sealed class SettingsEvent : Event {
     data object ContactUs: SettingsEvent()
     data object SelectExportLauncher: SettingsEvent()
     data class MakeToast(val uiText: UiText): SettingsEvent()
+    data object OpenFilePickerLauncher: SettingsEvent()
 }

@@ -80,7 +80,11 @@ private fun DataError.Network.asUiText(): UiText {
 
 private fun ImportExportError.asUiText(): UiText {
     return when (this) {
-        ImportExportError.EXPORT_FAILURE -> UiText.StringResource(R.string.error_export_match_data)
+        ImportExportError.EXPORT_FAILURE -> StringResource(R.string.error_export_match_data)
+        ImportExportError.TOTAL_IMPORT_FAILURE -> StringResource(R.string.error_total_import)
+        ImportExportError.PARTIAL_IMPORT_FAILURE -> StringResource(R.string.error_partial_import)
+        ImportExportError.BADLY_FORMED_JSON -> StringResource(R.string.error_badly_formed_json)
+        ImportExportError.WRONG_MATCH_LIST_STRUCTURE -> StringResource(R.string.error_wrong_match_list_structure)
     }
 }
 
