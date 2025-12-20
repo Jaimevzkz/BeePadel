@@ -91,4 +91,6 @@
     <string name="import_matches">Importar Partidos</string>
     <string name="export_matches">Exportar Partidos</string>
     <string name="data">Datos</string>
+    <string name="error_export_match_data">Ha ocurrido un error exprotando los datos de partidos</string>
+    <string name="match_data_exported_successfully">Datos exportados con éxito</string>
 </resources>

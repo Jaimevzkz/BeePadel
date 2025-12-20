@@ -8,5 +8,4 @@ android {
 
 dependencies {
     implementation(projects.settings.domain)
-    implementation(projects.core.database.domain)
 }

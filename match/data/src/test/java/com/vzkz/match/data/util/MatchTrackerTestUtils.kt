@@ -4,7 +4,7 @@ import com.vzkz.common.general.data_generator.defaultUUID
 import com.vzkz.common.general.data_generator.emptyMatch
 import com.vzkz.common.general.data_generator.fixedZonedDateTime
 import com.vzkz.match.data.MatchTrackerImpl
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import kotlin.math.max
 import kotlin.math.min
 

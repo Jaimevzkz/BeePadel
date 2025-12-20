@@ -7,6 +7,7 @@ import com.vzkz.core.domain.error.MessagingError
 import com.vzkz.core.domain.error.RootError
 import com.vzkz.core.presentation.ui.UiText.StringResource
 import com.vzkz.common.general.R
+import com.vzkz.core.domain.error.ImportExportError
 
 private fun DataError.asUiText(): UiText {
     return when (this) {
@@ -47,9 +48,9 @@ private fun ExerciseError.asUiText(): UiText {
 
 private fun MessagingError.asUiText(): UiText {
     return when (this) {
-        MessagingError.CONNECTION_INTERRUPTED ->  StringResource(R.string.error_connection_interrupted)
-        MessagingError.DISCONNECTED ->  StringResource(R.string.error_disconnected)
-        MessagingError.UNKNOWN ->  StringResource(R.string.error_unknown)
+        MessagingError.CONNECTION_INTERRUPTED -> StringResource(R.string.error_connection_interrupted)
+        MessagingError.DISCONNECTED -> StringResource(R.string.error_disconnected)
+        MessagingError.UNKNOWN -> StringResource(R.string.error_unknown)
     }
 }
 
@@ -59,42 +60,27 @@ private fun DataError.Logic.asUiText(): UiText {
     }
 }
 
-private fun DataError.Network.asUiText(): UiText{
-    return when(this){
-        DataError.Network.REQUEST_TIMEOUT ->
-            UiText.StringResource(
-                R.string.error_request_timeout
-            )
+private fun DataError.Network.asUiText(): UiText {
+    return when (this) {
+        DataError.Network.REQUEST_TIMEOUT -> UiText.StringResource(R.string.error_request_timeout)
 
-        DataError.Network.TOO_MANY_REQUEST ->
-            UiText.StringResource(
-                R.string.error_too_many_request
-            )
+        DataError.Network.TOO_MANY_REQUEST -> UiText.StringResource(R.string.error_too_many_request)
 
-        DataError.Network.NO_INTERNET ->
-            UiText.StringResource(
-                R.string.error_no_internet
-            )
+        DataError.Network.NO_INTERNET -> UiText.StringResource(R.string.error_no_internet)
 
-        DataError.Network.PAYLOAD_TOO_LARGE ->
-            UiText.StringResource(
-                R.string.error_payload_too_large
-            )
+        DataError.Network.PAYLOAD_TOO_LARGE -> UiText.StringResource(R.string.error_payload_too_large)
 
-        DataError.Network.SERVER_ERROR ->
-            UiText.StringResource(
-                R.string.error_server_error
-            )
+        DataError.Network.SERVER_ERROR -> UiText.StringResource(R.string.error_server_error)
 
-        DataError.Network.SERIALIZATION ->
-            UiText.StringResource(
-                R.string.error_serialization
-            )
+        DataError.Network.SERIALIZATION -> UiText.StringResource(R.string.error_serialization)
 
-        else ->
-            UiText.StringResource(
-                R.string.error_unknown
-            )
+        else -> UiText.StringResource(R.string.error_unknown)
+    }
+}
+
+private fun ImportExportError.asUiText(): UiText {
+    return when (this) {
+        ImportExportError.EXPORT_FAILURE -> UiText.StringResource(R.string.error_export_match_data)
     }
 }
 
@@ -103,4 +89,5 @@ fun RootError.asUiText(): UiText = when (this) {
     is GenericError -> this.asUiText()
     is ExerciseError -> this.asUiText()
     is MessagingError -> this.asUiText()
+    is ImportExportError -> this.asUiText()
 }

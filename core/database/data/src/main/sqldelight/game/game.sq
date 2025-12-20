@@ -1,4 +1,4 @@
-import com.vzkz.match.domain.model.Points;
+import com.vzkz.core.domain.model.Points;
 import java.util.UUID;
 
 CREATE TABLE gameEntity(

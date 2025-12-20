@@ -3,8 +3,11 @@
 package com.vzkz.beepadel.settings.presentation.general_settings
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.More
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material.icons.filled.MoreVert
@@ -52,7 +54,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vzkz.beepadel.settings.presentation.BuildConfig
 import com.vzkz.beepadel.settings.presentation.general_settings.components.AboutButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.BooleanSetting
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
@@ -60,10 +61,12 @@ import com.vzkz.beepadel.settings.presentation.general_settings.components.Conta
 import com.vzkz.beepadel.settings.presentation.general_settings.components.GithubStartButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.PlayerStoreButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.SectionTitle
+import com.vzkz.common.general.BuildConfig
 import com.vzkz.common.general.R
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 
 @Composable
@@ -77,6 +80,18 @@ fun SettingsScreen(
     val events by viewModel.events.collectAsState(initial = null)
     val activity = LocalActivity.current
     val context = LocalContext.current
+    val exportLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.CreateDocument("application/json")
+        ) { uri ->
+            Timber.tag("IN-APP").i("launcher triggered with uri: $uri")
+            uri?.let {
+                val stream = context.contentResolver.openOutputStream(it)
+                if (stream != null) {
+                    viewModel.onAction(SettingsIntent.ExportMatchData(stream))
+                }
+            }
+        }
 
     BackHandler {
         onNavigateBack()
@@ -130,6 +145,18 @@ fun SettingsScreen(
                 onNavToAbout()
             }
 
+            SettingsEvent.SelectExportLauncher -> {
+                exportLauncher.launch(BuildConfig.EXPORT_MATCHES_FILE_NAME)
+            }
+
+            is SettingsEvent.MakeToast -> {
+                Toast.makeText(
+                    context,
+                    (events as SettingsEvent.MakeToast).uiText.asString(context),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
             null -> {}
         }
     }
@@ -172,11 +199,12 @@ private fun SettingsScreenRoot(
     ) { innerPadding ->
         val itemSpacing = 8.dp
         val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
-                .verticalScroll(scrollState)
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp)
+                .verticalScroll(scrollState)
                 .fillMaxSize()
         ) {
             SectionTitle(
@@ -214,7 +242,7 @@ private fun SettingsScreenRoot(
             ImportExportMatchesButton(
                 modifier = Modifier,
                 onImport = {},
-                onExport = { onAction(SettingsIntent.ExportMatchData) },
+                onExport = { onAction(SettingsIntent.OnExportMatchDataClick) },
             )
 
             SectionTitle(
@@ -284,7 +312,10 @@ fun ImportExportMatchesButton(
                         )
                     },
                     text = { Text(stringResource(R.string.import_matches)) },
-                    onClick = onImport
+                    onClick = {
+                        expanded = false
+                        onImport()
+                    }
                 )
                 DropdownMenuItem(
                     leadingIcon = {
@@ -294,7 +325,10 @@ fun ImportExportMatchesButton(
                         )
                     },
                     text = { Text(stringResource(R.string.export_matches)) },
-                    onClick = onExport
+                    onClick = {
+                        expanded = false
+                        onExport()
+                    }
                 )
             }
         }

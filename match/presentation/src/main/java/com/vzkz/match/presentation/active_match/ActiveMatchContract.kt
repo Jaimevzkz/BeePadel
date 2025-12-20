@@ -1,12 +1,11 @@
 package com.vzkz.match.presentation.active_match
 
-import androidx.annotation.StringRes
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
-import com.vzkz.match.domain.model.Points
+import com.vzkz.core.domain.model.Points
 import com.vzkz.match.presentation.model.ActiveMatchDialog
 import kotlin.time.Duration
 

@@ -2,10 +2,9 @@
 
 package com.vzkz.match.data.networking
 
-import android.content.Context
 import com.vzkz.core.data.networking.SPORT
 import com.vzkz.core.data.networking.TYPE
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

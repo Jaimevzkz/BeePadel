@@ -1,7 +1,7 @@
 package com.vzkz.match.presentation.util
 
 import com.vzkz.core.presentation.ui.formatted
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import com.vzkz.match.presentation.match_history.model.MatchUi
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

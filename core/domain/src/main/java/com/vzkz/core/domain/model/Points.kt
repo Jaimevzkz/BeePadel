@@ -1,4 +1,4 @@
-package com.vzkz.match.domain.model
+package com.vzkz.core.domain.model
 
 enum class Points(val string: String) {
     Zero("00"),

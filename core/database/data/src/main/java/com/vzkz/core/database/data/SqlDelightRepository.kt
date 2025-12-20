@@ -9,7 +9,7 @@ import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
 import com.vzkz.core.domain.error.asEmptyDataResult
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow

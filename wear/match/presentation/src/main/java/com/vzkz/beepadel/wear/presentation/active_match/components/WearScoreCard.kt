@@ -30,7 +30,7 @@ import com.vzkz.core.presentation.designsystem.BallIcon
 import com.vzkz.core.presentation.designsystem.BeePadelDarkRed
 import com.vzkz.core.presentation.designsystem.Exo2
 import com.vzkz.core.presentation.ui.formatted
-import com.vzkz.match.domain.model.Points
+import com.vzkz.core.domain.model.Points
 import kotlin.time.Duration
 import com.vzkz.common.general.R
 

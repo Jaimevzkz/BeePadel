@@ -1,10 +1,13 @@
 package com.vzkz.beepadel.settings.presentation.general_settings
 
+import android.net.Uri
 import com.vzkz.common.general.GOLDEN_POINT
 import com.vzkz.core.presentation.ui.UiText
 import com.vzkz.core.presentation.ui.model.Event
 import com.vzkz.core.presentation.ui.model.Intent
 import com.vzkz.core.presentation.ui.model.State
+import java.io.DataOutputStream
+import java.io.OutputStream
 
 data class SettingsState(
     val error: UiText?,
@@ -30,7 +33,8 @@ sealed class SettingsIntent : Intent {
     data object OpenGithub: SettingsIntent()
     data object OpenPlayStore: SettingsIntent()
     data object ContactUs: SettingsIntent()
-    data object ExportMatchData: SettingsIntent()
+    data class ExportMatchData(val outputStream: OutputStream): SettingsIntent()
+    data object OnExportMatchDataClick: SettingsIntent()
 }
 
 sealed class SettingsEvent : Event {
@@ -41,4 +45,6 @@ sealed class SettingsEvent : Event {
     data object OpenGithub: SettingsEvent()
     data object OpenPlayStore: SettingsEvent()
     data object ContactUs: SettingsEvent()
+    data object SelectExportLauncher: SettingsEvent()
+    data class MakeToast(val uiText: UiText): SettingsEvent()
 }

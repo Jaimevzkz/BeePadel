@@ -1,8 +1,8 @@
 package com.vzkz.core.database.data.util
 
-import com.vzkz.match.domain.model.Game
-import com.vzkz.match.domain.model.Match
-import com.vzkz.match.domain.model.Set
+import com.vzkz.core.domain.model.Game
+import com.vzkz.core.domain.model.Match
+import com.vzkz.core.domain.model.Set
 import game.GameEntity
 import match.MatchEntity
 import set.SetEntity

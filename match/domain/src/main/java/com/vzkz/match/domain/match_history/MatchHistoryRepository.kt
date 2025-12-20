@@ -2,7 +2,7 @@ package com.vzkz.match.domain.match_history
 
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.EmptyResult
-import com.vzkz.match.domain.model.Match
+import com.vzkz.core.domain.model.Match
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 

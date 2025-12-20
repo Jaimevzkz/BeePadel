@@ -4,7 +4,7 @@ import com.vzkz.core.database.data.BeePadelDB
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
 import com.vzkz.core.domain.error.Result
-import com.vzkz.match.domain.model.Points
+import com.vzkz.core.domain.model.Points
 import game.GameEntity
 import kotlinx.coroutines.withContext
 import java.util.UUID
