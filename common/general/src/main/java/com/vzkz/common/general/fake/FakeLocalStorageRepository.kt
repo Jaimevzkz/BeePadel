@@ -51,4 +51,8 @@ class FakeLocalStorageRepository: LocalStorageRepository {
         }
         return failureNumber
     }
+
+    fun deleteAllMatches(){
+        matchHistoryFlow.value.clear()
+    }
 }

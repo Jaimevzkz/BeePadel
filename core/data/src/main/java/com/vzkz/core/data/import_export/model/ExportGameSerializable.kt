@@ -5,6 +5,7 @@ import com.vzkz.core.domain.model.toPoints
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@kotlinx.serialization.InternalSerializationApi
 @Serializable
 data class ExportGameSerializable(
     val gameId: String,
@@ -18,6 +19,7 @@ data class ExportGameSerializable(
     )
 }
 
+@kotlinx.serialization.InternalSerializationApi
 fun Game.toExportGameSerializable(): ExportGameSerializable = ExportGameSerializable(
     gameId = gameId.toString(),
     player1Points = player1Points.ordinal,
