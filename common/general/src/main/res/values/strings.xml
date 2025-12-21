@@ -15,6 +15,10 @@
     <string name="error_connection_interrupted">Phone-Watch connection interrupted</string>
     <string name="error_disconnected">Phone-Watch connection disconnected</string>
     <string name="error_disk_full">There is not enough storage in the device to store preferences</string>
+    <string name="error_total_import">Fatal error while importing matches, 0 matches imported.</string>
+    <string name="error_partial_import">Some matches were not successfully imported.</string>
+    <string name="error_badly_formed_json">The format for the selected import file is not correct.</string>
+    <string name="error_wrong_match_list_structure">The selected file does not have the proper Beepadel match structure.</string>
 
     <string name="active_match">Active Match</string>
 
@@ -102,8 +106,13 @@
     <string name="data">Data</string>
     <string name="match_data_exported_successfully">Success exporting data</string>
     <string name="match_data_imported_successfully">Success importing data</string>
-    <string name="error_total_import">Fatal error while importing matches, 0 matches imported.</string>
-    <string name="error_partial_import">Some matches were not successfully imported.</string>
-    <string name="error_badly_formed_json">The format for the selected import file is not correct.</string>
-    <string name="error_wrong_match_list_structure">The selected file does not have the proper Beepadel match structure.</string>
+
+
+    <string name="whether_games_end_in_the_fourth_won_point_or_by_difference_of_2_advantage">Whether games end in the fourth won point or by difference of 2 (Advantage)</string>
+    <string name="every_time_you_finish_a_match_it_will_be_automatically_uploaded_to_strava_as_a_new_activity">Every time you finish a match, it will be automatically uploaded to Strava as a new activity</string>
+    <string name="a_github_star_helps_this_open_source_project_more_visibility">A Github Star helps this open source project get more visibility</string>
+    <string name="leaving_a_review_in_the_google_play_store_helps_way_more_than_one_would_think_making_the_app_appear_higher_in_the_search_list">Leaving a review in the Google Play Store helps way more than one would think, making the app appear higher in the search list</string>
+    <string name="reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words">Reach us with any kind of feedback: bug reports, feature suggestion, or just some kind words</string>
+    <string name="some_context_on_what_this_project_is">Some context on what this project is</string>
+    <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">Backup your data to a JSON file or import it from one previously created</string>
 </resources>

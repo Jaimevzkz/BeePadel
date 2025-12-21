@@ -2,6 +2,7 @@ package com.vzkz.beepadel.settings.presentation.general_settings.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 fun BooleanSetting(
     modifier: Modifier = Modifier,
     title: String,
+    description: String? = null,
     value: Boolean,
     onValueChange: () -> Unit
 ) {
@@ -31,7 +33,16 @@ fun BooleanSetting(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = title, color = MaterialTheme.colorScheme.onSurface)
+        Column(Modifier.weight(1f)) {
+            Text(text = title, color = MaterialTheme.colorScheme.onSurface)
+            description?.let {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
         Switch(
             checked = value,
             onCheckedChange = { onValueChange() },
