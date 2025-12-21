@@ -9,12 +9,14 @@ import com.vzkz.core.domain.error.ImportExportError
 import com.vzkz.core.domain.error.Result
 import kotlinx.coroutines.flow.first
 import kotlinx.io.IOException
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.InputStream
 import java.io.OutputStream
 
+@OptIn(InternalSerializationApi::class)
 class ImportExportToJson(
     private val localStorageRepository: LocalStorageRepository,
     private val json: Json
