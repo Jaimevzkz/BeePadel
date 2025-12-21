@@ -8,28 +8,16 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.ImportExport
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Upload
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,12 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -59,6 +42,7 @@ import com.vzkz.beepadel.settings.presentation.general_settings.components.Boole
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ConnectToStravaButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.ContactButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.GithubStartButton
+import com.vzkz.beepadel.settings.presentation.general_settings.components.ImportExportMatchesButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.PlayerStoreButton
 import com.vzkz.beepadel.settings.presentation.general_settings.components.SectionTitle
 import com.vzkz.common.general.BuildConfig
@@ -221,132 +205,63 @@ private fun SettingsScreenRoot(
                 .verticalScroll(scrollState)
                 .fillMaxSize()
         ) {
-            SectionTitle(
-                modifier = Modifier,
-                text = stringResource(R.string.features)
-            )
+            Section(sectionTitle = stringResource(R.string.features)) {
+                BooleanSetting(
+                    modifier = Modifier,
+                    title = stringResource(R.string.golden_point),
+                    value = state.goldenPoint,
+                    onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
+                )
+            }
 
-            BooleanSetting(
-                modifier = Modifier,
-                title = stringResource(R.string.golden_point),
-                value = state.goldenPoint,
-                onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
-            )
+            Section(sectionTitle = stringResource(R.string.connect)) {
+                ConnectToStravaButton(
+                    modifier = Modifier,
+                    isLoggedIntoStrava = state.isLoggedIntoStrava,
+                    onConfigureStrava = {
+                        onAction(SettingsIntent.ConfigureStrava)
+                    },
+                    onLaunchAuthRequest = {
+                        onAction(SettingsIntent.LaunchAuthRequestIntent)
+                    }
+                )
+            }
 
-            SectionTitle( //todo commented until approved by strava
-                modifier = Modifier,
-                text = stringResource(R.string.connect)
-            )
+            Section(sectionTitle = stringResource(R.string.data)) {
+                ImportExportMatchesButton(
+                    modifier = Modifier,
+                    onImport = { onAction(SettingsIntent.OnImportMatchDataClick) },
+                    onExport = { onAction(SettingsIntent.OnExportMatchDataClick) },
+                )
+            }
 
-            ConnectToStravaButton(
-                modifier = Modifier,
-                isLoggedIntoStrava = state.isLoggedIntoStrava,
-                onConfigureStrava = {
-                    onAction(SettingsIntent.ConfigureStrava)
-                },
-                onLaunchAuthRequest = {
-                    onAction(SettingsIntent.LaunchAuthRequestIntent)
-                }
-            )
+            Section(sectionTitle = stringResource(R.string.support)) {
+                GithubStartButton(onClick = { onAction(SettingsIntent.OpenGithub) })
+                Spacer(Modifier.height(itemSpacing))
+                PlayerStoreButton(onClick = { onAction(SettingsIntent.OpenPlayStore) })
+            }
 
-            SectionTitle(
-                modifier = Modifier,
-                text = stringResource(R.string.data)
-            )
-            ImportExportMatchesButton(
-                modifier = Modifier,
-                onImport = { onAction(SettingsIntent.OnImportMatchDataClick) },
-                onExport = { onAction(SettingsIntent.OnExportMatchDataClick) },
-            )
-
-            SectionTitle(
-                modifier = Modifier,
-                text = stringResource(R.string.support)
-            )
-            GithubStartButton(onClick = { onAction(SettingsIntent.OpenGithub) })
-            Spacer(Modifier.height(itemSpacing))
-            PlayerStoreButton(onClick = { onAction(SettingsIntent.OpenPlayStore) })
-
-            SectionTitle(
-                modifier = Modifier,
-                text = stringResource(R.string.about)
-            )
-            ContactButton(onClick = { onAction(SettingsIntent.ContactUs) })
-            Spacer(Modifier.height(itemSpacing))
-            AboutButton(onClick = { onAction(SettingsIntent.NavigateToAbout) })
+            Section(sectionTitle = stringResource(R.string.about)) {
+                ContactButton(onClick = { onAction(SettingsIntent.ContactUs) })
+                Spacer(Modifier.height(itemSpacing))
+                AboutButton(onClick = { onAction(SettingsIntent.NavigateToAbout) })
+            }
         }
     }
 }
 
 @Composable
-fun ImportExportMatchesButton(
+private fun Section(
     modifier: Modifier = Modifier,
-    onImport: () -> Unit,
-    onExport: () -> Unit,
+    sectionTitle: String,
+    content: @Composable ColumnScope.() -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(horizontal = 12.dp, vertical = 24.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .size(20.dp),
-            imageVector = Icons.Default.ImportExport,
-            contentDescription = stringResource(R.string.import_export_matches)
+    Column() {
+        SectionTitle(
+            modifier = modifier,
+            text = sectionTitle
         )
-        Text(
-            text = stringResource(R.string.import_export_matches),
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(Modifier.weight(1f))
-        Box() {
-            IconButton(onClick = { expanded = true }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Open dropdown"
-                )
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                DropdownMenuItem(
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Upload,
-                            contentDescription = stringResource(R.string.import_matches)
-                        )
-                    },
-                    text = { Text(stringResource(R.string.import_matches)) },
-                    onClick = {
-                        expanded = false
-                        onImport()
-                    }
-                )
-                DropdownMenuItem(
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Download,
-                            contentDescription = stringResource(R.string.export_matches)
-                        )
-                    },
-                    text = { Text(stringResource(R.string.export_matches)) },
-                    onClick = {
-                        expanded = false
-                        onExport()
-                    }
-                )
-            }
-        }
-
+        content()
     }
 }
 
