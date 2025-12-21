@@ -209,6 +209,7 @@ private fun SettingsScreenRoot(
                 BooleanSetting(
                     modifier = Modifier,
                     title = stringResource(R.string.golden_point),
+                    description = stringResource(R.string.whether_games_end_in_the_fourth_won_point_or_by_difference_of_2_advantage),
                     value = state.goldenPoint,
                     onValueChange = { onAction(SettingsIntent.ToggleGoldenPoint) }
                 )
@@ -270,7 +271,7 @@ private fun Section(
 private fun SettingsScreenPreview() {
     BeePadelTheme {
         SettingsScreenRoot(
-            state = SettingsState.initial.copy(goldenPoint = true, isLoggedIntoStrava = true),
+            state = SettingsState.initial.copy(goldenPoint = true, isLoggedIntoStrava = false),
             onAction = {}
         )
     }

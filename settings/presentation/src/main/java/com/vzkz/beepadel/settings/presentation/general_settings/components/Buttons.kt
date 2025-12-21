@@ -3,6 +3,7 @@ package com.vzkz.beepadel.settings.presentation.general_settings.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -75,6 +76,7 @@ fun ConnectToStravaButton(
         title =
             if (isLoggedIntoStrava) stringResource(R.string.configure_strava)
             else stringResource(R.string.connect_with_strava),
+        description = if (!isLoggedIntoStrava) stringResource(R.string.every_time_you_finish_a_match_it_will_be_automatically_uploaded_to_strava_as_a_new_activity) else null,
         onClick = {
             if (isLoggedIntoStrava) {
                 onConfigureStrava()
@@ -89,7 +91,6 @@ fun ConnectToStravaButton(
 fun GithubStartButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
-
 ) {
     ClickableSetting(
         modifier = modifier,
@@ -104,6 +105,7 @@ fun GithubStartButton(
         },
         title =
             stringResource(R.string.github_star),
+        description = stringResource(R.string.a_github_star_helps_this_open_source_project_more_visibility),
         onClick = onClick
     )
 }
@@ -127,6 +129,7 @@ fun PlayerStoreButton(
         },
         title =
             stringResource(R.string.leave_a_review),
+        description = stringResource(R.string.leaving_a_review_in_the_google_play_store_helps_way_more_than_one_would_think_making_the_app_appear_higher_in_the_search_list),
         onClick = onClick
     )
 }
@@ -149,6 +152,7 @@ fun ContactButton(
         },
         title =
             stringResource(R.string.contact_us),
+        description = stringResource(R.string.reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words),
         onClick = onClick
     )
 }
@@ -171,6 +175,7 @@ fun AboutButton(
             )
         },
         title = text,
+        description = stringResource(R.string.some_context_on_what_this_project_is),
         onClick = onClick
     )
 }
@@ -185,7 +190,6 @@ fun ImportExportMatchesButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(80.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(horizontal = 12.dp, vertical = 24.dp),
@@ -199,11 +203,16 @@ fun ImportExportMatchesButton(
             imageVector = Icons.Default.ImportExport,
             contentDescription = stringResource(R.string.import_export_matches)
         )
-        Text(
-            text = stringResource(R.string.import_export_matches),
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(Modifier.weight(1f))
+
+        Column(Modifier.weight(1f)) {
+            Text(text = stringResource(R.string.import_export_matches), color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = stringResource(R.string.backup_your_data_to_a_json_file_or_import_it_from_one_previously_created),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+        }
+
         Box() {
             IconButton(onClick = { expanded = true }) {
                 Icon(
