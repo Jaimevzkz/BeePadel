@@ -13,6 +13,7 @@ fi
 branchName=$1/release
 
 git checkout master
+git pull
 git checkout -b $branchName
 git push origin $branchName
 
