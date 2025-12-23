@@ -103,6 +103,6 @@
     <string name="a_github_star_helps_this_open_source_project_more_visibility">Una estrella en Github ayuda a este proyecto de código abierto a tener más visibilidad</string>
     <string name="leaving_a_review_in_the_google_play_store_helps_way_more_than_one_would_think_making_the_app_appear_higher_in_the_search_list">Una reseña en la Google Play Store ayuda enormemente, haciendo que la aplicación aparezca más alta en las búsquedas</string>
     <string name="reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words">Contáctanos con cualquier tipo de feedback: reporte de errores, recomendaciones de nueva funcionalidad o simplemente unas palabras agradables</string>
-    <string name="some_context_on_what_this_project_is">Un poco de contexto en que consiste este proyecto</string>
+    <string name="some_context_on_what_this_project_is">Un poco de contexto sobre en qué consiste este proyecto</string>
     <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">Haz una copia de seguridad de tus datos en un archivo JSON o importa tus datos a la aplicación desde un archivo creado anteriormente</string>
 </resources>
