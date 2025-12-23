@@ -33,7 +33,7 @@ fun BooleanSetting(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(1f).padding(end = 4.dp)) {
             Text(text = title, color = MaterialTheme.colorScheme.onSurface)
             description?.let {
                 Text(
