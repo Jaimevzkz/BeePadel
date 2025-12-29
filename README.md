@@ -2,9 +2,13 @@
 Welcome to BeePadel, the open source Pádel tracker you were looking for!
 
 Track your pádel matches while you are playing with the WearOS watch version of the app and have all your matches logged in one place.
-# Contributing
+## Download
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.vzkz.beepadel)
+## Contributing
 Feel free to open new issues with possible upgrades, as well as bugs found in the app.
-## Build from source
+### Build from source
 In order to build BeePadel from source:
 - Clone this repository
 - Add this lines to the `local.properties` (if strava functionality is not needed, just fill with dummy values):
@@ -12,7 +16,7 @@ In order to build BeePadel from source:
 strava_client_id=<client-id>
 strava_client_secret="<client-secret>"
 ```
-# Tech Stack
+## Tech Stack
 - Built using [Kotlin](https://kotlinlang.org/) and [Jetpack Compose](https://developer.android.com/compose)
 - [Navigation 3](https://developer.android.com/guide/navigation/navigation-3)
 - Feature based multi module architecture
