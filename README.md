@@ -1,21 +1,57 @@
+fjfj
 # BeePadel
 Welcome to BeePadel, the open source Pádel tracker you were looking for!
 
-Track your pádel matches while you are playing with the WearOS watch version of the app and have all your matches logged in one place.
+- Track your pádel matches while you are playing, with your phone or a WearOS watch and have all your matches logged in one place. 
+- With the ability to import/export your match data, you'll have the ability to never loose your data. 
+- Connect with Strava so that your matches are automatically uploaded and get more reach.
 ## Download
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.vzkz.beepadel)
-## Contributing
-Feel free to open new issues with possible upgrades, as well as bugs found in the app.
-### Build from source
-In order to build BeePadel from source:
-- Clone this repository
-- Add this lines to the `local.properties` (if strava functionality is not needed, just fill with dummy values):
-```kotlin
-strava_client_id=<client-id>
-strava_client_secret="<client-secret>"
+## Module Architecture
 ```
+BeePadel
+├── app
+├── wear
+│   ├── app
+│   ├── match
+│   │   ├── data
+│   │   ├── domain
+│   │   ├── presentation
+├── build-logic
+│   ├── convention
+├── common
+│   ├── general
+│   ├── sharedTest
+├── core
+│   ├── connectivity
+│   │   ├── data
+│   │   ├── domain
+│   ├── data
+│   ├── database
+│   │   ├── data
+│   │   ├── domain
+│   ├── domain
+│   ├── notification
+│   │   ├── data
+│   │   ├── domain
+│   ├── preferences
+│   ├── presentation
+│   │   ├── desingsystem
+│   │   ├── desingsystem_wear
+│   │   ├── ui
+│   ├── 
+├── match
+│   ├── data
+│   ├── domain
+│   ├── presentation
+├── settings
+│   ├── data
+│   ├── domain
+│   ├── presentation
+```
+
 ## Tech Stack
 - Built using [Kotlin](https://kotlinlang.org/) and [Jetpack Compose](https://developer.android.com/compose)
 - [Navigation 3](https://developer.android.com/guide/navigation/navigation-3)
