@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -101,7 +102,7 @@ fun MatchHistoryScreenRoot(
         floatingActionButton = {
             BeePadelFloatingActionButton(
                 onClick = { onAction(MatchHistoryIntent.NavigateToActiveMatch) },
-                icon = Icons.Default.PlayArrow,
+                icon = Icons.Rounded.PlayArrow,
                 contentDescription = stringResource(R.string.start_match)
             )
         }
