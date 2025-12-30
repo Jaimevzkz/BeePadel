@@ -8,6 +8,7 @@ import com.vzkz.core.domain.model.Set
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -113,6 +114,12 @@ fun emptyMatch(matchId: UUID, setId: UUID, gameId: UUID, zonedDateTime: ZonedDat
 fun fixedZonedDateTime(): ZonedDateTime = ZonedDateTime.of(
     2025, 6, 29,
     14, 30, 24, 0,
+    ZoneId.of("UTC")
+)
+
+fun randomZonedDateTime(): ZonedDateTime = ZonedDateTime.of(
+    Random.nextInt(2024, 2025), Random.nextInt(1, 12), Random.nextInt(1, 28),
+    Random.nextInt(7, 22), Random.nextInt(1, 60), Random.nextInt(1, 60), Random.nextInt(1, 60),
     ZoneId.of("UTC")
 )
 
