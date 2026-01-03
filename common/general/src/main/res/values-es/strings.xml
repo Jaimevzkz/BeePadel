@@ -105,4 +105,6 @@
     <string name="reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words">Con cualquier tipo de feedback: reporte de errores, recomendaciones de nueva funcionalidad o simplemente unas palabras agradables</string>
     <string name="some_context_on_what_this_project_is">Un poco de contexto sobre en qué consiste este proyecto</string>
     <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">Haz una copia de seguridad de tus datos en un archivo JSON o importa tus datos a la aplicación desde un archivo creado anteriormente</string>
+    <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">Añadir una línea en la que ponga \"Guardado con BeePadel\" para ayudar a la app a tener más visibilidad</string>
+    <string name="tweak_how_your_matches_will_appear_on_strava">Ajusta como aparecerán tus actividades en Strava</string>
 </resources>

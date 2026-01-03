@@ -271,7 +271,7 @@ private fun Section(
 private fun SettingsScreenPreview() {
     BeePadelTheme {
         SettingsScreenRoot(
-            state = SettingsState.initial.copy(goldenPoint = true, isLoggedIntoStrava = false),
+            state = SettingsState.initial.copy(goldenPoint = true, isLoggedIntoStrava = true),
             onAction = {}
         )
     }
