@@ -1,6 +1,6 @@
 # BeePadel
 Welcome to BeePadel, the open source Pádel tracker you were looking for!
-
+![beepadel_banner](.github/beepadel_banner.png)
 - Track your pádel matches while you are playing, with your phone or a WearOS watch and have all your matches logged in one place. 
 - With the ability to import/export your match data, you'll have the ability to never loose your data. 
 - Connect with Strava so that your matches are automatically uploaded and get more reach.
