@@ -1,4 +1,3 @@
-fjfj
 # BeePadel
 Welcome to BeePadel, the open source Pádel tracker you were looking for!
 
