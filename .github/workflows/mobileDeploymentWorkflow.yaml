@@ -47,6 +47,29 @@ jobs:
         run: ./gradlew :app:bundleRelease
         continue-on-error: false
 
+      - name: Build Mobile and Wear APKs
+        run: |
+          ./gradlew :app:assembleRelease
+          ./gradlew :wear:app:assembleRelease
+
+      - name: Sign Mobile APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: '${{ secrets.KEYSTORE }}'
+          alias: '${{ secrets.SIGNING_KEY_ALIAS }}'
+          keyStorePassword: '${{ secrets.SIGNING_STORE_PASSWORD }}'
+          keyPassword: '${{ secrets.SIGNING_KEY_PASSWORD }}'
+
+      - name: Sign Wear APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: wear/app/build/outputs/apk/release
+          signingKeyBase64: '${{ secrets.KEYSTORE }}'
+          alias: '${{ secrets.SIGNING_KEY_ALIAS }}'
+          keyStorePassword: '${{ secrets.SIGNING_STORE_PASSWORD }}'
+          keyPassword: '${{ secrets.SIGNING_KEY_PASSWORD }}'
+
       - name: Sign Mobile AAB
         id: sign
         uses: r0adkll/sign-android-release@v1
@@ -64,6 +87,20 @@ jobs:
           path: app/build/outputs/bundle/release/app-release.aab
           retention-days: 2
         continue-on-error: false
+
+      - name: Upload Mobile APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-apk
+          path: app/build/outputs/apk/release/app-release.apk
+          retention-days: 2
+
+      - name: Upload Wear APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wear-apk
+          path: wear/app/build/outputs/apk/release/app-release.apk
+          retention-days: 2
   deploy:
     runs-on: ubuntu-latest
     needs: build-phone
@@ -71,12 +108,53 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Read release notes (EN)
+        id: release_notes
+        run: |
+          NOTES="$(cat release-notes/whatsnew-en-US)"
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Download Mobile bundle
         uses: actions/download-artifact@v4
         with:
           name: app-bundle
           path: ${{ github.workspace }}
 
+      - name: Download Mobile APK
+        uses: actions/download-artifact@v4
+        with:
+          name: mobile-apk
+          path: ${{ github.workspace }}/release-assets
+
+      - name: Download Wear APK
+        uses: actions/download-artifact@v4
+        with:
+          name: wear-apk
+          path: ${{ github.workspace }}/release-assets
+
+      - name: Generate SHA-256 checksums
+        run: |
+          cd release-assets
+          sha256sum app-release.apk > app-release.apk.sha256
+          sha256sum wear-release.apk > wear-release.apk.sha256
+          ls -lh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION_NAME }}
+          name: BeePadel app ${{ env.VERSION_NAME }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          latest: true
+          files: |
+            release-assets/app-release.apk
+            release-assets/wear-release.apk
+            release-assets/app-release.apk.sha256
+            release-assets/wear-release.apk.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Mobile app to Play Store
         uses: r0adkll/upload-google-play@v1
