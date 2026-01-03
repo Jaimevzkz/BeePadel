@@ -94,6 +94,7 @@ private fun StravaSettingsScreenRoot(
                 BooleanSetting(
                     modifier = Modifier,
                     title = stringResource(R.string.logged_with_beepadel),
+                    description = stringResource(R.string.add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility),
                     value = state.loggedWithBeePadelEnabled,
                     onValueChange = { onAction(StravaSettingsIntent.ToggleLoggedWithBeePadel) }
                 )

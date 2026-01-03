@@ -115,4 +115,6 @@
     <string name="reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words">Reach us with any kind of feedback: bug reports, feature suggestion, or just some kind words</string>
     <string name="some_context_on_what_this_project_is">Some context on what this project is</string>
     <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">Backup your data to a JSON file or import it from one previously created</string>
+    <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">Add a line saying \"Logged with BeePadel\" to help the app get more visibility</string>
+    <string name="tweak_how_your_matches_will_appear_on_strava">Tweak how your matches will appear on Strava</string>
 </resources>
