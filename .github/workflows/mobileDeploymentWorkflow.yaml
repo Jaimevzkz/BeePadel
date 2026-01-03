@@ -13,6 +13,9 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+
       - name: Install Android Build Tools
         run: |
           sdkmanager --install "build-tools;34.0.0"
@@ -20,8 +23,10 @@ jobs:
       - name: Export ANDROID_SDK_ROOT
         run: echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+      - name: Add Android SDK tools to PATH
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
