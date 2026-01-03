@@ -1,9 +1,13 @@
 name: Mobile Deployment Workflow
 on:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build-phone:
     runs-on: ubuntu-latest
+    outputs:
+      version_name: ${{ steps.extract_version.outputs.version_name }}
     steps:
       - uses: actions/checkout@v3
 
@@ -47,10 +51,11 @@ jobs:
           BRANCH_NAME="${GITHUB_REF_NAME}"
           VERSION_NAME="${BRANCH_NAME%/release}"
           VERSION_CODE=$(echo $VERSION_NAME | awk -F. '{printf("%03d%03d%03d", $1, $2, $3)}')
-
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-      # version code strategy: [1/2][000][000][000] -> [phone/wear][version name]
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+        # version code strategy: [1/2][000][000][000] -> [phone/wear][version name]
+
       - name: Update libs.versions.toml with new versions
         run: |
           sed -i "s/^projectVersionName = .*/projectVersionName = \"${VERSION_NAME}\"/" gradle/libs.versions.toml
@@ -126,6 +131,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-phone
+    env:
+      VERSION_NAME: ${{ needs.build-phone.outputs.version_name }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -184,6 +191,7 @@ jobs:
             wear-release.apk.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Publish Mobile app to Play Store
         uses: r0adkll/upload-google-play@v1
