@@ -182,7 +182,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.VERSION_NAME }}
-          name: BeePadel app ${{ env.VERSION_NAME }}
+          name: BeePadel ${{ env.VERSION_NAME }}
           body: ${{ steps.release_notes.outputs.notes }}
           files: |
             mobile-release.apk
@@ -191,7 +191,6 @@ jobs:
             wear-release.apk.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Publish Mobile app to Play Store
         uses: r0adkll/upload-google-play@v1
