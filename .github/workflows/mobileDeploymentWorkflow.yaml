@@ -13,6 +13,14 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Add Android SDK tools to PATH
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+
       - name: Install Android Build Tools
         run: |
           sdkmanager --install "build-tools;34.0.0"
@@ -20,8 +28,10 @@ jobs:
       - name: Export ANDROID_SDK_ROOT
         run: echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+      - name: Add Android SDK tools to PATH
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -61,6 +71,8 @@ jobs:
 
       - name: Sign Mobile APK
         uses: r0adkll/sign-android-release@v1
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: '${{ secrets.KEYSTORE }}'
@@ -68,8 +80,11 @@ jobs:
           keyStorePassword: '${{ secrets.SIGNING_STORE_PASSWORD }}'
           keyPassword: '${{ secrets.SIGNING_KEY_PASSWORD }}'
 
+
       - name: Sign Wear APK
         uses: r0adkll/sign-android-release@v1
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
         with:
           releaseDirectory: wear/app/build/outputs/apk/release
           signingKeyBase64: '${{ secrets.KEYSTORE }}'
@@ -99,14 +114,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mobile-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/release/app-release-unsigned-signed.apk
           retention-days: 2
 
       - name: Upload Wear APK as artifact
         uses: actions/upload-artifact@v4
         with:
           name: wear-apk
-          path: wear/app/build/outputs/apk/release/app-release.apk
+          path: wear/app/build/outputs/apk/release/app-release-unsigned-signed.apk
           retention-days: 2
   deploy:
     runs-on: ubuntu-latest
@@ -133,18 +148,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: mobile-apk
-          path: ${{ github.workspace }}/release-assets
+          path: ${{ github.workspace }}/release-assets/mobile/
 
       - name: Download Wear APK
         uses: actions/download-artifact@v4
         with:
           name: wear-apk
-          path: ${{ github.workspace }}/release-assets
+          path: ${{ github.workspace }}/release-assets/wear/
+
+
+      - name: Debug release-assets contents
+        run: |
+          echo "== release-assets tree =="
+          ls -R release-assets
+          mv release-assets/mobile/app-release-unsigned-signed.apk mobile-release.apk
+          mv release-assets/wear/app-release-unsigned-signed.apk wear-release.apk
+          ls -lh
 
       - name: Generate SHA-256 checksums
         run: |
-          cd release-assets
-          sha256sum app-release.apk > app-release.apk.sha256
+          sha256sum mobile-release.apk > mobile-release.apk.sha256
           sha256sum wear-release.apk > wear-release.apk.sha256
           ls -lh
 
@@ -154,12 +177,11 @@ jobs:
           tag_name: v${{ env.VERSION_NAME }}
           name: BeePadel app ${{ env.VERSION_NAME }}
           body: ${{ steps.release_notes.outputs.notes }}
-          latest: true
           files: |
-            release-assets/app-release.apk
-            release-assets/wear-release.apk
-            release-assets/app-release.apk.sha256
-            release-assets/wear-release.apk.sha256
+            mobile-release.apk
+            wear-release.apk
+            mobile-release.apk.sha256
+            wear-release.apk.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
