@@ -1,5 +1,6 @@
 # BeePadel
 Welcome to BeePadel, the open source Pádel tracker you were looking for!
+
 ![beepadel_banner](.github/beepadel_banner.png)
 - Track your pádel matches while you are playing, with your phone or a WearOS watch and have all your matches logged in one place. 
 - With the ability to import/export your match data, you'll have the ability to never loose your data. 
@@ -8,6 +9,8 @@ Welcome to BeePadel, the open source Pádel tracker you were looking for!
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.vzkz.beepadel)
+
+Or get the app from the [Release Section](https://github.com/Jaimevzkz/BeePadel/releases/latest).
 ## Module Architecture
 ```
 BeePadel
