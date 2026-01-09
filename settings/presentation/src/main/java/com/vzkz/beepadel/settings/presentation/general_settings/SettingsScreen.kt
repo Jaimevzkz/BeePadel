@@ -215,7 +215,7 @@ private fun SettingsScreenRoot(
                 )
             }
 
-           /* Section(sectionTitle = stringResource(R.string.connect)) {
+            Section(sectionTitle = stringResource(R.string.connect)) {
                 ConnectToStravaButton(
                     modifier = Modifier,
                     isLoggedIntoStrava = state.isLoggedIntoStrava,
@@ -226,7 +226,7 @@ private fun SettingsScreenRoot(
                         onAction(SettingsIntent.LaunchAuthRequestIntent)
                     }
                 )
-            }*/
+            }
 
             Section(sectionTitle = stringResource(R.string.data)) {
                 ImportExportMatchesButton(
