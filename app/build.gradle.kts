@@ -9,6 +9,11 @@ android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    dependenciesInfo{
+        includeInApk = false
+        includeInBundle = false
+    }
 }
 
 dependencies {
