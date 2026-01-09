@@ -2,6 +2,9 @@ name: Instrumented tests
 on:
   workflow_dispatch:
   pull_request:
+  push:
+    branches:
+      - master
 jobs:
   instrumented:
     runs-on: ubuntu-latest
