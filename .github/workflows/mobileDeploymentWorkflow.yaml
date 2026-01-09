@@ -107,6 +107,11 @@ jobs:
           keyStorePassword: '${{ secrets.SIGNING_STORE_PASSWORD }}'
           keyPassword: '${{ secrets.SIGNING_KEY_PASSWORD }}'
 
+      - name: Get AllowedAPKSigningKeys
+        run: |
+          echo "Apk signer output:"
+          apksigner verify --print-certs app/build/outputs/apk/release/app-release-unsigned-signed.apk
+
       - name: Upload Mobile bundle as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -164,13 +169,10 @@ jobs:
           path: ${{ github.workspace }}/release-assets/wear/
 
 
-      - name: Debug release-assets contents
+      - name: Move apks to root
         run: |
-          echo "== release-assets tree =="
-          ls -R release-assets
           mv release-assets/mobile/app-release-unsigned-signed.apk mobile-release.apk
           mv release-assets/wear/app-release-unsigned-signed.apk wear-release.apk
-          ls -lh
 
       - name: Generate SHA-256 checksums
         run: |
