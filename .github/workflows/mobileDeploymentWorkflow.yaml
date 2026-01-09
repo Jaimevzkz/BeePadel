@@ -110,7 +110,8 @@ jobs:
       - name: Get AllowedAPKSigningKeys
         run: |
           echo "Apk signer output:"
-          apksigner verify --print-certs app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --print-certs \
+            app/build/outputs/apk/release/app-release-unsigned-signed.apk
 
       - name: Upload Mobile bundle as artifact
         uses: actions/upload-artifact@v4
