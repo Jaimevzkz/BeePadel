@@ -1,5 +1,5 @@
 # BeePadel
-Welcome to BeePadel, the open source Pádel tracker you were looking for!
+The open source Pádel tracker you were looking for!
 
 ![beepadel_banner](.github/beepadel_banner.png)
 - Track your pádel matches while you are playing, with your phone or a WearOS watch and have all your matches logged in one place. 
@@ -66,6 +66,6 @@ BeePadel
 - [Timber](https://github.com/JakeWharton/timber) for logging
 - [SqlDelight](https://github.com/sqldelight/sqldelight) for local persistence
 - Use of permissions and foreground services
-- [Github actions](https://github.com/features/actions) in combination with a custom branching strategy for continuous integration and continuous deployment to the [Google Play Store](https://play.google.com/store)
-- [Ktor](https://ktor.io/) for https requests
+- [Github actions](https://github.com/features/actions) in combination with a custom branching strategy for continuous integration and continuous deployment to the Github Release page and the [Google Play Store](https://play.google.com/store)
+- [Ktor](https://ktor.io/) for HTTP requests
 - [Strava API](https://developers.strava.com/) for 'Connect to Strava'
