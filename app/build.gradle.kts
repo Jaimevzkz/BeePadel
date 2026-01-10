@@ -6,10 +6,6 @@ plugins {
 android {
     namespace = "com.vzkz.beepadel"
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     dependenciesInfo{
         includeInApk = false
         includeInBundle = false
