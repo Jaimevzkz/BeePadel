@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_unknown">عذرًا، حدث خطأ غير معروف</string>
+    <string name="error_insert_match">عذرًا، حدث خطأ أثناء حفظ المباراة</string>
+    <string name="error_insert_set">عذرًا، حدث خطأ أثناء حفظ المباراة (المجموعة)</string>
+    <string name="error_insert_game">عذرًا، حدث خطأ أثناء حفظ المباراة (الشوط)</string>
+    <string name="error_delete_match">عذرًا، حدث خطأ أثناء حذف المباراة</string>
+    <string name="error_delete_set">عذرًا، حدث خطأ أثناء حذف المباراة (المجموعة)</string>
+    <string name="error_delete_game">عذرًا، حدث خطأ أثناء حذف المباراة (الشوط)</string>
+    <string name="error_empty_set_list">لحفظ المباراة يجب إنهاء مجموعة واحدة على الأقل</string>
+    <string name="error_heart_rate_tracking_not_supported">تتبع معدل ضربات القلب غير مدعوم</string>
+    <string name="error_ongoing_own_exercise">يوجد تمرين جارٍ خاص بك بالفعل (خدمات الصحة)</string>
+    <string name="error_ongoing_other_exercise">يوجد تمرين جارٍ آخر بالفعل (خدمات الصحة)</string>
+    <string name="error_exercise_already_ended">تم إنهاء التمرين بالفعل (خدمات الصحة)</string>
+    <string name="error_connection_interrupted">تم انقطاع الاتصال بين الهاتف والساعة</string>
+    <string name="error_disconnected">تم فصل الاتصال بين الهاتف والساعة</string>
+    <string name="error_disk_full">لا توجد مساحة تخزين كافية على الجهاز لحفظ الإعدادات</string>
+    <string name="error_total_import">خطأ فادح أثناء استيراد المباريات، لم يتم استيراد أي مباراة.</string>
+    <string name="error_partial_import">لم يتم استيراد بعض المباريات بنجاح.</string>
+    <string name="error_badly_formed_json">تنسيق ملف الاستيراد المحدد غير صحيح.</string>
+    <string name="error_wrong_match_list_structure">الملف المحدد لا يحتوي على بنية مباريات BeePadel الصحيحة.</string>
+
+    <string name="active_match">مباراة نشطة</string>
+
+    <string name="error_request_timeout">انتهت مهلة الطلب.</string>
+    <string name="error_too_many_request">لقد تجاوزت الحد المسموح من الطلبات.\n</string>
+    <string name="error_no_internet">تعذر الوصول إلى الخادم، يرجى التحقق من الاتصال.</string>
+    <string name="error_payload_too_large">الملف الذي تحاول رفعه كبير جدًا.</string>
+    <string name="error_server_error">عذرًا، حدث خطأ ما، يرجى المحاولة مرة أخرى.</string>
+    <string name="error_serialization">عذرًا، تعذر تحليل البيانات.</string>
+    <string name="error_export_match_data">حدث خطأ أثناء تصدير بيانات المباراة.</string>
+
+    <string name="start_match">بدء المباراة</string>
+    <string name="match_options">خيارات المباراة</string>
+    <string name="delete_match">حذف المباراة</string>
+    <string name="own_player_serving">إرسال فريقك</string>
+    <string name="add_own_point">إضافة نقطة لفريقك</string>
+    <string name="add_other_point">إضافة نقطة للفريق الآخر</string>
+    <string name="undo">تراجع</string>
+    <string name="discard_match">إلغاء المباراة</string>
+    <string name="end_match">إنهاء المباراة</string>
+    <string name="who_starts_serving">من يبدأ الإرسال؟</string>
+    <string name="team_1">الفريق 1</string>
+    <string name="team_2">الفريق 2</string>
+    <string name="cancel">إلغاء</string>
+    <string name="end_match_question">هل تريد إنهاء المباراة؟</string>
+    <string name="confirm">تأكيد</string>
+    <string name="discard_match_question">هل تريد إلغاء المباراة؟</string>
+    <string name="error_occurred">حدث خطأ</string>
+    <string name="discard">إلغاء</string>
+    <string name="end">إنهاء</string>
+    <string name="permission_required">الإذن مطلوب</string>
+    <string name="notification_rationale">لعرض الوقت الحالي ونتيجة المباراة كإشعار، يحتاج التطبيق إلى إذنك. يرجى الضغط على "حسنًا" لمنحه.</string>
+    <string name="start">بدء</string>
+    <string name="once_deleted_the_match_can_t_be_recovered">بمجرد حذف المباراة، لا يمكن استعادتها</string>
+    <string name="permanently_delete">حذف نهائيًا؟</string>
+    <string name="other_player_serving">إرسال الفريق الآخر</string>
+    <string name="create_you_first_match">أنشئ أول مباراة لك!</string>
+    <string name="match_won">تم الفوز بالمباراة</string>
+    <string name="match_duration">مدة المباراة</string>
+    <string name="elapsed_time">الوقت المنقضي</string>
+    <string name="settings_screen">شاشة الإعدادات</string>
+    <string name="heart_rate">معدل ضربات القلب</string>
+    <string name="team_1_score">نتيجة الفريق 1</string>
+    <string name="team_2_score">نتيجة الفريق 2</string>
+    <string name="error_uploading_match_to_strava">حدث خطأ أثناء رفع المباراة إلى Strava</string>
+
+    <string name="settings">الإعدادات</string>
+    <string name="golden_point">النقطة الذهبية</string>
+    <string name="logged_with_beepadel">تم التسجيل باستخدام BeePadel</string>
+    <string name="features">المميزات</string>
+    <string name="connect">اتصال</string>
+    <string name="connect_with_strava">الاتصال بـ Strava</string>
+    <string name="connected_to_strava">متصل بـ Strava</string>
+    <string name="configure_strava">إعداد Strava</string>
+    <string name="logout_from_strava">تسجيل الخروج من Strava</string>
+    <string name="support">ادعم المشروع</string>
+    <string name="leave_a_review">اترك تقييمًا</string>
+    <string name="about">حول</string>
+    <string name="about2">حول</string>
+    <string name="contact_us">اتصل بنا</string>
+    <string name="who_are_we">من نحن؟</string>
+
+    <string name="beepadel_is_a_p_del_tracker_app_designed_by_players_for_players">BeePadel هو تطبيق لتتبع مباريات البادل، صُمم من لاعبين لأجل لاعبين.\n</string>
+    <string name="behind_the_development_of_the_app_is_the_free_open_source_software_foss_philosophy">يقوم تطوير التطبيق على فلسفة البرمجيات الحرة ومفتوحة المصدر (FOSS).</string>
+    <string name="this_means_that_the_code_for_the_app_can_be_found_publicly_on">وهذا يعني أن كود التطبيق متاح للعامة على</string>
+    <string name="it_also_means_that_this_app_will_never_charge_you_any_kind_of_licensing_fee_for_its_use">. كما يعني أن هذا التطبيق لن يفرض عليك أي رسوم ترخيص مقابل استخدامه.\n\n</string>
+    <string name="this_project_is_currently_under_active_development_by_indie_developers_in_their_free_time">يتم تطوير هذا المشروع حاليًا بشكل نشط من قبل مطورين مستقلين في أوقات فراغهم.</string>
+    <string name="we_don_t_want_any_monetary_donations_but_we_appreciate_any_other_kind_of_support">لا نرغب في أي تبرعات مالية، لكننا نقدر أي نوع آخر من الدعم—</string>
+    <string name="such_as_a_rating_on_the_play_store_or_a_github_star_that_is_totally_free_of_charge">مثل ترك تقييم على متجر Play أو وضع نجمة على GitHub—وهو مجاني تمامًا.</string>
+    <string name="this_support_is_really_helpful_so_the_project_continues_growing">هذا الدعم يساعد المشروع على الاستمرار والنمو.</string>
+
+    <string name="finish">إنهاء المباراة</string>
+    <string name="connect_your_phone">يجب تثبيت تطبيق BeePadel على الهاتف وتوصيله.</string>
+    <string name="match_finished">تم إنهاء المباراة!</string>
+    <string name="match_has_been_saved">تم حفظ المباراة في تطبيق الهاتف</string>
+    <string name="strava_match_name">مباراة بادل</string>
+    <string name="import_export_matches">استيراد/تصدير المباريات</string>
+    <string name="import_matches">استيراد المباريات</string>
+    <string name="export_matches">تصدير المباريات</string>
+    <string name="data">البيانات</string>
+    <string name="match_data_exported_successfully">تم تصدير البيانات بنجاح</string>
+    <string name="match_data_imported_successfully">تم استيراد البيانات بنجاح</string>
+
+    <string name="whether_games_end_in_the_fourth_won_point_or_by_difference_of_2_advantage">هل تنتهي الأشواط عند النقطة الرابعة أم بفارق نقطتين (أفضلية)</string>
+    <string name="every_time_you_finish_a_match_it_will_be_automatically_uploaded_to_strava_as_a_new_activity">في كل مرة تنهي فيها مباراة، سيتم رفعها تلقائيًا إلى Strava كنشاط جديد</string>
+    <string name="a_github_star_helps_this_open_source_project_more_visibility">وضع نجمة على GitHub يساعد هذا المشروع مفتوح المصدر على الحصول على مزيد من الظهور</string>
+    <string name="leaving_a_review_in_the_google_play_store_helps_way_more_than_one_would_think_making_the_app_appear_higher_in_the_search_list">ترك تقييم في متجر Google Play يساعد أكثر مما تتوقع، ويجعل التطبيق يظهر أعلى في نتائج البحث</string>
+    <string name="reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words">تواصل معنا بأي نوع من الملاحظات: تقارير أخطاء، اقتراحات ميزات، أو حتى كلمات لطيفة</string>
+    <string name="some_context_on_what_this_project_is">نبذة عن هذا المشروع</string>
+    <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">قم بنسخ بياناتك احتياطيًا إلى ملف JSON أو استيرادها من ملف تم إنشاؤه مسبقًا</string>
+    <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">أضف سطرًا يقول "تم التسجيل باستخدام BeePadel" لمساعدة التطبيق على الحصول على مزيد من الظهور</string>
+    <string name="tweak_how_your_matches_will_appear_on_strava">عدّل طريقة ظهور مبارياتك على Strava</string>
+</resources>
