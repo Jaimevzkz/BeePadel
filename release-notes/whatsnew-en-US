@@ -1,2 +1,3 @@
-- Change BeePadel app icon to look cooler
-- Add 'Connect to Strava' functionality
+- Fix bug where strava account wouln't be linked correctly
+- Bump project dependecies
+- Add translations for Hindi and Arabic
