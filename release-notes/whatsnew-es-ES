@@ -1,2 +1,3 @@
-- Modernización del icono de la aplicación
-- Añadir la funcinalidad de 'Conectar con Strava'
+- Solución de error por el cual la cuenta de Strava no se vinculaba correctamente
+- Actualización de las dependencias del proyecto
+- Adición de traducciones al hindi y al árabe
