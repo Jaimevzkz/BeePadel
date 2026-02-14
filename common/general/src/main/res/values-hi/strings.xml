@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_unknown">ओह, एक अज्ञात त्रुटि हुई</string>
+    <string name="error_insert_match">ओह, मैच सहेजते समय त्रुटि हुई</string>
+    <string name="error_insert_set">ओह, मैच (सेट) सहेजते समय त्रुटि हुई</string>
+    <string name="error_insert_game">ओह, मैच (गेम) सहेजते समय त्रुटि हुई</string>
+    <string name="error_delete_match">ओह, मैच हटाते समय त्रुटि हुई</string>
+    <string name="error_delete_set">ओह, मैच (सेट) हटाते समय त्रुटि हुई</string>
+    <string name="error_delete_game">ओह, मैच (गेम) हटाते समय त्रुटि हुई</string>
+    <string name="error_empty_set_list">मैच सहेजने के लिए कम से कम 1 सेट पूरा करना आवश्यक है</string>
+    <string name="error_heart_rate_tracking_not_supported">हृदय गति ट्रैकिंग समर्थित नहीं है</string>
+    <string name="error_ongoing_own_exercise">आपका एक व्यायाम पहले से जारी है (हेल्थ सेवाएँ)</string>
+    <string name="error_ongoing_other_exercise">एक अन्य व्यायाम पहले से जारी है (हेल्थ सेवाएँ)</string>
+    <string name="error_exercise_already_ended">व्यायाम पहले ही समाप्त हो चुका है (हेल्थ सेवाएँ)</string>
+    <string name="error_connection_interrupted">फोन-वॉच कनेक्शन बाधित हो गया</string>
+    <string name="error_disconnected">फोन-वॉच कनेक्शन डिस्कनेक्ट हो गया</string>
+    <string name="error_disk_full">प्राथमिकताएँ सहेजने के लिए डिवाइस में पर्याप्त स्टोरेज नहीं है</string>
+    <string name="error_total_import">मैच आयात करते समय गंभीर त्रुटि हुई, 0 मैच आयात हुए।</string>
+    <string name="error_partial_import">कुछ मैच सफलतापूर्वक आयात नहीं हो पाए।</string>
+    <string name="error_badly_formed_json">चयनित आयात फ़ाइल का प्रारूप सही नहीं है।</string>
+    <string name="error_wrong_match_list_structure">चयनित फ़ाइल में सही BeePadel मैच संरचना नहीं है।</string>
+
+    <string name="active_match">सक्रिय मैच</string>
+
+    <string name="error_request_timeout">अनुरोध का समय समाप्त हो गया।</string>
+    <string name="error_too_many_request">आपने अनुरोध सीमा पार कर ली है।\n</string>
+    <string name="error_no_internet">सर्वर से कनेक्ट नहीं हो सका, कृपया अपना कनेक्शन जाँचें।</string>
+    <string name="error_payload_too_large">आप जिस फ़ाइल को अपलोड करने का प्रयास कर रहे हैं वह बहुत बड़ी है।</string>
+    <string name="error_server_error">ओह, कुछ गलत हो गया, कृपया पुनः प्रयास करें।</string>
+    <string name="error_serialization">ओह, डेटा पार्स नहीं किया जा सका।</string>
+    <string name="error_export_match_data">मैच डेटा निर्यात करते समय त्रुटि हुई।</string>
+
+    <string name="start_match">मैच शुरू करें</string>
+    <string name="match_options">मैच विकल्प</string>
+    <string name="delete_match">मैच हटाएँ</string>
+    <string name="own_player_serving">आपकी टीम सर्व कर रही है</string>
+    <string name="add_own_point">अपनी टीम का अंक जोड़ें</string>
+    <string name="add_other_point">दूसरी टीम का अंक जोड़ें</string>
+    <string name="undo">पूर्ववत करें</string>
+    <string name="discard_match">मैच रद्द करें</string>
+    <string name="end_match">मैच समाप्त करें</string>
+    <string name="who_starts_serving">सर्विस कौन शुरू करेगा?</string>
+    <string name="team_1">टीम 1</string>
+    <string name="team_2">टीम 2</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="end_match_question">मैच समाप्त करें?</string>
+    <string name="confirm">पुष्टि करें</string>
+    <string name="discard_match_question">मैच रद्द करें?</string>
+    <string name="error_occurred">एक त्रुटि हुई</string>
+    <string name="discard">रद्द करें</string>
+    <string name="end">समाप्त करें</string>
+    <string name="permission_required">अनुमति आवश्यक है</string>
+    <string name="notification_rationale">मैच का वर्तमान समय और स्कोर सूचना के रूप में दिखाने के लिए इस ऐप को आपकी अनुमति चाहिए। कृपया "Okay" पर क्लिक करें।</string>
+    <string name="start">शुरू करें</string>
+    <string name="once_deleted_the_match_can_t_be_recovered">हटाने के बाद मैच पुनः प्राप्त नहीं किया जा सकता</string>
+    <string name="permanently_delete">स्थायी रूप से हटाएँ?</string>
+    <string name="other_player_serving">दूसरी टीम सर्व कर रही है</string>
+    <string name="create_you_first_match">अपना पहला मैच बनाएँ!</string>
+    <string name="match_won">मैच जीत लिया</string>
+    <string name="match_duration">मैच की अवधि</string>
+    <string name="elapsed_time">बीता हुआ समय</string>
+    <string name="settings_screen">सेटिंग्स स्क्रीन</string>
+    <string name="heart_rate">हृदय गति</string>
+    <string name="team_1_score">टीम 1 का स्कोर</string>
+    <string name="team_2_score">टीम 2 का स्कोर</string>
+    <string name="error_uploading_match_to_strava">आपका मैच Strava पर अपलोड करते समय त्रुटि हुई</string>
+
+    <string name="settings">सेटिंग्स</string>
+    <string name="golden_point">गोल्डन पॉइंट</string>
+    <string name="logged_with_beepadel">BeePadel के साथ लॉग किया गया</string>
+    <string name="features">विशेषताएँ</string>
+    <string name="connect">कनेक्ट करें</string>
+    <string name="connect_with_strava">Strava से कनेक्ट करें</string>
+    <string name="connected_to_strava">Strava से कनेक्टेड</string>
+    <string name="configure_strava">Strava कॉन्फ़िगर करें</string>
+    <string name="logout_from_strava">Strava से लॉगआउट करें</string>
+    <string name="support">प्रोजेक्ट का समर्थन करें</string>
+    <string name="leave_a_review">समीक्षा दें</string>
+    <string name="about">के बारे में</string>
+    <string name="about2">के बारे में</string>
+    <string name="contact_us">संपर्क करें</string>
+    <string name="who_are_we">हम कौन हैं?</string>
+
+    <string name="beepadel_is_a_p_del_tracker_app_designed_by_players_for_players">BeePadel एक पैडल ट्रैकर ऐप है, जिसे खिलाड़ियों द्वारा खिलाड़ियों के लिए डिज़ाइन किया गया है।</string>
+    <string name="behind_the_development_of_the_app_is_the_free_open_source_software_foss_philosophy">इस ऐप का विकास मुक्त और ओपन सोर्स सॉफ़्टवेयर (FOSS) दर्शन पर आधारित है।</string>
+    <string name="this_means_that_the_code_for_the_app_can_be_found_publicly_on">इसका अर्थ है कि ऐप का कोड सार्वजनिक रूप से उपलब्ध है</string>
+    <string name="it_also_means_that_this_app_will_never_charge_you_any_kind_of_licensing_fee_for_its_use">। इसका यह भी अर्थ है कि इस ऐप के उपयोग के लिए आपसे कभी कोई लाइसेंस शुल्क नहीं लिया जाएगा।\n\n</string>
+    <string name="this_project_is_currently_under_active_development_by_indie_developers_in_their_free_time">यह प्रोजेक्ट वर्तमान में स्वतंत्र डेवलपर्स द्वारा अपने खाली समय में सक्रिय रूप से विकसित किया जा रहा है।</string>
+    <string name="we_don_t_want_any_monetary_donations_but_we_appreciate_any_other_kind_of_support">हम कोई आर्थिक दान नहीं चाहते, लेकिन किसी भी अन्य प्रकार के समर्थन की सराहना करते हैं—</string>
+    <string name="such_as_a_rating_on_the_play_store_or_a_github_star_that_is_totally_free_of_charge">जैसे Play Store पर रेटिंग या GitHub स्टार—जो पूरी तरह निःशुल्क है।</string>
+    <string name="this_support_is_really_helpful_so_the_project_continues_growing">यह समर्थन प्रोजेक्ट को आगे बढ़ने में बहुत मदद करता है।</string>
+
+    <string name="finish">मैच समाप्त करें</string>
+    <string name="connect_your_phone">BeePadel फोन ऐप इंस्टॉल और कनेक्ट होना आवश्यक है।</string>
+    <string name="match_finished">मैच समाप्त!</string>
+    <string name="match_has_been_saved">मैच फोन ऐप में सहेज लिया गया है</string>
+    <string name="strava_match_name">पैडल मैच</string>
+    <string name="import_export_matches">मैच आयात/निर्यात करें</string>
+    <string name="import_matches">मैच आयात करें</string>
+    <string name="export_matches">मैच निर्यात करें</string>
+    <string name="data">डेटा</string>
+    <string name="match_data_exported_successfully">डेटा सफलतापूर्वक निर्यात हुआ</string>
+    <string name="match_data_imported_successfully">डेटा सफलतापूर्वक आयात हुआ</string>
+
+    <string name="whether_games_end_in_the_fourth_won_point_or_by_difference_of_2_advantage">क्या गेम चौथे अंक पर समाप्त हों या 2 अंकों के अंतर से (एडवांटेज)</string>
+    <string name="every_time_you_finish_a_match_it_will_be_automatically_uploaded_to_strava_as_a_new_activity">हर बार जब आप मैच समाप्त करेंगे, इसे Strava पर नए एक्टिविटी के रूप में स्वचालित रूप से अपलोड किया जाएगा</string>
+    <string name="a_github_star_helps_this_open_source_project_more_visibility">GitHub स्टार इस ओपन सोर्स प्रोजेक्ट को अधिक दृश्यता दिलाने में मदद करता है</string>
+    <string name="leaving_a_review_in_the_google_play_store_helps_way_more_than_one_would_think_making_the_app_appear_higher_in_the_search_list">Google Play Store पर समीक्षा देना ऐप को खोज सूची में ऊपर लाने में मदद करता है</string>
+    <string name="reach_us_with_any_kind_of_feedback_bug_reports_feature_suggestion_or_just_some_kind_words">किसी भी प्रकार की प्रतिक्रिया के लिए हमसे संपर्क करें: बग रिपोर्ट, फीचर सुझाव या कुछ अच्छे शब्द</string>
+    <string name="some_context_on_what_this_project_is">इस प्रोजेक्ट के बारे में कुछ जानकारी</string>
+    <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">अपने डेटा का बैकअप JSON फ़ाइल में लें या पहले से बनाई गई फ़ाइल से आयात करें</string>
+    <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">ऐप की दृश्यता बढ़ाने के लिए "Logged with BeePadel" पंक्ति जोड़ें</string>
+    <string name="tweak_how_your_matches_will_appear_on_strava">Strava पर आपके मैच कैसे दिखेंगे इसे समायोजित करें</string>
+</resources>
