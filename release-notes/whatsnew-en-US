@@ -1,3 +1,4 @@
 - Fix bug where strava account wouln't be linked correctly
 - Bump project dependecies
+- App icon update in the Wear OS version
 - Add translations for Hindi and Arabic
