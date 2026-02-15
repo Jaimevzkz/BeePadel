@@ -13,15 +13,15 @@ material = "1.13.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-junitJupiterApi = "5.13.4"
-uiAutomator = "2.4.0-alpha07"
+junitJupiterApi = "6.0.2"
+uiAutomator = "2.4.0-beta01"
 
 kotlintestRunnerJunit5 = "3.4.2"
 coroutinesTestVersion = "1.10.2"
-mockk = "1.14.7"
+mockk = "1.14.9"
 assertk = "0.28.1"
 turbine = "1.2.1"
-junitPluginVersion = "1.14.0.0"
+junitPluginVersion = "2.0.1"
 # SqlDelight
 sqlDelight = "2.2.1"
 
@@ -29,7 +29,7 @@ sqlDelight = "2.2.1"
 androidTools = "31.13.2"
 desugar_jdk_libs = "2.1.5"
 coroutines = "1.10.2"
-uiAndroid = "1.10.0"
+uiAndroid = "1.10.3"
 #Koin
 koin = "4.1.1"
 # Navigation 3
