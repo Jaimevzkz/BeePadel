@@ -11,26 +11,26 @@ import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.domain.DispatchersProvider
 import com.vzkz.core.domain.error.DataError
+import com.vzkz.core.domain.error.Result
+import com.vzkz.core.domain.model.Points
+import com.vzkz.core.domain.model.toPoints
+import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.ui.BaseViewModel
+import com.vzkz.core.presentation.ui.asUiText
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
-import com.vzkz.core.domain.error.Result
-import com.vzkz.core.notification.ActiveMatchService
-import com.vzkz.core.presentation.ui.asUiText
-import com.vzkz.core.domain.model.Points
-import com.vzkz.core.domain.model.toPoints
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 class WearActiveMatchViewmodel(
     private val dispatchers: DispatchersProvider,

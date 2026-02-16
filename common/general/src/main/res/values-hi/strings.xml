@@ -39,7 +39,7 @@
     <string name="undo">पूर्ववत करें</string>
     <string name="discard_match">मैच रद्द करें</string>
     <string name="end_match">मैच समाप्त करें</string>
-    <string name="who_starts_serving">सर्विस कौन शुरू करेगा?</string>
+    <string name="who_starts_serving">कौन सर्व करता है?</string>
     <string name="team_1">टीम 1</string>
     <string name="team_2">टीम 2</string>
     <string name="cancel">रद्द करें</string>

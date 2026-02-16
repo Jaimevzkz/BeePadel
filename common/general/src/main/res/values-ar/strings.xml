@@ -39,7 +39,7 @@
     <string name="undo">تراجع</string>
     <string name="discard_match">إلغاء المباراة</string>
     <string name="end_match">إنهاء المباراة</string>
-    <string name="who_starts_serving">من يبدأ الإرسال؟</string>
+    <string name="who_starts_serving">من يقدّم الإرسال؟</string>
     <string name="team_1">الفريق 1</string>
     <string name="team_2">الفريق 2</string>
     <string name="cancel">إلغاء</string>
