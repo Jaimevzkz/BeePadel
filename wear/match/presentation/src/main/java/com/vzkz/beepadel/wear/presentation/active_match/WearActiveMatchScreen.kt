@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,7 +39,6 @@ import androidx.wear.compose.material3.OutlinedIconButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.vzkz.beepadel.designsystem_wear.BeePadelTheme
-import com.vzkz.common.general.R
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam1
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.AddPointToTeam2
 import com.vzkz.beepadel.wear.presentation.active_match.WearActiveMatchIntent.CloseError
@@ -60,10 +58,10 @@ import com.vzkz.beepadel.wear.presentation.active_match.components.WearErrorDial
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearScoreCard
 import com.vzkz.beepadel.wear.presentation.active_match.components.WearServingDialog
 import com.vzkz.beepadel.wear.presentation.active_match.model.WearDialogs
+import com.vzkz.common.general.R
 import com.vzkz.core.notification.ActiveMatchService
 import com.vzkz.core.presentation.designsystem.FinishIcon
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun WearActiveMatchScreenRoot(
@@ -324,9 +322,9 @@ private fun WearActiveMatchScreenPreview() {
                 setsTeam1 = 3,
                 setsTeam2 = 2,
                 isTeam1Serving = true,
-                dialogToShow = WearDialogs.NONE,
+//                dialogToShow = WearDialogs.NONE,
 //                dialogToShow = WearDialogs.MATCH_FINISHED,
-//                dialogToShow = WearDialogs.SERVING,
+                dialogToShow = WearDialogs.SERVING,
 //                dialogToShow = WearDialogs.ERROR,
             ),
             onAction = {}

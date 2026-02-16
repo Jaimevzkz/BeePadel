@@ -40,7 +40,7 @@ internal fun FinishMatchDialog(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        val paddingValues = PaddingValues(horizontal = 8.dp)
+        val paddingValues = PaddingValues(horizontal = 4.dp)
         Column(
             modifier = Modifier.width(IntrinsicSize.Max),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -49,7 +49,6 @@ internal fun FinishMatchDialog(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = paddingValues,
                 onClick = onDiscardMatch,
-//                onLongClick = onDiscardMatch, // todo decide whether to use long press or normal
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 )
