@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.UUID
 
 class SqlDelightRepository(
@@ -82,6 +83,7 @@ class SqlDelightRepository(
                 }
                 result
             } catch (e: Exception) {
+                e.printStackTrace()
                 Result.Error(DataError.Local.INSERT_MATCH_FAILED)
             }
         }
