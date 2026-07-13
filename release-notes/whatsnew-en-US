@@ -1,5 +1,5 @@
-- Fix bug where strava account wouln't be linked correctly
-- Bump project dependecies
-- App icon update in the Wear OS version
-- Add translations for Hindi and Arabic
-- Adapt screen for large font on Wear OS
+- Temporarily disable Strava integration (Strava API moved behind a paywall)
+- Fix a bug where finishing a match with a failed Strava connection would trigger discard twice
+- Update project dependencies
+- Upgrade to AGP 9
+

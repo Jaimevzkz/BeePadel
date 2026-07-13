@@ -1,5 +1,4 @@
-- Solución de error por el cual la cuenta de Strava no se vinculaba correctamente
+- Deshabilitación temporal de la integración con Strava (la API de Strava ha pasado a ser de pago)
+- Corrección de un error por el cual al terminar un partido con la conexión a Strava fallida se descartaba dos veces
 - Actualización de las dependencias del proyecto
-- Actualización del icono de la aplicación en la versión de WearOs
-- Adición de traducciones al hindi y al árabe
-- Adaptar pantalla a fuente grande en WearOS
+- Actualización a AGP 9
