@@ -3,21 +3,18 @@ package com.vzkz.build_logic.convention
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.BuildType
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.DynamicFeatureExtension
 import com.android.build.api.dsl.LibraryExtension
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import java.util.Properties
 
 internal fun Project.configureBuildTypes(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
     extensionType: ExtensionType
 ) {
-    commonExtension.run {
-        buildFeatures {
-            buildConfig = true
-        }
+    commonExtension.apply {
+        buildFeatures.buildConfig = true
+
         val localProps = Properties()
         val localPropertiesFile = rootProject.file("local.properties")
         if (localPropertiesFile.exists()) {
@@ -33,7 +30,7 @@ internal fun Project.configureBuildTypes(
             ?: localProps.getProperty("strava_client_secret")
             ?: notSet
 
-        defaultConfig {
+        defaultConfig.apply {
             buildConfigField(
                 "String",
                 "APP_VERSION_NAME",
@@ -46,33 +43,34 @@ internal fun Project.configureBuildTypes(
             buildConfigField("String", "CONTACT_EMAIL", "\"jaimevazquezmartin23@gmail.com\"")
             buildConfigField("String", "EXPORT_MATCHES_FILE_NAME", "\"beepadel-match-list-export.json\"")
 
-            manifestPlaceholders["appAuthRedirectScheme"] =
-                libs.findVersion("projectVersionName").get()
+            addManifestPlaceholders(
+                mapOf("appAuthRedirectScheme" to libs.findVersion("projectVersionName").get().toString())
+            )
         }
+    }
 
-        when (extensionType) {
-            ExtensionType.APPLICATION -> {
-                extensions.configure<ApplicationExtension> {
-                    buildTypes {
-                        debug {
-                            configureDebugBuildType()
-                        }
-                        release {
-                            configureReleaseBuildType(commonExtension)
-                        }
+    when (extensionType) {
+        ExtensionType.APPLICATION -> {
+            extensions.configure<ApplicationExtension> {
+                buildTypes {
+                    getByName("debug") {
+                        configureDebugBuildType()
+                    }
+                    getByName("release") {
+                        configureReleaseBuildType(commonExtension)
                     }
                 }
             }
+        }
 
-            ExtensionType.LIBRARY -> {
-                extensions.configure<LibraryExtension> {
-                    buildTypes {
-                        debug {
-                            configureDebugBuildType()
-                        }
-                        release {
-                            configureReleaseBuildType(commonExtension)
-                        }
+        ExtensionType.LIBRARY -> {
+            extensions.configure<LibraryExtension> {
+                buildTypes {
+                    getByName("debug") {
+                        configureDebugBuildType()
+                    }
+                    getByName("release") {
+                        configureReleaseBuildType(commonExtension)
                     }
                 }
             }
@@ -81,7 +79,7 @@ internal fun Project.configureBuildTypes(
 }
 
 
-private fun BuildType.configureReleaseBuildType(commonExtension: CommonExtension<*, *, *, *, *, *>) {
+private fun BuildType.configureReleaseBuildType(commonExtension: CommonExtension) {
     isMinifyEnabled = false
     proguardFiles(
         commonExtension.getDefaultProguardFile("proguard-android-optimize.txt"),
