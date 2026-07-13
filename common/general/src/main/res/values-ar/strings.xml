@@ -111,4 +111,7 @@
     <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">قم بنسخ بياناتك احتياطيًا إلى ملف JSON أو استيرادها من ملف تم إنشاؤه مسبقًا</string>
     <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">أضف سطرًا يقول "تم التسجيل باستخدام BeePadel" لمساعدة التطبيق على الحصول على مزيد من الظهور</string>
     <string name="tweak_how_your_matches_will_appear_on_strava">عدّل طريقة ظهور مبارياتك على Strava</string>
+    <string name="strava_temporarily_unavailable">Strava غير متاح مؤقتًا</string>
+    <string name="strava_disabled_description">تم مؤخرًا وضع واجهة Strava البرمجية للمطورين خلف نظام دفع، لذلك تم تعطيلها مؤقتًا من BeePadel حتى يتم الوصول إلى قاعدة مستخدمين معقولة.\n\nنعتذر عن الإزعاج، وشكرًا لصبركم حتى يتم حل هذه المشكلة.</string>
+    <string name="strava_temporarily_disabled_hint">غير متاح مؤقتًا</string>
 </resources>

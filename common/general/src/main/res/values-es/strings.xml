@@ -107,4 +107,7 @@
     <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">Haz una copia de seguridad de tus datos en un archivo JSON o importa tus datos a la aplicación desde un archivo creado anteriormente</string>
     <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">Añadir una línea en la que ponga \"Guardado con BeePadel\" para ayudar a la app a tener más visibilidad</string>
     <string name="tweak_how_your_matches_will_appear_on_strava">Ajusta como aparecerán tus actividades en Strava</string>
+    <string name="strava_temporarily_unavailable">Strava no disponible temporalmente</string>
+    <string name="strava_disabled_description">La API de Strava para desarrolladores ha pasado recientemente a ser de pago, por lo que se ha deshabilitado temporalmente en BeePadel hasta alcanzar una base de usuarios razonable.\n\nDisculpa las molestias y gracias por tu paciencia hasta que este problema se resuelva.</string>
+    <string name="strava_temporarily_disabled_hint">No disponible temporalmente</string>
 </resources>
