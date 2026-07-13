@@ -1,5 +1,6 @@
 package com.vzkz.match.presentation.active_match
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction
 import com.vzkz.core.connectivity.domain.messaging.MessagingAction.ConnectionRequest
@@ -23,7 +24,7 @@ import timber.log.Timber
 class ActiveMatchViewmodel(
     private val dispatchers: DispatchersProvider,
     private val matchTracker: MatchTracker,
-    private val watchConnector: WatchConnector
+    private val watchConnector: WatchConnector,
 ) :
     BaseViewModel<ActiveMatchState, ActiveMatchIntent, ActiveMatchEvent>(
         ActiveMatchState.initial,
@@ -219,8 +220,7 @@ class ActiveMatchViewmodel(
                     Timber.e("[Viewmodel] Error occurred when finishing match -> ${insert.error}: ${insert.error.asUiText()}")
 
                     if (insert.error is DataError.Network) {
-                        sendEvent(ActiveMatchEvent.NavToHistoryScreen(R.string.error_uploading_match_to_strava))
-                        discardMatch()
+                        discardMatch(toastMessage = R.string.error_uploading_match_to_strava)
                         val result = watchConnector.sendActionToWatch(MessagingAction.Discard)
                         if (result is Result.Error)
                             Timber.w("[Viewmodel] Watch connector error -> ${result.error}: ${result.error.asUiText()}")
@@ -245,7 +245,8 @@ class ActiveMatchViewmodel(
         }
     }
 
-    private fun discardMatch() {
+    private fun discardMatch(toastMessage: Int? = null) {
+        if (state.value.isMatchFinished) return
         _state.update {
             it.copy(
                 activeMatchDialogToShow = null,
@@ -255,7 +256,7 @@ class ActiveMatchViewmodel(
         }
         ioLaunch {
             matchTracker.discardMatch()
-            sendEvent(ActiveMatchEvent.NavToHistoryScreen())
+            sendEvent(ActiveMatchEvent.NavToHistoryScreen(toastMessage))
         }
     }
 

@@ -82,7 +82,7 @@ fun NavigationRoot(
                     val context = LocalContext.current
                     ActiveMatchScreen(
                         onNavigateToMatchHistory = {
-                            backStack.removeLastOrNull()
+                            if (backStack.size > 1) backStack.removeLastOrNull()
                         },
                         onServiceToggle = { shouldServiceRun ->
                             if (shouldServiceRun) {
