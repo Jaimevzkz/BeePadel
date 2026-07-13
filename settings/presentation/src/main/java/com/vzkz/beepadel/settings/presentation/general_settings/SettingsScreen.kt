@@ -5,7 +5,6 @@ package com.vzkz.beepadel.settings.presentation.general_settings
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -48,6 +50,8 @@ import com.vzkz.beepadel.settings.presentation.general_settings.components.Secti
 import com.vzkz.common.general.BuildConfig
 import com.vzkz.common.general.R
 import com.vzkz.core.presentation.designsystem.BeePadelTheme
+import com.vzkz.core.presentation.designsystem.components.BeePadelActionButton
+import com.vzkz.core.presentation.designsystem.components.BeePadelDialog
 import com.vzkz.core.presentation.designsystem.components.BeePadelScaffold
 import org.koin.androidx.compose.koinViewModel
 
@@ -61,7 +65,6 @@ fun SettingsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsState(initial = null)
-    val activity = LocalActivity.current
     val context = LocalContext.current
     val exportLauncher =
         rememberLauncherForActivityResult(
@@ -95,14 +98,6 @@ fun SettingsScreen(
         when (events) {
             SettingsEvent.NavigateBack -> {
                 onNavigateBack()
-            }
-
-            is SettingsEvent.LaunchAuthRequestIntent -> {
-                activity?.startActivity((events as SettingsEvent.LaunchAuthRequestIntent).intent)
-            }
-
-            SettingsEvent.ConfigureStrava -> {
-                onNavToConfigureStrava()
             }
 
             SettingsEvent.OpenGithub -> {
@@ -156,6 +151,7 @@ fun SettingsScreen(
             }
 
             null -> {}
+            else -> {}
         }
     }
 
@@ -170,6 +166,24 @@ private fun SettingsScreenRoot(
     state: SettingsState,
     onAction: (SettingsIntent) -> Unit
 ) {
+    var showStravaDisabledDialog by remember { mutableStateOf(false) }
+
+    if (showStravaDisabledDialog) {
+        BeePadelDialog(
+            title = stringResource(R.string.strava_temporarily_unavailable),
+            onDismiss = { showStravaDisabledDialog = false },
+            description = stringResource(R.string.strava_disabled_description),
+            primaryButton = {
+                BeePadelActionButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.okay),
+                    isLoading = false,
+                    onClick = { showStravaDisabledDialog = false }
+                )
+            }
+        )
+    }
+
     BeePadelScaffold(
         topAppBar = {
             TopAppBar(
@@ -218,13 +232,7 @@ private fun SettingsScreenRoot(
             Section(sectionTitle = stringResource(R.string.connect)) {
                 ConnectToStravaButton(
                     modifier = Modifier,
-                    isLoggedIntoStrava = state.isLoggedIntoStrava,
-                    onConfigureStrava = {
-                        onAction(SettingsIntent.ConfigureStrava)
-                    },
-                    onLaunchAuthRequest = {
-                        onAction(SettingsIntent.LaunchAuthRequestIntent)
-                    }
+                    onClick = { showStravaDisabledDialog = true }
                 )
             }
 
@@ -271,7 +279,7 @@ private fun Section(
 private fun SettingsScreenPreview() {
     BeePadelTheme {
         SettingsScreenRoot(
-            state = SettingsState.initial.copy(goldenPoint = true, isLoggedIntoStrava = true),
+            state = SettingsState.initial.copy(goldenPoint = true, isLoggedIntoStrava = false),
             onAction = {}
         )
     }

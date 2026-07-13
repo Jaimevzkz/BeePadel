@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material.icons.filled.Info
@@ -32,8 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.vzkz.common.general.R
@@ -45,13 +44,11 @@ import com.vzkz.core.presentation.designsystem.StravaIcon
 @Composable
 fun ConnectToStravaButton(
     modifier: Modifier = Modifier,
-    isLoggedIntoStrava: Boolean,
-    onConfigureStrava: () -> Unit,
-    onLaunchAuthRequest: () -> Unit
-
+    onClick: () -> Unit
 ) {
     ClickableSetting(
-        modifier = modifier,
+        modifier = modifier
+            .alpha(0.6f),
         startIcon = {
             Row {
                 Icon(
@@ -61,31 +58,11 @@ fun ConnectToStravaButton(
                     imageVector = StravaIcon,
                     contentDescription = stringResource(R.string.connect_with_strava)
                 )
-
-                if (isLoggedIntoStrava)
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Default.Check,
-                        tint = Color.Green,
-                        contentDescription = stringResource(R.string.configure_strava)
-                    )
             }
         },
-        title =
-            if (isLoggedIntoStrava) stringResource(R.string.configure_strava)
-            else stringResource(R.string.connect_with_strava),
-        description = if (!isLoggedIntoStrava) stringResource(R.string.every_time_you_finish_a_match_it_will_be_automatically_uploaded_to_strava_as_a_new_activity) else stringResource(
-            R.string.tweak_how_your_matches_will_appear_on_strava
-        ),
-        onClick = {
-            if (isLoggedIntoStrava) {
-                onConfigureStrava()
-            } else {
-                onLaunchAuthRequest()
-            }
-        }
+        title = stringResource(R.string.connect_with_strava),
+        description = stringResource(R.string.strava_temporarily_disabled_hint),
+        onClick = onClick
     )
 }
 

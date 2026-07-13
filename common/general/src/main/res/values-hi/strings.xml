@@ -111,4 +111,7 @@
     <string name="backup_your_data_to_a_json_file_or_import_it_from_one_previously_created">अपने डेटा का बैकअप JSON फ़ाइल में लें या पहले से बनाई गई फ़ाइल से आयात करें</string>
     <string name="add_a_line_saying_logged_with_beepadel_to_help_the_app_get_more_visibility">ऐप की दृश्यता बढ़ाने के लिए "Logged with BeePadel" पंक्ति जोड़ें</string>
     <string name="tweak_how_your_matches_will_appear_on_strava">Strava पर आपके मैच कैसे दिखेंगे इसे समायोजित करें</string>
+    <string name="strava_temporarily_unavailable">Strava अस्थायी रूप से अनुपलब्ध</string>
+    <string name="strava_disabled_description">Strava की डेवलपर API को हाल ही में सशुल्क कर दिया गया है, इसलिए इसे BeePadel से अस्थायी रूप से अक्षम कर दिया गया है जब तक कि पर्याप्त उपयोगकर्ता आधार नहीं बन जाता।\n\nअसुविधा के लिए खेद है, और इस समस्या के समाधान तक आपके धैर्य के लिए धन्यवाद।</string>
+    <string name="strava_temporarily_disabled_hint">अस्थायी रूप से अनुपलब्ध</string>
 </resources>

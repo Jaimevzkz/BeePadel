@@ -63,8 +63,8 @@ securityCryptoKtx = "1.1.0"
 # Project versions
 projectApplicationId = "com.vzkz.beepadel"
 projectMinSdkVersion = "25"
-projectTargetSdkVersion = "36"
-projectCompileSdkVersion = "36"
+projectTargetSdkVersion = "37"
+projectCompileSdkVersion = "37"
 projectVersionName = "0.0.0"
 projectVersionCode = "1"
 
