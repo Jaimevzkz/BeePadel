@@ -205,3 +205,4 @@ jobs:
           releaseFiles: ${{ github.workspace }}/app-release.aab
           track: production
           whatsNewDirectory: release-notes/
+          changesNotSentForReview: true

@@ -83,3 +83,4 @@ jobs:
           releaseFiles: ${{ github.workspace }}/app-release.aab
           track: wear:production
           whatsNewDirectory: release-notes/
+          changesNotSentForReview: true
