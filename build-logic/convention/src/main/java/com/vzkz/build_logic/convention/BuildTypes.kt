@@ -40,6 +40,7 @@ internal fun Project.configureBuildTypes(
             buildConfigField("Integer", "STRAVA_CLIENT_ID", clientID)
             buildConfigField("String", "STRAVA_CLIENT_SECRET", clientSecret)
             buildConfigField("String", "GITHUB_URL", "\"https://github.com/Jaimevzkz/BeePadel\"")
+            buildConfigField("String", "PRIVACY_POLICY_URL", "\"https://github.com/Jaimevzkz/BeePadel/blob/master/PRIVACY.md\"")
             buildConfigField("String", "CONTACT_EMAIL", "\"jaimevazquezmartin23@gmail.com\"")
             buildConfigField("String", "EXPORT_MATCHES_FILE_NAME", "\"beepadel-match-list-export.json\"")
 

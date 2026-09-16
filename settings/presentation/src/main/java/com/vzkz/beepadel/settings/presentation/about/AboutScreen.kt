@@ -88,6 +88,9 @@ private fun AboutScreenRoot(onNavBack: () -> Unit) {
             )
             AboutText()
 
+            Spacer(Modifier.height(16.dp))
+            PrivacyPolicyLink()
+
             Spacer(Modifier.weight(1f))
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -121,6 +124,31 @@ fun AboutText(modifier: Modifier = Modifier) {
         append(stringResource(R.string.we_don_t_want_any_monetary_donations_but_we_appreciate_any_other_kind_of_support))
         append(stringResource(R.string.such_as_a_rating_on_the_play_store_or_a_github_star_that_is_totally_free_of_charge))
         append(stringResource(R.string.this_support_is_really_helpful_so_the_project_continues_growing))
+    }
+
+    Text(
+        modifier = modifier,
+        text = annotatedText,
+    )
+}
+
+@Composable
+private fun PrivacyPolicyLink(modifier: Modifier = Modifier) {
+    val annotatedText = buildAnnotatedString {
+        pushLink(
+            LinkAnnotation.Url(
+                url = BuildConfig.PRIVACY_POLICY_URL,
+            )
+        )
+        withStyle(
+            SpanStyle(
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
+            )
+        ) {
+            append(stringResource(R.string.privacy_policy))
+        }
+        pop()
     }
 
     Text(
